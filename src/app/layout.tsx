@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+import { draftMode } from 'next/headers'
+import { VisualEditing } from 'next-sanity/visual-editing'
+import { SanityLive } from '@/sanity/lib/live'
 import { bodyFont, headingFont } from './fonts'
 import './globals.css'
 
@@ -15,11 +18,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { isEnabled: isDraftMode } = await draftMode()
+
   return (
     <html
       lang="no"
@@ -29,7 +34,21 @@ export default function RootLayout({
         {/* Adobe Fonts — Gastromond (display font) */}
         <link rel="stylesheet" href="https://use.typekit.net/ybg3phx.css" />
       </head>
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body className="min-h-full flex flex-col font-body">
+        {children}
+        <SanityLive />
+        {isDraftMode && (
+          <>
+            <VisualEditing />
+            <a
+              href="/api/draft-mode/disable"
+              className="fixed bottom-4 right-4 z-50 rounded-full bg-navy px-4 py-2 text-sm font-medium text-white shadow-lg"
+            >
+              Avslutt forhåndsvisning
+            </a>
+          </>
+        )}
+      </body>
     </html>
   )
 }
