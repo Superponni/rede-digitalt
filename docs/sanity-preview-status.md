@@ -25,10 +25,18 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
 - **`presentationTool`** i `sanity.config.ts` med `previewUrl.previewMode.enable`,
   `resolve.mainDocuments` (rute→doc) og `resolve.locations` (doc→URL, med
   `tone:'positive'` + `message`).
-- **Øye-ikon document action** `src/sanity/actions/previewAction.tsx` («Forhåndsvis»,
-  `EyeOpenIcon`) → navigerer til `/studio/presentation?preview=<path>` for
-  `article` (`/artikler/:slug`) og `editorial` (`/leder`). Koblet inn via
-  `document.actions` i config.
+- **Øye-knapp øverst i dokumentet** `src/sanity/components/PreviewInput.tsx`
+  («Åpne live forhåndsvisning», `EyeOpenIcon`). Ett klikk → åpner dokumentet i
+  Presentation via `router.navigateIntent('edit', {id, type, mode:'presentation',
+  preview})` — samme tverr-verktøy-mønster som Sanitys egen «Open in Structure»
+  (`mode:'presentation'` = `EDIT_INTENT_MODE`). Robust uansett hvilket verktøys
+  router man står i (intents løses globalt). Koblet inn via `components.input` på
+  `article`- og `editorial`-schema; sti bygges av delt `src/sanity/lib/preview.ts`.
+  - **Erstattet** den gamle to-stegs `resolve.locations`-banneren (klikk for å
+    utvide → klikk lenke) som lugget. `resolve.locations` er fjernet fra config;
+    Presentation rendrer kun banneret når en locations-resolver finnes
+    (`hasLocationsResolver`), så uten den er den borte. `mainDocuments` beholdt
+    (URL→doc, kreves av Presentation). Gamle `previewAction.tsx` slettet.
 - **stega på** med filter som hopper over logikk-felter
   (`scrollyTheme`, `scrollyBackground`, `spotifyUrl`, `url`) — usynlige stega-tegn
   i oppslagsnøkler/farger/URLer bryter logikk (f.eks. `THEME_MAP[scrollyTheme]`).
@@ -66,10 +74,10 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
 2. **Live-redigering:** rediger et felt i Presentation-panelet → skal oppdatere
    preview live (via Comlink, uten publisering). Brukeren rapporterte at dette
    IKKE virket i forrige (stega-av) tilstand — sjekk på nytt med stega på.
-3. **Øye-ikon:** bekreft at `previewAction` faktisk navigerer riktig
-   (`router.navigateUrl({path:'/presentation?preview=...'})` — path er antatt
-   studio-rot-relativ; hvis den peker feil, prøv absolutt `/studio/presentation?…`
-   via `window.location`).
+3. **Øye-knapp:** bekreft at den grønne «Åpne live forhåndsvisning»-knappen
+   øverst i artikkel/leder åpner Presentation med riktig dokument + preview-URL i
+   ett klikk (nå via `navigateIntent('edit', …, mode:'presentation')` — det
+   autoritative tverr-verktøy-mønsteret, ikke lenger `navigateUrl`).
 
 ## Research-funn (autoritativt, next-sanity v12)
 
