@@ -124,7 +124,7 @@ Gjort **etter** GitHub-transfer, slik at vi koblet mot repoet på endelig plasse
 **Viktige merknader / feller (lært under utførelse):**
 - **Vercel-prosjektnavnet er `rededemo`**, ikke `rede-digitalt` (arvet fra opprinnelig repo-navn). GitHub-repo + lokal mappe heter `rede-digitalt`. Live-URL er `rededemo.vercel.app`. *Valgfri opprydding:* rename Vercel-prosjektet til `rede-digitalt` — men det endrer `.vercel.app`-subdomenet. Mindre viktig siden eget domene kommer (Fase 4).
 - **Ikke bruk `vercel link --yes --project <navn>`** hvis navnet ikke matcher eksakt — `--yes` *oppretter* et nytt tomt prosjekt i stedet for å feile. Skjedde her (lagde et duplikat `rede-digitalt`-prosjekt koblet til samme repo); måtte slettes i UI. Riktig: link uten `--yes`, eller bruk eksakt prosjektnavn `rededemo`.
-- **`SANITY_API_WRITE_TOKEN` ligger i Vercel** (fra opprinnelig oppsett) men brukes **ikke** av `src/` — kun importskriptet lokalt. *Anbefalt før overlevering:* fjern den fra Vercel og rotér den (unødvendig hemmelighet i kundens flate).
+- ~~**`SANITY_API_WRITE_TOKEN` ligger i Vercel**~~ ✅ LØST 2026-06-01: fjernet fra Vercel + rotert i Sanity (gammelt token revokert, nytt «Rede import»/Editor kun i lokal `.env.local`). Live-siden bruker den ikke.
 - **Preview-miljøet** mangler env-vars hvis prosjektet noen gang re-seedes; `rededemo` har dem allerede på alle tre miljøer, så ikke et problem nå.
 
 ---
