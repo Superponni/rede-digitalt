@@ -12,7 +12,6 @@ import { AudioSection } from './sections/AudioSection'
 import { FactBox } from './sections/FactBox'
 import { Gallery } from './sections/Gallery'
 import { StickyPortrait } from './sections/StickyPortrait'
-import { HorizontalImageStrip } from './sections/HorizontalImageStrip'
 import { RecipeCard } from './sections/RecipeCard'
 import { CountUpFact } from './sections/CountUpFact'
 import { NumberedStop } from './sections/NumberedStop'
@@ -58,7 +57,6 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
   factBox: FactBox,
   gallery: Gallery,
   stickyPortrait: StickyPortrait,
-  horizontalImageStrip: HorizontalImageStrip,
   recipeCard: RecipeCard,
   countUpFact: CountUpFact,
   numberedStop: NumberedStop,

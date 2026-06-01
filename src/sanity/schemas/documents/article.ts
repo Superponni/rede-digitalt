@@ -152,7 +152,6 @@ export const article = defineType({
         { type: 'factBox' },
         { type: 'gallery' },
         { type: 'stickyPortrait' },
-        { type: 'horizontalImageStrip' },
         { type: 'recipeCard' },
         { type: 'countUpFact' },
         { type: 'numberedStop' },

@@ -14,6 +14,7 @@ interface GalleryImage {
 
 interface GalleryProps {
   data: {
+    title?: string
     images?: GalleryImage[]
     layout?: 'grid' | 'carousel' | 'masonry'
     backgroundColor?: string
@@ -29,6 +30,14 @@ export function Gallery({ data }: GalleryProps) {
 
   return (
     <section className="relative overflow-hidden py-16 lg:py-24" style={{ backgroundColor: bgColor }}>
+      {data.title && (
+        <div className="px-6 pb-8 lg:px-16">
+          <h2 className="font-display text-2xl text-white lg:text-3xl">
+            {data.title}
+          </h2>
+        </div>
+      )}
+
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 scrollbar-hide lg:gap-6 lg:px-16">
         {images.map((img, i) => {
           const hotspot = img.hotspot

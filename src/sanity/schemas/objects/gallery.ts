@@ -6,6 +6,12 @@ export const gallery = defineType({
   type: 'object',
   fields: [
     defineField({
+      name: 'title',
+      title: 'Tittel',
+      type: 'string',
+      description: 'Valgfri overskrift over galleriet',
+    }),
+    defineField({
       name: 'images',
       title: 'Bilder',
       type: 'array',
@@ -61,12 +67,13 @@ export const gallery = defineType({
   ],
   preview: {
     select: {
+      title: 'title',
       images: 'images',
     },
-    prepare({ images }) {
+    prepare({ title, images }) {
       return {
-        title: `Galleri (${images?.length || 0} bilder)`,
-        subtitle: 'Galleri',
+        title: title || `Galleri (${images?.length || 0} bilder)`,
+        subtitle: title ? `Galleri (${images?.length || 0} bilder)` : 'Galleri',
       }
     },
   },
