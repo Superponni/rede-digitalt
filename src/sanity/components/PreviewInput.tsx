@@ -3,6 +3,7 @@
 import { EyeOpenIcon } from '@sanity/icons'
 import { useState } from 'react'
 import { useRouter } from 'sanity/router'
+import { usePresentationParams } from 'sanity/presentation'
 import type { ObjectInputProps } from 'sanity'
 import { previewPathFor } from '@/sanity/lib/preview'
 
@@ -14,6 +15,11 @@ export function PreviewInput(props: ObjectInputProps) {
   const router = useRouter()
   const [hover, setHover] = useState(false)
 
+  // Skjul knappen når skjemaet allerede vises inne i Presentation — der er den
+  // overflødig (man ser preview-en ved siden av). `usePresentationParams(false)`
+  // returnerer null utenfor Presentation i stedet for å kaste.
+  const inPresentation = Boolean(usePresentationParams(false))
+
   const value = props.value as
     | { _id?: string; _type?: string; slug?: { current?: string } }
     | undefined
@@ -21,7 +27,7 @@ export function PreviewInput(props: ObjectInputProps) {
   const id = value?._id
   const type = value?._type
   const previewPath = previewPathFor(type, value)
-  const canPreview = Boolean(id && type && previewPath)
+  const canPreview = !inPresentation && Boolean(id && type && previewPath)
 
   const openPreview = () => {
     if (!id || !type || !previewPath) return
