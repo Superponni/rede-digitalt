@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { gsap, ScrollTrigger } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
+import { stegaClean } from 'next-sanity'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface FullscreenParallaxProps {
@@ -23,7 +24,8 @@ interface FullscreenParallaxProps {
  */
 function isShortTitle(blocks: any[]): boolean {
   if (!blocks || blocks.length !== 1) return false
-  const text = blocks[0].children?.map((c: any) => c.text)?.join('') || ''
+  // Rens stega-tegn før lengdemåling — usynlige tegn ville blåst opp lengden.
+  const text = stegaClean(blocks[0].children?.map((c: any) => c.text)?.join('')) || ''
   return text.length < 80
 }
 

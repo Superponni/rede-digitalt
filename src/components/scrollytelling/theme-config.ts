@@ -84,5 +84,7 @@ export const THEME_MAP: Record<ScrollyThemeName, ThemeConfig> = {
 }
 
 export function getThemeConfig(name?: ScrollyThemeName): ThemeConfig {
-  return THEME_MAP[name || 'warm']
+  // Fall alltid tilbake til 'warm' for manglende/ukjent tema (f.eks. stega-
+  // kodede eller uferdige utkast-verdier) — aldri returner undefined.
+  return THEME_MAP[name as ScrollyThemeName] ?? THEME_MAP.warm
 }
