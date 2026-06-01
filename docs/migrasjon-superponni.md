@@ -103,34 +103,29 @@ Flytting av et Sanity-prosjekt til en org **beholder samme `projectId` (`tqfezov
 
 ---
 
-## Fase 2 — GitHub til organisasjon
+## Fase 2 — GitHub til organisasjon  ✅ GJORT 2026-06-01
 
-- [ ] GitHub: repo `asbjorngr/rededemo` → Settings → **Transfer ownership** → Superponni.
-      Transfer beholder all commit-historikk; gammel URL **redirigeres** automatisk.
-- [ ] (Anbefalt) Gi nytt navn `rede-digitalt` for konsistens (gamle lenker redirigeres fortsatt).
-- [ ] Sett Asbjørn som org-owner; legg til team/medlemmer etter behov.
-- [ ] Oppdater lokal remote:
-      ```bash
-      git remote set-url origin https://github.com/Superponni/rede-digitalt.git
-      git remote -v   # verifiser
-      ```
+- [x] GitHub: repo `asbjorngr/rededemo` → **Transfer ownership** → Superponni. Historikk intakt, gammel URL redirigeres.
+- [x] Gitt nytt navn `rede-digitalt` for konsistens.
+- [x] Asbjørn er org-owner.
+- [x] Lokal remote oppdatert til `https://github.com/Superponni/rede-digitalt.git` + pushet ventende commits.
 
 ---
 
-## Fase 3 — Vercel til team (mest skjøre steg)
+## Fase 3 — Vercel til team  ✅ GJORT 2026-06-01
 
-Gjøres **etter** GitHub-transfer, slik at vi kobler mot repoet på endelig plassering.
+Gjort **etter** GitHub-transfer, slik at vi koblet mot repoet på endelig plassering.
 
-- [ ] Opprett/bekreft Vercel Team «Superponni».
-- [ ] Vercel: prosjekt `rede-digitalt` → Settings → **Transfer project** → Superponni-team.
-      Env-variabler følger med prosjektet.
-- [ ] Installer **Vercel GitHub-app** på Superponni GitHub-org, gi tilgang til `rede-digitalt`-repoet.
-- [ ] Koble prosjektets Git-integrasjon til repoet på nytt (`Superponni/rede-digitalt`).
-- [ ] Verifiser at env-variabler finnes i nytt prosjekt — minst:
-  - `NEXT_PUBLIC_SANITY_PROJECT_ID=tqfezovu`
-  - `NEXT_PUBLIC_SANITY_DATASET=production`
-      (`SANITY_API_WRITE_TOKEN` / `ANTHROPIC_API_KEY` trengs **ikke** for live site — kun lokalt for import.)
-- [ ] Trigg en deploy (push en liten commit) og bekreft at den bygger og blir live.
+- [x] Opprettet Vercel Team «Superponni» (slug `superponni`, orgId `team_Jl8QNwJr2GW8R04unnJRWQXb`).
+- [x] Flyttet prosjektet til teamet. **Env-variabler fulgte med** (verifisert på `rededemo`: begge `NEXT_PUBLIC_SANITY_*` + skrivetoken på alle miljøer).
+- [x] Vercel GitHub-app installert på Superponni-org; Git koblet til `Superponni/rede-digitalt`.
+- [x] Verifisert: tom commit pushet → **grønn produksjons-deploy** (`...-superponni.vercel.app`, Ready ~1m). Live `https://rededemo.vercel.app` svarer HTTP 200 med ekte Sanity-innhold.
+
+**Viktige merknader / feller (lært under utførelse):**
+- **Vercel-prosjektnavnet er `rededemo`**, ikke `rede-digitalt` (arvet fra opprinnelig repo-navn). GitHub-repo + lokal mappe heter `rede-digitalt`. Live-URL er `rededemo.vercel.app`. *Valgfri opprydding:* rename Vercel-prosjektet til `rede-digitalt` — men det endrer `.vercel.app`-subdomenet. Mindre viktig siden eget domene kommer (Fase 4).
+- **Ikke bruk `vercel link --yes --project <navn>`** hvis navnet ikke matcher eksakt — `--yes` *oppretter* et nytt tomt prosjekt i stedet for å feile. Skjedde her (lagde et duplikat `rede-digitalt`-prosjekt koblet til samme repo); måtte slettes i UI. Riktig: link uten `--yes`, eller bruk eksakt prosjektnavn `rededemo`.
+- **`SANITY_API_WRITE_TOKEN` ligger i Vercel** (fra opprinnelig oppsett) men brukes **ikke** av `src/` — kun importskriptet lokalt. *Anbefalt før overlevering:* fjern den fra Vercel og rotér den (unødvendig hemmelighet i kundens flate).
+- **Preview-miljøet** mangler env-vars hvis prosjektet noen gang re-seedes; `rededemo` har dem allerede på alle tre miljøer, så ikke et problem nå.
 
 ---
 
