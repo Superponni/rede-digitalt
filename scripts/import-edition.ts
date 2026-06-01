@@ -1,26 +1,38 @@
 /**
- * Import-script for Rede 2 2026
+ * Import-script for Rede-utgaver (manifest-drevet)
  *
  * Leser docx-filer, analyserer med Claude, laster opp bilder,
  * og oppretter alt innhold i Sanity.
  *
  * VIKTIG — kilde til sannhet:
  *   Dette er et ENGANGS-seedingverktøy, ikke en synk. Sanity er fasit for
- *   alt publisert/levende innhold. content/-mappa er kun råarkiv.
+ *   alt publisert/levende innhold. Drive-mappa er journalistens råarkiv som
+ *   vi kun LESER — vi skriver aldri tilbake til den.
  *   Skriptet bruker deterministiske _id og HOPPER OVER artikler som allerede
  *   finnes i Sanity, slik at en re-kjøring aldri dupliserer eller overskriver
  *   redaktørens arbeid. Se docs/migrasjon-superponni.md.
  *
+ * Hvilken utgave? Velges via et manifest i scripts/editions/. Manifestet er
+ * oversettelseslaget mellom journalistens (rotete) Drive-navn og Sanity, og
+ * er det eneste «våre» — selve råfilene rører vi aldri.
+ *
+ * Tørrkjør (validér manifest mot innholdsmappa, ingen Sanity/Claude):
+ *   npx tsx scripts/import-edition.ts --edition=2-2026 --dry-run
+ *
  * Kjør (trygt, hopper over eksisterende):
- *   npx tsx scripts/import-edition.ts
+ *   npx tsx scripts/import-edition.ts --edition=2-2026
  *
  * Tving overskriving av eksisterende artikler (BRUK MED OMHU — ødelegger
  * redaksjonelle endringer i Sanity):
- *   npx tsx scripts/import-edition.ts --force
+ *   npx tsx scripts/import-edition.ts --edition=2-2026 --force
  *
- * Pek på annen innholdsmappe (f.eks. Drive-mappe):
- *   npx tsx scripts/import-edition.ts --content="/sti/til/Rede 2 2026"
- *   eller env: REDE_CONTENT_DIR="/sti/til/Rede 2 2026"
+ * Målrettet re-import av ÉN artikkel (trygt — rører ikke de andre):
+ *   npx tsx scripts/import-edition.ts --edition=2-2026 --force --only=gronn-plattform
+ *
+ * Pek på innholdsmappe i delt Drive (basemappe over utgavemappene):
+ *   REDE_CONTENT_DIR="/sti/til/REDE/Rede 2026" npx tsx scripts/import-edition.ts --edition=2-2026
+ *   eller eksakt utgavemappe: --content="/sti/til/Rede 2 2026"
+ *   eller eksplisitt manifest: --manifest="/sti/til/manifest.json"
  */
 
 import dotenv from 'dotenv'
@@ -48,19 +60,21 @@ const anthropic = new Anthropic({
 // Tving overskriving av eksisterende artikler (default: hopp over).
 const FORCE = process.argv.includes('--force')
 
-// Innholdsmappe kan overstyres med --content="..." eller REDE_CONTENT_DIR,
-// slik at råmaterialet kan ligge i delt Drive-mappe i stedet for i repoet.
-const contentArg = process.argv
-  .find((a) => a.startsWith('--content='))
-  ?.split('=')
-  .slice(1)
-  .join('=')
+// Tørrkjøring: valider manifest + at filene finnes (i Drive/lokalt) uten å
+// kontakte Sanity eller Claude. Trygt å kjøre når som helst.
+const DRY_RUN = process.argv.includes('--dry-run')
 
-const CONTENT_DIR = path.resolve(
-  contentArg ??
-    process.env.REDE_CONTENT_DIR ??
-    path.join(process.cwd(), 'content', 'Rede 2 2026')
-)
+// Begrens til én artikkel (slug). Sammen med --force gir dette en målrettet
+// re-import av kun den artikkelen, uten å røre de andre i Sanity.
+const ONLY = (() => {
+  const a = process.argv.find((x) => x.startsWith('--only='))
+  return a ? a.split('=').slice(1).join('=') : undefined
+})()
+
+function argValue(flag: string): string | undefined {
+  const a = process.argv.find((x) => x.startsWith(`${flag}=`))
+  return a ? a.split('=').slice(1).join('=') : undefined
+}
 
 // --- Article definitions ---
 
@@ -74,124 +88,50 @@ interface ArticleDef {
   tags: string[]
 }
 
-const ARTICLES: ArticleDef[] = [
-  {
-    folder: 'Kjepphest',
-    docxFiles: ['kjepphest_rede2_26.docx'],
-    title: 'Gøy med kjepphest',
-    type: 'scrollytelling',
-    imageDir: 'bilder',
-    slug: 'goy-med-kjepphest',
-    tags: ['fritid', 'sport', 'barn'],
-  },
-  {
-    folder: 'Alma Mater_mat og profil',
-    docxFiles: ['Amla mater_rede2_26.docx'],
-    title: 'Fransk finesse bak disken',
-    type: 'scrollytelling',
-    imageDir: 'Filemail.com - Alma Mater bilder',
-    slug: 'fransk-finesse-bak-disken',
-    tags: ['mat', 'kultur', 'nabolag'],
-  },
-  {
-    folder: 'Promenade',
-    docxFiles: ['Forsvarsrunden_rede2_26.docx'],
-    title: 'Forsvarsrunden',
-    type: 'scrollytelling',
-    imageDir: 'Bilder Forvarsrunden',
-    slug: 'forsvarsrunden',
-    tags: ['fritid', 'nabolag', 'kultur'],
-  },
-  {
-    folder: 'Støtte til lag og foreninger',
-    docxFiles: ['TOBB støtte curling_rede2_ 26.docx'],
-    title: 'Curlingfeber på Hoeggen',
-    type: 'standard',
-    imageDir: 'wetransfer_curling_2026-03-03_1245 2',
-    slug: 'curlingfeber-pa-hoeggen',
-    tags: ['sport', 'fritid', 'nabolag'],
-  },
-  {
-    folder: 'Grønn Plattform',
-    docxFiles: ['Grønn plattform med Vendom, DIPLOM og TOBB_rede2_26.docx'],
-    title: 'Grønn Plattform',
-    type: 'standard',
-    slug: 'gronn-plattform',
-    tags: ['bolig', 'bærekraft'],
-  },
-  {
-    folder: 'Bank og megler',
-    docxFiles: ['Bank_rede2_26.docx', 'Eiendomsmegler_rede2_26.docx'],
-    title: 'Bank og megler',
-    type: 'standard',
-    slug: 'bank-og-megler',
-    tags: ['økonomi', 'bolig'],
-  },
-  {
-    folder: 'Trygghet rundt boligselskapsmodellen',
-    docxFiles: ['Felleskostnader_rede2_26.docx', 'Utfordringer i boligselskap i nord1_rede2_26.docx'],
-    title: 'Trygghet rundt boligselskapsmodellen',
-    type: 'standard',
-    slug: 'trygghet-boligselskap',
-    tags: ['bolig', 'økonomi'],
-  },
-  {
-    folder: 'Medlem_forskjøpsrett',
-    docxFiles: ['Medlem nr 80000_rede2_26.docx'],
-    title: 'Medlem nummer 80 000!',
-    type: 'standard',
-    slug: 'medlem-nummer-80000',
-    tags: ['bolig'],
-  },
-  {
-    folder: 'Medlem case',
-    docxFiles: ['Ole Elias_rede2_26.docx'],
-    title: 'Ole Elias',
-    type: 'standard',
-    slug: 'ole-elias',
-    tags: ['bolig', 'nabolag'],
-  },
-  {
-    folder: 'Hit Padel',
-    docxFiles: ['hit padel_rede2_26.docx'],
-    title: 'Hit Padel',
-    type: 'standard',
-    imageDir: 'Hit Padel',
-    slug: 'hit-padel',
-    tags: ['sport', 'fritid'],
-  },
-  {
-    folder: 'Høyt&Lavt',
-    docxFiles: ['Høyt&lavt_rede2_26.docx'],
-    title: 'Høyt og lavt',
-    type: 'standard',
-    imageDir: 'wetransfer_adelie-zip-line-jpg_2026-03-23_1719',
-    slug: 'hoyt-og-lavt',
-    tags: ['fritid', 'barn'],
-  },
-  {
-    folder: 'Trondheim Kino',
-    docxFiles: ['Trondheim Kino_rede2_26.docx'],
-    title: 'Trondheim Kino',
-    type: 'standard',
-    imageDir: 'Trondheim Kino bilder til TOBB',
-    slug: 'trondheim-kino',
-    tags: ['kultur', 'fritid'],
-  },
-  {
-    folder: 'Kåseri',
-    docxFiles: ['Rede 2602_taklekkasje.docx'],
-    title: 'Farvel til tørt inneklima',
-    type: 'standard',
-    slug: 'farvel-til-tort-inneklima',
-    tags: ['bolig'],
-  },
-]
+interface EditionManifest {
+  edition: {
+    id: string
+    title: string
+    number: number
+    year: number
+    publishedAt: string
+  }
+  editionFolder: string
+  tags: string[]
+  articles: ArticleDef[]
+}
 
-const TAG_LIST = [
-  'bolig', 'økonomi', 'fritid', 'kultur', 'mat',
-  'sport', 'nabolag', 'bærekraft', 'barn',
-]
+// --- Velg utgave via manifest ---
+//   --edition=2-2026   → scripts/editions/rede-2-2026.json
+//   --manifest=<sti>   → eksplisitt manifestfil
+const editionArg = argValue('--edition') ?? '2-2026'
+const manifestPath = path.resolve(
+  argValue('--manifest') ??
+    path.join(process.cwd(), 'scripts', 'editions', `rede-${editionArg}.json`)
+)
+
+if (!fs.existsSync(manifestPath)) {
+  console.error(`❌ Fant ikke manifest: ${manifestPath}`)
+  console.error('   Bruk --edition=<nr-år> (f.eks. 2-2026) eller --manifest=<sti>.')
+  process.exit(1)
+}
+
+const MANIFEST: EditionManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'))
+const EDITION = MANIFEST.edition
+const ARTICLES: ArticleDef[] = MANIFEST.articles
+const TAG_LIST: string[] = MANIFEST.tags
+
+// Innholdsmappe (journalistens råmateriale). Oppløsning:
+//   1. --content="<eksakt utgavemappe>"             (overstyrer alt)
+//   2. REDE_CONTENT_DIR=<basemappe> + editionFolder  (f.eks. Drive «…/Rede 2026»)
+//   3. lokal content/<editionFolder>                 (fallback)
+const contentArg = argValue('--content')
+const CONTENT_DIR = path.resolve(
+  contentArg ??
+    (process.env.REDE_CONTENT_DIR
+      ? path.join(process.env.REDE_CONTENT_DIR, MANIFEST.editionFolder)
+      : path.join(process.cwd(), 'content', MANIFEST.editionFolder))
+)
 
 // --- Helpers ---
 
@@ -416,27 +356,88 @@ function buildSections(
   }).filter(Boolean)
 }
 
+// --- Dry-run: valider manifest mot innholdsmappa ---
+
+async function dryRun() {
+  console.log('🔎 Tørrkjøring — validerer manifest mot innholdsmappa (ingen Sanity/Claude).\n')
+  console.log(`📄 Manifest: ${manifestPath}`)
+  console.log(`📂 Innholdsmappe: ${CONTENT_DIR}\n`)
+
+  let problems = 0
+
+  if (!fs.existsSync(CONTENT_DIR)) {
+    console.error(`❌ Finner ikke innholdsmappa: ${CONTENT_DIR}`)
+    console.error('   Sjekk REDE_CONTENT_DIR / --content, og at Drive er montert.')
+    process.exit(1)
+  }
+
+  for (const article of ARTICLES) {
+    console.log(`📝 ${article.title}  (${article.type})  →  ${article.folder}`)
+
+    const folderPath = path.join(CONTENT_DIR, article.folder)
+    if (!fs.existsSync(folderPath)) {
+      problems++
+      console.log(`   ✗ MAPPE MANGLER: ${article.folder}\n`)
+      continue
+    }
+
+    for (const docx of article.docxFiles) {
+      const ok = fs.existsSync(path.join(folderPath, docx))
+      if (!ok) problems++
+      console.log(`   ${ok ? '✓' : '✗'} docx: ${docx}`)
+    }
+
+    if (article.imageDir) {
+      const dir = path.join(folderPath, article.imageDir)
+      if (!fs.existsSync(dir)) {
+        problems++
+        console.log(`   ✗ bildemappe MANGLER: ${article.imageDir}`)
+      } else {
+        const imgs = await findImages(dir)
+        console.log(`   ✓ bildemappe: ${article.imageDir} (${imgs.length} bilder lest, maks 8 brukes)`)
+      }
+    }
+
+    const direct = await findImages(folderPath)
+    if (direct.length) console.log(`   · ${direct.length} løse bilder direkte i mappa`)
+    console.log('')
+  }
+
+  console.log(
+    problems === 0
+      ? '✅ Tørrkjøring OK — alle filer i manifestet ble funnet.'
+      : `⚠️  Tørrkjøring fant ${problems} problem(er) — rett manifest eller sjekk Drive-navn.`
+  )
+  if (problems > 0) process.exit(1)
+}
+
 // --- Main import ---
 
 async function main() {
-  console.log('🚀 Starter import av Rede 2 2026\n')
+  if (DRY_RUN) {
+    await dryRun()
+    return
+  }
+
+  console.log(`🚀 Starter import av ${EDITION.title}\n`)
 
   console.log(
     FORCE
       ? '⚠️  --force aktiv: eksisterende artikler vil OVERSKRIVES\n'
       : 'ℹ️  Trygg modus: eksisterende artikler hoppes over (bruk --force for å overskrive)\n'
   )
+  console.log(`📄 Manifest: ${manifestPath}`)
   console.log(`📂 Innholdsmappe: ${CONTENT_DIR}\n`)
 
   // 1. Create edition (deterministisk _id → gjenbrukes ved re-kjøring)
   console.log('📖 Oppretter utgave...')
   const edition = await sanity.createIfNotExists({
-    _id: 'edition-2-2026',
+    _id: EDITION.id,
     _type: 'edition',
-    title: 'Rede nr 2 2026',
-    number: 2,
-    year: 2026,
-    publishedAt: '2026-04-01T00:00:00Z',
+    title: EDITION.title,
+    number: EDITION.number,
+    year: EDITION.year,
+    publishedAt: EDITION.publishedAt,
   })
   console.log(`   ✓ Utgave: ${edition._id}\n`)
 
@@ -465,6 +466,9 @@ async function main() {
 
   // 3. Import articles
   for (const article of ARTICLES) {
+    // Målrettet re-import: hopp over alt unntatt valgt slug.
+    if (ONLY && article.slug !== ONLY) continue
+
     console.log(`📝 ${article.title} (${article.type})`)
 
     // Deterministisk _id slik at re-kjøring treffer samme dokument.
@@ -572,7 +576,7 @@ async function main() {
       slug: { _type: 'slug', current: article.slug },
       type: article.type,
       edition: { _type: 'reference', _ref: edition._id },
-      publishedAt: '2026-04-01T00:00:00Z',
+      publishedAt: EDITION.publishedAt,
       tags: article.tags.map((t) => ({
         _type: 'reference',
         _ref: tagMap[t],

@@ -141,26 +141,53 @@ Gjort **etter** GitHub-transfer, slik at vi koblet mot repoet på endelig plasse
 
 ---
 
-## Fase 5 — Innhold til Drive + regler  ← NESTE FASE
+## Fase 5 — Innhold til Drive + regler  ← PÅGÅR
 
-`content/` er gitignorert, så **live site er ALDRI avhengig av mappa** — den brukes kun av
-`scripts/import-edition.ts` (engangs-seeding). Å flytte mappa kan derfor ikke ta ned siden.
+### Hva vi oppdaget (kartlagt 2026-06-01)
+- **Drive er allerede komplett.** Journalistens råmateriale ligger i den delte disken på
+  `Delte disker/Superponni/02 Prosjekter/TOBB/REDE/Rede 2026/Rede 2 2026/`. Tidligere antagelse
+  om at «Drive mangler filer» var en **synkeartefakt** (online-only-mapper lister ikke innholdet
+  før de materialiseres). Verifisert: lokal `Kjepphest/bilder/` (89 filer) er identisk med
+  journalistens `wetransfer_kjepphest_utkast-bilder…/`.
+- **Eneste reelle forskjell lokalt vs. Drive var NAVN**, ikke filer: vi hadde lokalt døpt om
+  rotete leveransemapper (`wetransfer_…` → `bilder`) for at importskriptet skulle finne dem.
+- `content/` er gitignorert, så **live site er ALDRI avhengig av mappa** — å flytte/lese den kan
+  ikke ta ned siden.
 
-**Kontekst for ny økt:** Mappa ligger på `~/Documents/Projects/rede-digitalt/content/`
-(~1GB: `Rede 2 2026/`, `audio-tekster/`, `raw/`). Backup-fila
-`rede-backup-pre-migrasjon.tar.gz` (390 MB) ligger i `~/Documents/Projects/`.
-`CONTENT_DIR` i importskriptet er allerede gjort konfigurerbar via `--content=` / `REDE_CONTENT_DIR`.
+### Modellen vi landet på: tre adskilte hjem
+| Hjem | Innhold | Fasit for | Vi |
+|------|---------|-----------|-----|
+| **Git-repo** (GitHub `Superponni/rede-digitalt`, klonet lokalt) | All kode, `CLAUDE.md`, `.agents/`, `docs/`, `scripts/` + **manifest** | «Hjernen» / agent-oppsettet | redigerer |
+| **Drive «REDE»** (delt disk) | Journalistens råmateriale + backup | Råarkiv | **kun leser** |
+| **Sanity** (`tqfezovu`) | Publisert innhold | Levende innhold | redigerer i Studio |
 
-Anbefalt framgangsmåte:
-- [ ] Opprett **delt Drive** «Rede» (shared drive på Superponni-konto, ikke privat «My Drive»).
-- [ ] Installer **Google Drive for Desktop** hvis ikke alt på plass (gir lokal sti til shared drive).
-- [ ] Flytt `content/`-materialet + `rede-backup-pre-migrasjon.tar.gz` til Drive «Rede».
-- [ ] Beslutning om import-tilgang til mappa (velg én):
-  - **(a) Enkel:** kjør import ved behov med `REDE_CONTENT_DIR="/Drive-sti/Rede" npx tsx scripts/import-edition.ts`
-  - **(b) Sømløs:** symlink `content/` → Drive-stien, så virker default-stien som før
-- [ ] Legg en `LESMEG.txt` i Drive-mappa: «Råarkiv for Rede. Fasit for publisert innhold = Sanity.
+- **Repoet skal ALDRI ligge inni Google Drive** (sync korrumperer `.git`/`node_modules`). Behold
+  lokal sti utenfor Drive. Agent-info deles via GitHub, ikke ved kopi til Drive.
+- **Manifestet er oversettelseslaget.** `scripts/editions/rede-<nr-år>.json` mapper journalistens
+  faktiske (rotete) Drive-navn → Sanity. Importen leser journalistens mappe **urørt**; vi kopierer
+  ingenting opp og forurenser ikke kilden. Det eneste «våre» er manifestet (tekst, versjonert).
+
+### Importskriptet — generalisert (gjort 2026-06-01)
+`scripts/import-edition.ts` er nå manifest-drevet:
+- `npx tsx scripts/import-edition.ts --edition=2-2026 --dry-run` — validerer manifest mot mappa
+  (leser kun mappelistinger, ingen Sanity/Claude, ingen nedlasting av bildebytes). **Verifisert OK
+  mot Drive: alle 13 artikler funnet.**
+- `REDE_CONTENT_DIR="…/REDE/Rede 2026" npx tsx scripts/import-edition.ts --edition=2-2026` — kjør.
+- On-demand: bare docx + maks 8 bilder/artikkel materialiseres fra Drive, ikke hele 1,7 GB.
+
+### Gjenstår
+- [ ] **Redaksjonelt valg:** Grønn Plattform-docx. Manifestet peker default på journalistens
+      `Vendom_rede2_26.docx` (full, nyere versjon, dekker Vendom+DIPLOM+TOBB). Vår lokale var et
+      eldre utkast (571 vs 621 ord). Live Sanity er upåvirket (import hopper over eksisterende).
+      Bytt til override i repoet hvis det gamle utkastet skal bevares.
+- [ ] Flytt `rede-backup-pre-migrasjon.tar.gz` (390 MB) til Drive «REDE» (f.eks. `backups/`).
+- [ ] Legg `LESMEG.txt` i Drive-mappa: «Råarkiv for Rede. Fasit for publisert innhold = Sanity.
       Importskriptet er engangs-seeding, ikke synk — se docs/migrasjon-superponni.md §1.»
-- [ ] (Valgfritt) Fjern den lokale `content/`-kopien når Drive-versjonen er bekreftet, for å frigjøre ~1GB.
+- [ ] (Valgfritt) Fjern lokal `content/`-kopi (1,7 GB) **når** Drive-import er kjørt og verifisert.
+      `audio-tekster/` er generert output (regenereres via `scripts/export-article-text.mjs`);
+      `raw/` er tom.
+- [ ] **Framtidig utgave:** journalist laster opp `Rede 3 2026/` i Drive → lag
+      `scripts/editions/rede-3-2026.json` (map faktiske Drive-navn) → `--dry-run` → import.
 
 ---
 
