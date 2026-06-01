@@ -74,28 +74,30 @@ Fase 6  Verifisering + opprydding
 
 - [ ] Bekreft at `main` er ren og pushet (`git status`, `git push`).
 - [ ] Sikkerhetskopier env-verdier et trygt sted (passordhvelv), ikke bare i `.env.local`.
-- [ ] Ta full Sanity-backup som sikkerhetsnett:
-      `npx sanity dataset export production rede-backup-pre-migrasjon.tar.gz`
+- [x] Ta full Sanity-backup som sikkerhetsnett (2026-06-01):
+      `rede-backup-pre-migrasjon.tar.gz` (390 MB, 28 dok + 82 assets) — ligger i
+      `~/Documents/Projects/` (utenfor repoet). Flytt til Drive «Rede» når den finnes.
 - [ ] Opprett de tre org-kontoene:
   - [ ] **GitHub-organisasjon** «Superponni»
   - [ ] **Vercel Team** «Superponni» (Pro-plan for flere medlemmer/roller/domene)
-  - [ ] **Sanity-organisasjon** «Superponni» (på sanity.io/manage)
+  - [x] **Sanity-organisasjon** «Superponni» (org-ID `oo6Gx1isw`)
 - [ ] Avklar med deg selv: hvilket **domene** og hvem styrer **DNS**? (blokkerer Fase 4)
 
 ---
 
-## Fase 1 — Sanity til organisasjon (gjør først, tryggest)
+## Fase 1 — Sanity til organisasjon (gjør først, tryggest)  ✅ GJORT 2026-06-01
 
 Flytting av et Sanity-prosjekt til en org **beholder samme `projectId` (`tqfezovu`) og dataset**. Ingen kode endres, ingen env endres, ingen re-import, ingen nedetid.
 
-- [ ] sanity.io/manage → prosjekt `tqfezovu` → Settings → **Transfer project to organization** → velg Superponni.
-- [ ] Verifiser at `projectId` fortsatt er `tqfezovu` og at live site + `/studio` fungerer (gjør de — ingenting i koden er rørt).
-- [ ] **Inviter kunde-medlemmer** med riktig rolle:
+- [x] sanity.io/manage → prosjekt `tqfezovu` → flyttet til **Superponni** (org-ID `oo6Gx1isw`).
+- [x] Verifisert: `projectId` fortsatt `tqfezovu`; API-lesing OK (13 artikler, 9 tags, 1 utgave); innhold intakt.
+- [ ] **Inviter kunde-medlemmer** med riktig rolle — **UTSATT til alt er klart (rett før overlevering):**
   - Asbjørn / Superponni: **Administrator**
   - TOBB-redaktør (lager/redigerer innhold): **Editor**
   - TOBB-godkjenner (vedlikehold/godkjenning): **Editor** (eller egendefinert «publisher»-rolle på Growth-plan)
-- [ ] Flytt fakturering til org-eierskap hvis dere oppgraderer plan.
-- [ ] API-token `SANITY_API_WRITE_TOKEN` er per prosjekt og **overlever flyttingen** — ingen endring nødvendig.
+  - *Mangler:* e-postadresser til TOBB-redaktør + -godkjenner.
+- [ ] Flytt fakturering til org-eierskap hvis dere oppgraderer plan (nå: Free).
+- [x] API-token `SANITY_API_WRITE_TOKEN` overlever flyttingen — ingen endring nødvendig.
 
 > **CORS:** Eksisterende origins følger med. Husk å legge til det nye domenet i Fase 4 (Settings → API → CORS origins), ellers vil `/studio` på nytt domene ikke fungere.
 
