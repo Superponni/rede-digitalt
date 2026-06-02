@@ -49,6 +49,17 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
   publiserte beholdes).
 - **`FullscreenMenu.tsx`**: `featured?.slug?.current`-guard.
 
+## 🖥️ Lokalt dev
+
+- **Rede kjører på fast port `3100`** (`next dev/start --port 3100` i package.json).
+  Grunn: Keepr-prosjektet brukte `localhost:3000` og registrerte en **service
+  worker** der. SW-er er bundet til origin (host+port), ikke prosjekt, så Keepr sin
+  SW lekket sitt app-skall/tittel inn i Rede OG serverte stale cache → live-
+  redigering oppdaterte ikke. Egen port = egen origin = ingen Keepr-baggage.
+- **CORS:** `http://localhost:3100` må ligge i Sanity CORS origins (Manage → API).
+- Rydder du opp gammel SW på `:3000`: DevTools → Application → Service Workers →
+  Unregister + tøm Cache Storage.
+
 ## ⚙️ Konfig / hemmeligheter
 
 - **`SANITY_API_READ_TOKEN`** (Viewer-rolle) ligger i `.env.local` (gitignorert),
