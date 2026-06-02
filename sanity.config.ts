@@ -1,10 +1,27 @@
 'use client'
 
-import { defineConfig } from 'sanity'
+import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineDocuments } from 'sanity/presentation'
+import { HomeIcon } from '@sanity/icons'
 import { schemaTypes } from '@/sanity/schemas'
 import { projectId, dataset } from '@/sanity/env'
+import { WelcomeGuide } from '@/sanity/components/WelcomeGuide'
+
+// Velkomstfane: legges først slik at studioet åpner på en veiviser i stedet
+// for en tom skjerm. Se WelcomeGuide.tsx for innholdet.
+const welcomeTool = definePlugin({
+  name: 'rede-welcome',
+  tools: (prev) => [
+    {
+      name: 'velkommen',
+      title: 'Velkommen',
+      icon: HomeIcon,
+      component: WelcomeGuide,
+    },
+    ...prev,
+  ],
+})
 
 export default defineConfig({
   name: 'rede-digitalt',
@@ -15,6 +32,7 @@ export default defineConfig({
   dataset,
 
   plugins: [
+    welcomeTool(),
     structureTool(),
     presentationTool({
       previewUrl: {
