@@ -1,7 +1,12 @@
 import { defineQuery } from 'next-sanity'
 
+// Delt filter: kun publiserbare artikler. Utkast uten slug ekskluderes så
+// lenke-bygging ikke krasjer. Brukes på tvers av alle artikkel-spørringer slik
+// at intensjonen (kun-publiserbare) bor ett sted.
+const PUBLISHABLE_ARTICLE = `_type == "article" && defined(slug.current)`
+
 export const ARTICLES_QUERY = defineQuery(
-  `*[_type == "article" && defined(slug.current)] | order(publishedAt desc) {
+  `*[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -41,7 +46,7 @@ export const EDITION_QUERY = defineQuery(
     year,
     coverImage,
     publishedAt,
-    "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(publishedAt desc) {
+    "articles": *[${PUBLISHABLE_ARTICLE} && references(^._id)] | order(publishedAt desc) {
       _id,
       title,
       slug,
@@ -54,7 +59,7 @@ export const EDITION_QUERY = defineQuery(
 )
 
 export const RELATED_ARTICLES_QUERY = defineQuery(
-  `*[_type == "article" && _id != $id && type == "scrollytelling" && defined(slug.current)] | order(publishedAt desc) [0...3] {
+  `*[${PUBLISHABLE_ARTICLE} && _id != $id && type == "scrollytelling"] | order(publishedAt desc) [0...3] {
     _id,
     title,
     slug,
@@ -68,7 +73,7 @@ export const RELATED_ARTICLES_QUERY = defineQuery(
 export const MENU_QUERY = defineQuery(
   `{
     "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug },
-    "featured": *[_type == "article" && type == "scrollytelling" && defined(slug.current)] | order(publishedAt desc) [0] {
+    "featured": *[${PUBLISHABLE_ARTICLE} && type == "scrollytelling"] | order(publishedAt desc) [0] {
       _id, title, slug, heroImage, "heroVideoUrl": heroVideo.asset->url, tags[]->{ _id, title }
     }
   }`
@@ -77,7 +82,7 @@ export const MENU_QUERY = defineQuery(
 export const TAG_PAGE_QUERY = defineQuery(
   `{
     "tag": *[_type == "tag" && slug.current == $slug][0] { _id, title, slug },
-    "articles": *[_type == "article" && references(*[_type == "tag" && slug.current == $slug][0]._id) && defined(slug.current)] | order(publishedAt desc) {
+    "articles": *[${PUBLISHABLE_ARTICLE} && references(*[_type == "tag" && slug.current == $slug][0]._id)] | order(publishedAt desc) {
       _id, title, slug, type, teaser, heroImage,
       tags[]->{ _id, title, slug }
     }
@@ -89,12 +94,12 @@ export const FRONTPAGE_QUERY = defineQuery(
     "edition": *[_type == "edition"] | order(year desc, number desc) [0] {
       _id, title, number, year, coverImage
     },
-    "articles": *[_type == "article" && defined(slug.current)] | order(publishedAt desc) {
+    "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
       _id, title, slug, type, teaser, heroImage,
       "heroVideoUrl": heroVideo.asset->url,
       tags[]->{ _id, title, slug }
     },
-    "editorial": *[_type == "editorial"][0] {
+    "editorial": *[_type == "editorial"] | order(publishedAt desc) [0] {
       _id, title, slug, teaserText, heroImage
     },
     "podcast": *[_type == "podcastEpisode"] | order(publishedAt desc) [0] {
@@ -105,7 +110,7 @@ export const FRONTPAGE_QUERY = defineQuery(
 )
 
 export const EDITORIAL_PAGE_QUERY = defineQuery(
-  `*[_type == "editorial"][0] {
+  `*[_type == "editorial"] | order(publishedAt desc) [0] {
     _id, title, slug, teaserText, heroImage, fullText,
     "audioFileUrl": audioFile.asset->url,
     edition->{ _id, title, number, year }

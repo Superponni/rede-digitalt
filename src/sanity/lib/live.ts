@@ -3,6 +3,13 @@ import type { QueryParams } from 'next-sanity'
 import { client } from './client'
 import { token } from '../env'
 
+// Felter som IKKE skal stega-kodes: verdiene brukes i logikk (oppslagsnøkler,
+// hex-farger, URL-er) der usynlige stega-tegn bryter f.eks. THEME_MAP-oppslag,
+// fargematch eller embed-URL-er. Matches på feltnavn (siste sti-segment).
+// NB: matcher på basenavn, så et felt med samme navn i en annen type mister
+// også klikk-til-redigering — bevisst avveining (disse navnene er logikk-felter).
+const STEGA_SKIP_FIELDS = ['scrollyTheme', 'scrollyBackground', 'spotifyUrl', 'url']
+
 // Live Content API: gir sanntidsoppdatering i forhåndsvisning (og på publisert
 // innhold). `sanityFetch` bytter automatisk til `drafts`-perspektiv når Next.js
 // `draftMode()` er på — da brukes `serverToken` til å lese utkast.
@@ -18,8 +25,7 @@ const { sanityFetch: liveFetch, SanityLive } = defineLive({
       // URL-er) — usynlige stega-tegn der bryter f.eks. THEME_MAP-oppslag.
       filter: (props) => {
         const key = props.sourcePath[props.sourcePath.length - 1]
-        const skip = ['scrollyTheme', 'scrollyBackground', 'spotifyUrl', 'url']
-        if (typeof key === 'string' && skip.includes(key)) return false
+        if (typeof key === 'string' && STEGA_SKIP_FIELDS.includes(key)) return false
         return props.filterDefault(props)
       },
     },
