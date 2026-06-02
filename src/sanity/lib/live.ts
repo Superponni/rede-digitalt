@@ -25,9 +25,13 @@ const { sanityFetch: liveFetch, SanityLive } = defineLive({
     },
   }),
   serverToken: token,
-  // Med vilje ikke satt: live draft-synk i Presentation skjer via Comlink, så
-  // vi deler aldri et token med nettleseren. `false` demper advarselen.
-  browserToken: false,
+  // Kreves for LIVE draft-oppdatering: `<SanityLive/>` lytter på
+  // `client.live.events({ includeDrafts: !!token })` — uten token får
+  // nettleseren kun published-events, så draft-edits i Presentation refresher
+  // ikke (Comlink-stien håndterer bare perspektiv-bytte, ikke mutasjoner).
+  // next-sanity sender dette tokenet til nettleseren KUN når draftMode er på
+  // (bak preview-secret), aldri til offentlige besøkende. Må være Viewer-rolle.
+  browserToken: token,
 })
 
 export { SanityLive }
