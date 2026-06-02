@@ -27,6 +27,12 @@ export const editorial = defineType({
       to: [{ type: 'edition' }],
     }),
     defineField({
+      name: 'author',
+      title: 'Forfatter',
+      type: 'reference',
+      to: [{ type: 'author' }],
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Publisert',
       type: 'datetime',
