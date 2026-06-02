@@ -63,10 +63,12 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
 ## ⚙️ Konfig / hemmeligheter
 
 - **`SANITY_API_READ_TOKEN`** (Viewer-rolle) ligger i `.env.local` (gitignorert),
-  validert mot `drafts`-perspektiv. Brukes som `serverToken` (kun server-side).
-  `browserToken` er bevisst **ikke** satt (`false`) — Presentation bruker Comlink,
-  ingen token til nettleseren.
+  validert mot `drafts`-perspektiv. Brukes som **både `serverToken` og
+  `browserToken`** i `defineLive`. next-sanity sender browserToken til nettleseren
+  KUN når draftMode er på (bak preview-secret) — aldri til offentlige besøkende, så
+  Viewer-tokenet er trygt. Se «Live-redigering løst» under for hvorfor det kreves.
 - **TODO før produksjon:** legg `SANITY_API_READ_TOKEN` i **Vercel** (alle miljøer).
+  Uten den vil live draft-preview ikke virke i prod (kun published-events).
 - `apiVersion` bumpet til `2025-02-19` (kreves for `drafts`-perspektiv) i `env.ts`.
 
 ## ❗ Gjenstår å verifisere i nettleser (start her i ny chat)
@@ -82,20 +84,42 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
      loggstrengene viser kilden — sannsynlig neste mistenkt er hvordan
      `@sanity/visual-editing` skanner PortableText-tekstnoder, eller en
      RSC-serialisering som mangler zero-width-tegn.
-2. **Live-redigering:** rediger et felt i Presentation-panelet → skal oppdatere
-   preview live (via Comlink, uten publisering). Brukeren rapporterte at dette
-   IKKE virket i forrige (stega-av) tilstand — sjekk på nytt med stega på.
-3. **Øye-knapp:** bekreft at den grønne «Åpne live forhåndsvisning»-knappen
-   øverst i artikkel/leder åpner Presentation med riktig dokument + preview-URL i
-   ett klikk (nå via `navigateIntent('edit', …, mode:'presentation')` — det
-   autoritative tverr-verktøy-mønsteret, ikke lenger `navigateUrl`).
+2. ~~**Live-redigering**~~ ✅ **LØST & verifisert** (se «Live-redigering løst»).
+3. ✅ **Øye-knapp** verifisert: grønn «Åpne live forhåndsvisning» øverst i
+   artikkel/leder, ett klikk → Presentation via `navigateIntent('edit', …,
+   mode:'presentation')`. Skjules inne i Presentation (`usePresentationParams`).
+
+## ✅ Live-redigering løst (browserToken)
+
+**Symptom:** draft-edits i Presentation oppdaterte ikke preview-en live.
+
+**Root-cause:** `<SanityLive/>` (next-sanity 12.2.2) refresher KUN på
+`client.live.events({ includeDrafts: !!token })`. Med `browserToken: false` får
+nettleseren bare published-events → ingen refresh på draft-mutasjon.
+`PresentationComlink` håndterer kun **perspektiv-bytte**, ikke mutasjoner — og
+prosjektet bruker rene server-komponenter + `sanityFetch` (ingen
+`@sanity/react-loader`/`useQuery`-sti som ellers ville fått loader-oppdateringer).
+
+**Fix:** `browserToken: token` i `src/sanity/lib/live.ts`. Sendt til nettleseren
+kun i draftMode (next-sanity `live.js` linje 81: `isDraftModeEnabled ? browserToken
+: void 0`). Krever `localhost:3100` (og prod-domenet) i Sanity CORS origins, fordi
+nettleseren nå kobler til live-endpointet med credentials fra den origin-en.
+
+**Note:** oppdateringen er «litt treg» — forventet, siden `router.refresh()` kjører
+server-komponenten på nytt (refetch + re-render). Ikke optimalisert (ingen måledata).
 
 ## Research-funn (autoritativt, next-sanity v12)
 
-- Inne i Presentation trengs **ikke** `browserToken` — Comlink/postMessage synker
-  drafts. `browserToken` (kun Viewer/published) er bare for frittstående preview.
-- `defineLive` + `sanityFetch` + `<SanityLive/>` er nok for live-i-Presentation;
-  trenger IKKE `@sanity/react-loader`/`useQuery`.
+- ⚠️ **KORRIGERT (var feil):** Det ble tidligere antatt at `browserToken` ikke
+  trengs i Presentation fordi Comlink synker drafts. Det stemmer IKKE for
+  next-sanity 12.2.2 med rene server-komponenter: Comlink (`PresentationComlink`)
+  håndterer kun perspektiv-bytte, ikke mutasjoner. Draft-live krever `browserToken`
+  (→ `includeDrafts:true` på `client.live.events`). Se «Live-redigering løst».
+  Comlink-/loader-synk uten token gjelder kun hvis man bruker
+  `@sanity/react-loader` (`useQuery`/`loadQuery`) i klient-komponenter — det gjør
+  vi ikke her.
+- `defineLive` + `sanityFetch` + `<SanityLive/>` (+ `browserToken`) gir
+  live-i-Presentation uten `@sanity/react-loader`/`useQuery`.
 - stega + tekst som splittes ⇒ rens med `stegaClean()` før splitting; vil man
   beholde overlay på et renset felt, bruk `createDataAttribute()` (begge eksportert
   fra `next-sanity`).
