@@ -60,10 +60,13 @@ const components: PortableTextComponents = {
       if (!value?.content) return null
       const title = value.title || 'Faktaboks'
       return (
-        <aside className="my-10 border-l-4 border-gold bg-navy px-6 py-7 lg:px-8">
-          <h3 className="mb-4 font-heading text-xs font-bold uppercase tracking-[0.2em] text-gold">
-            {title}
-          </h3>
+        <aside className="my-10 bg-navy px-6 py-8 lg:px-10 lg:py-10">
+          <div className="mb-6 lg:mb-8">
+            <h3 className="font-display text-2xl leading-tight text-white lg:text-3xl">
+              {title}
+            </h3>
+            <div className="mt-4 h-px w-16 bg-gold/30" />
+          </div>
           <PortableText
             value={value.content}
             components={{
