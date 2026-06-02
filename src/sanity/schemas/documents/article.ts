@@ -1,9 +1,11 @@
 import { defineType, defineField } from 'sanity'
+import { PreviewInput } from '@/sanity/components/PreviewInput'
 
 export const article = defineType({
   name: 'article',
   title: 'Artikkel',
   type: 'document',
+  components: { input: PreviewInput },
   fields: [
     defineField({
       name: 'title',

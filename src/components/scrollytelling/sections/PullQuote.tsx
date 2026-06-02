@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { stegaClean } from 'next-sanity'
 import { gsap } from '@/lib/gsap-config'
 
 interface PullQuoteProps {
@@ -42,8 +43,9 @@ export function PullQuote({ data }: PullQuoteProps) {
     return () => mm.revert()
   }, [])
 
-  // Split quote into words for staggered animation
-  const words = data.quote?.split(/\s+/) || []
+  // Split quote into words for staggered animation. Rens stega-tegn først —
+  // splitting av en stega-kodet streng ødelegger de usynlige tegnene.
+  const words = stegaClean(data.quote)?.split(/\s+/) || []
 
   return (
     <section

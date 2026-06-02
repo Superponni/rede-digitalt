@@ -152,7 +152,8 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
         </div>
 
         {/* Column 3 — Featured article (right half, prominent) */}
-        {featured && (
+        {/* slug kan mangle på uferdige utkast i forhåndsvisning — da hopper vi over */}
+        {featured?.slug?.current && (
           <div
             className={`hidden flex-1 flex-col items-center justify-center transition-all duration-700 lg:flex ${
               isOpen ? 'translate-x-0 opacity-100' : 'translate-x-8 opacity-0'
