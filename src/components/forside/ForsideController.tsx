@@ -1,11 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
 import { DiscoverView } from './DiscoverView'
 import { MagasinView } from './MagasinView'
 
-const STORAGE_KEY = 'rede-forside-mode'
-
+// Magasin-visningen er midlertidig skjult for bruker — Discover er eneste visning.
+// MagasinView beholdes for senere bruk (toggle kan gjeninnføres ved behov).
 type Mode = 'discover' | 'magasin'
 
 interface Article {
@@ -47,23 +46,7 @@ export function ForsideController({
   podcast,
   edition,
 }: ForsideControllerProps) {
-  const [mode, setMode] = useState<Mode>('discover')
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as Mode | null
-    if (saved === 'discover' || saved === 'magasin') {
-      setMode(saved)
-    }
-    setMounted(true)
-  }, [])
-
-  const toggle = useCallback(() => {
-    const next: Mode = mode === 'discover' ? 'magasin' : 'discover'
-    setMode(next)
-    localStorage.setItem(STORAGE_KEY, next)
-    window.scrollTo(0, 0)
-  }, [mode])
+  const mode: Mode = 'discover'
 
   // Categorize articles for MagasinView
   const scrollytelling = articles.filter((a) => a.type === 'scrollytelling')
@@ -74,28 +57,6 @@ export function ForsideController({
 
   return (
     <>
-      {/* Toggle — right-aligned near Meny+ */}
-      {mounted && (
-        <div className="pointer-events-none fixed top-0 z-50 w-full">
-          <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-end px-6">
-            <button
-              onClick={toggle}
-              className="pointer-events-auto mr-24 flex cursor-pointer items-center gap-2.5"
-            >
-              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-white/50">
-                {mode === 'discover' ? 'Discover' : 'Magasin'}
-              </span>
-              <div className="relative h-5 w-9 rounded-full bg-white/10 transition-colors duration-300">
-                <div
-                  className="absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-300"
-                  style={{ transform: mode === 'magasin' ? 'translateX(18px)' : 'translateX(2px)' }}
-                />
-              </div>
-            </button>
-          </div>
-        </div>
-      )}
-
       {mode === 'discover' ? (
         <DiscoverView
           articles={articles}
