@@ -33,8 +33,9 @@ export default defineConfig({
 
   plugins: [
     welcomeTool(),
-    structureTool(),
+    structureTool({ title: 'Struktur' }),
     presentationTool({
+      title: 'Forhåndsvisning',
       previewUrl: {
         previewMode: {
           enable: '/api/draft-mode/enable',
