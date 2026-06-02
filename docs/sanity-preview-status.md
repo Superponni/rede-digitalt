@@ -71,23 +71,19 @@ sanity 5.20.0, @sanity/client 7.20.0. Studio embedded på `/studio` (same origin
   Uten den vil live draft-preview ikke virke i prod (kun published-events).
 - `apiVersion` bumpet til `2025-02-19` (kreves for `drafts`-perspektiv) i `env.ts`.
 
-## ❗ Gjenstår å verifisere i nettleser (start her i ny chat)
+## ✅ Alt verifisert i nettleser
 
-1. **De 183 «Failed to decode stega»-feilene** dukket opp på forsvarsrunden FØR
-   stega-fiksene. Reproduksjon viste at **rådataen er ren** (51 stega-strenger, 0
-   dekodingsfeil, 0 «pure-invisible»), og det finnes **ingen annen display-tekst-
-   splitting** enn PullQuote (nå renset) — og forsvarsrunden har ingen PullQuote.
-   Hypotese: feilene hørte til mellomtilstanden og er borte nå. **Må bekreftes.**
-   - **Slik verifiserer du:** hard refresh `localhost:3000/studio` → åpne
-     forsvarsrunden i Presentation → les `[browser] Failed to decode stega` i
-     dev-server-loggen (`npm run dev` stdout). Tell antall. Hvis fortsatt mange:
-     loggstrengene viser kilden — sannsynlig neste mistenkt er hvordan
-     `@sanity/visual-editing` skanner PortableText-tekstnoder, eller en
-     RSC-serialisering som mangler zero-width-tegn.
-2. ~~**Live-redigering**~~ ✅ **LØST & verifisert** (se «Live-redigering løst»).
+1. ✅ **De 183 «Failed to decode stega»-feilene er borte.** Verifisert 2026-06-02:
+   forsvarsrunden lastet i draft-modus (`?sanity-preview-perspective=drafts`, dvs.
+   stega faktisk kodet inn) → **0 stega-feil** i dev-loggen. Hypotesen stemte:
+   feilene tilhørte mellomtilstanden før stega-fiksene (rådata var bekreftet ren).
+2. ✅ **Live-redigering** LØST & verifisert (se «Live-redigering løst»).
 3. ✅ **Øye-knapp** verifisert: grønn «Åpne live forhåndsvisning» øverst i
    artikkel/leder, ett klikk → Presentation via `navigateIntent('edit', …,
    mode:'presentation')`. Skjules inne i Presentation (`usePresentationParams`).
+
+**→ Branchen er funksjonelt ferdig.** Gjenstår kun: legg token + prod-domene-CORS
+i Vercel (se Konfig), og merge til `main`.
 
 ## ✅ Live-redigering løst (browserToken)
 
