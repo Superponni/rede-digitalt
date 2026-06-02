@@ -121,7 +121,7 @@ export const article = defineType({
         layout: 'radio',
       },
       hidden: ({ parent }) => parent?.type !== 'scrollytelling',
-      description: 'Velg fargetema for scrollytelling-opplevelsen',
+      description: 'Styrer stemningen: aksentfarger og hvordan animasjonene føles (rolig vs. energisk). Ikke bakgrunnsfargen — den settes i feltet under.',
     }),
     defineField({
       name: 'scrollyBackground',
