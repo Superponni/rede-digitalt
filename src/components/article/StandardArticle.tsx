@@ -66,7 +66,7 @@ export function StandardArticle({ article }: StandardArticleProps) {
 
           {/* Meta */}
           <div className="mt-6 flex items-center gap-4 border-t border-navy/10 pt-4 text-sm text-navy/40">
-            {article.author && <span>{article.author.name}</span>}
+            {article.author && <span>Tekst: {article.author.name}</span>}
             {article.edition && (
               <span>Rede nr {article.edition.number} {article.edition.year}</span>
             )}
