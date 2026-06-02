@@ -6,7 +6,7 @@ export function Footer() {
           <span className="font-display text-3xl italic text-white">Rede</span>
           <p className="max-w-md font-heading text-sm text-white/40">
             Rede er TOBBs medlemsmagasin med historier om bolig, nabolag og
-            livet i Trondheim.
+            livet i Trøndelag.
           </p>
           <div className="mt-4 font-heading text-[11px] uppercase tracking-widest text-white/30">
             &copy; {new Date().getFullYear()} TOBB

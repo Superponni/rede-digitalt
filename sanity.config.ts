@@ -35,6 +35,10 @@ export default defineConfig({
             route: '/leder',
             filter: `_type == "editorial"`,
           },
+          {
+            route: '/om',
+            filter: `_type == "aboutPage"`,
+          },
         ]),
       },
     }),

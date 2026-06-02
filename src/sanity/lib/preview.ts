@@ -11,5 +11,8 @@ export function previewPathFor(
   if (type === 'editorial') {
     return '/leder'
   }
+  if (type === 'aboutPage') {
+    return '/om'
+  }
   return null
 }

@@ -109,6 +109,22 @@ export const FRONTPAGE_QUERY = defineQuery(
   }`
 )
 
+export const ABOUT_PAGE_QUERY = defineQuery(
+  `{
+    "page": *[_type == "aboutPage"][0] {
+      label, title, intro,
+      featureLabel, featureHeading, featureBody,
+      topicsLabel, publisherLine, editionsHeading
+    },
+    "editions": *[_type == "edition"] | order(year desc, number desc) {
+      _id, title, number, year, coverImage, publishedAt
+    },
+    "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) {
+      _id, title, slug
+    }
+  }`
+)
+
 export const EDITORIAL_PAGE_QUERY = defineQuery(
   `*[_type == "editorial"] | order(publishedAt desc) [0] {
     _id, title, slug, teaserText, heroImage, fullText,
