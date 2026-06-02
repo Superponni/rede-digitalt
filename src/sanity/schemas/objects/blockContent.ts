@@ -62,6 +62,9 @@ export const blockContent = defineType({
       },
     }),
     defineArrayMember({
+      type: 'inlineFactBox',
+    }),
+    defineArrayMember({
       type: 'image',
       options: { hotspot: true },
       fields: [

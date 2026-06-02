@@ -56,6 +56,57 @@ const components: PortableTextComponents = {
     ),
   },
   types: {
+    inlineFactBox: ({ value }) => {
+      if (!value?.content) return null
+      const title = value.title || 'Faktaboks'
+      return (
+        <aside className="my-10 border-l-4 border-gold bg-navy px-6 py-7 lg:px-8">
+          <h3 className="mb-4 font-heading text-xs font-bold uppercase tracking-[0.2em] text-gold">
+            {title}
+          </h3>
+          <PortableText
+            value={value.content}
+            components={{
+              block: {
+                normal: ({ children }) => (
+                  <p className="mb-3 text-[16px] leading-[1.7] text-white/85 last:mb-0">
+                    {children}
+                  </p>
+                ),
+              },
+              list: {
+                bullet: ({ children }) => (
+                  <ul className="mb-4 list-none space-y-2 pl-0 last:mb-0">{children}</ul>
+                ),
+              },
+              listItem: {
+                bullet: ({ children }) => (
+                  <li className="flex items-baseline gap-3 text-[16px] leading-[1.6] text-white/85">
+                    <span className="mt-[0.4em] h-1.5 w-1.5 shrink-0 bg-gold" />
+                    <span>{children}</span>
+                  </li>
+                ),
+              },
+              marks: {
+                strong: ({ children }) => (
+                  <strong className="font-bold text-white">{children}</strong>
+                ),
+                link: ({ children, value: mark }) => (
+                  <a
+                    href={mark?.href}
+                    target={mark?.blank ? '_blank' : undefined}
+                    rel={mark?.blank ? 'noopener noreferrer' : undefined}
+                    className="text-gold underline decoration-gold/40 underline-offset-2 hover:decoration-gold"
+                  >
+                    {children}
+                  </a>
+                ),
+              },
+            }}
+          />
+        </aside>
+      )
+    },
     image: ({ value }) => {
       if (!value?.asset) return null
       return (

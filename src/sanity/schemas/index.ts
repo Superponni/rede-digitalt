@@ -18,6 +18,7 @@ import { pullQuote } from './objects/pullQuote'
 import { videoSection } from './objects/videoSection'
 import { audioSection } from './objects/audioSection'
 import { factBox } from './objects/factBox'
+import { inlineFactBox } from './objects/inlineFactBox'
 import { gallery } from './objects/gallery'
 import { stickyPortrait } from './objects/stickyPortrait'
 import { recipeCard } from './objects/recipeCard'
@@ -43,6 +44,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   videoSection,
   audioSection,
   factBox,
+  inlineFactBox,
   gallery,
   stickyPortrait,
   recipeCard,
