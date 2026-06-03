@@ -5,6 +5,19 @@ import { defineQuery } from 'next-sanity'
 // at intensjonen (kun-publiserbare) bor ett sted.
 const PUBLISHABLE_ARTICLE = `_type == "article" && defined(slug.current)`
 
+// Felles SEO-fragment. `legacyOgDescription` plukker opp den gamle topp-nivå-
+// `ogDescription` fra dokumenter importert før seo-objektet, så fallback i
+// generateMetadata fungerer uten re-import.
+const SEO_FRAGMENT = `
+  seo {
+    metaTitle,
+    metaDescription,
+    shareImage,
+    noIndex
+  },
+  "legacyOgDescription": ogDescription
+`
+
 export const ARTICLES_QUERY = defineQuery(
   `*[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
     _id,
@@ -31,10 +44,14 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
     sections,
     scrollyTheme,
     scrollyBackground,
+    publishedAt,
+    _updatedAt,
+    estimatedReadTime,
     "audioFileUrl": audioFile.asset->url,
     tags[]->{ _id, title, slug },
     edition->{ _id, title, number, year },
-    author->{ _id, name, bio, portrait }
+    author->{ _id, name, slug, bio, portrait },
+    ${SEO_FRAGMENT}
   }`
 )
 
@@ -128,7 +145,29 @@ export const ABOUT_PAGE_QUERY = defineQuery(
 export const EDITORIAL_PAGE_QUERY = defineQuery(
   `*[_type == "editorial"] | order(publishedAt desc) [0] {
     _id, title, slug, teaserText, heroImage, fullText,
+    publishedAt, _updatedAt,
     "audioFileUrl": audioFile.asset->url,
-    edition->{ _id, title, number, year }
+    edition->{ _id, title, number, year },
+    author->{ _id, name },
+    ${SEO_FRAGMENT}
+  }`
+)
+
+// Lettvekts-spørring for sitemap.xml: kun det vi trenger for å liste URL-er og
+// «sist endret»-datoer. Ekskluderer sider som er skjult fra Google (seo.noIndex).
+export const SITEMAP_QUERY = defineQuery(
+  `{
+    "articles": *[${PUBLISHABLE_ARTICLE} && seo.noIndex != true] | order(publishedAt desc) {
+      "slug": slug.current,
+      _updatedAt,
+      publishedAt
+    },
+    "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) {
+      "slug": slug.current,
+      _updatedAt
+    },
+    "editorial": *[_type == "editorial" && seo.noIndex != true] | order(publishedAt desc) [0] {
+      _updatedAt
+    }
   }`
 )

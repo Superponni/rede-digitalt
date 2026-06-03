@@ -90,13 +90,6 @@ export const article = defineType({
       description: 'Kort intro for forsiden (1-2 setninger)',
     }),
     defineField({
-      name: 'ogDescription',
-      title: 'OG-beskrivelse',
-      type: 'text',
-      rows: 2,
-      description: 'Beskrivelse for deling i sosiale medier',
-    }),
-    defineField({
       name: 'estimatedReadTime',
       title: 'Lesetid (minutter)',
       type: 'number',
@@ -168,6 +161,13 @@ export const article = defineType({
       type: 'blockContent',
       hidden: ({ parent }) => parent?.type !== 'standard',
       description: 'Brødtekst for standard-artikler',
+    }),
+    defineField({
+      name: 'seo',
+      title: 'Deling & søk',
+      type: 'seo',
+      description:
+        'Valgfritt. Overstyr hvordan artikkelen ser ut i Google og ved deling. Tom = utledes automatisk fra tittel, ingress og hovedbilde.',
     }),
   ],
   preview: {

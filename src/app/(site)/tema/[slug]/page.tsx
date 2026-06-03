@@ -1,9 +1,11 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { sanityFetch } from '@/sanity/lib/live'
 import { TAG_PAGE_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
+import { metaRobots } from '@/lib/seo'
 
 interface Article {
   _id: string
@@ -15,16 +17,45 @@ interface Article {
   tags?: { _id: string; title: string; slug: { current: string } }[]
 }
 
+interface TagData {
+  tag: { _id: string; title: string; slug: { current: string } } | null
+  articles: Article[]
+}
+
+async function getTagData(slug: string): Promise<TagData> {
+  return sanityFetch<TagData>({ query: TAG_PAGE_QUERY, params: { slug } })
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const data = await getTagData(slug)
+  if (!data.tag) return {}
+
+  const title = `${data.tag.title} – tema`
+  const description = `Artikler fra Rede om ${data.tag.title.toLowerCase()}.`
+  const path = `/tema/${data.tag.slug.current}`
+
+  return {
+    title,
+    description,
+    robots: metaRobots(),
+    alternates: { canonical: path },
+    openGraph: { type: 'website', title, description, url: path },
+    twitter: { card: 'summary_large_image', title, description },
+  }
+}
+
 export default async function TemaPage({
   params,
 }: {
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const data = await sanityFetch<{
-    tag: { _id: string; title: string; slug: { current: string } } | null
-    articles: Article[]
-  }>({ query: TAG_PAGE_QUERY, params: { slug } })
+  const data = await getTagData(slug)
 
   if (!data.tag) notFound()
 

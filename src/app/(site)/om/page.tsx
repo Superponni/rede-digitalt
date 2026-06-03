@@ -1,13 +1,27 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { sanityFetch } from '@/sanity/lib/live'
 import { ABOUT_PAGE_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
+import { metaRobots } from '@/lib/seo'
 
-export const metadata = {
-  title: 'Om Rede',
-  description:
-    'Rede er TOBBs medlemsmagasin — historier om bolig, nabolag og folk i Trøndelag, nå som en digital leseopplevelse.',
+const omTitle = 'Om Rede'
+const omDescription =
+  'Rede er TOBBs medlemsmagasin — historier om bolig, nabolag og folk i Trøndelag, nå som en digital leseopplevelse.'
+
+export const metadata: Metadata = {
+  title: omTitle,
+  description: omDescription,
+  robots: metaRobots(),
+  alternates: { canonical: '/om' },
+  openGraph: {
+    type: 'website',
+    title: omTitle,
+    description: omDescription,
+    url: '/om',
+  },
+  twitter: { card: 'summary_large_image', title: omTitle, description: omDescription },
 }
 
 interface Edition {

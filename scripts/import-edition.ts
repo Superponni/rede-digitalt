@@ -583,7 +583,8 @@ async function main() {
         _key: randomKey(),
       })),
       teaser: analysis.teaser,
-      ogDescription: analysis.ogDescription,
+      // Søkebeskrivelse legges i seo-objektet (redaktør-fanen «Deling & søk»).
+      seo: { _type: 'seo', metaDescription: analysis.ogDescription },
       estimatedReadTime: analysis.estimatedReadTime,
     }
 

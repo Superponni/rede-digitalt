@@ -11,6 +11,7 @@ import { tag } from './documents/tag'
 import { author } from './documents/author'
 
 // Objekttyper (seksjoner + blockContent)
+import { seo } from './objects/seo'
 import { blockContent } from './objects/blockContent'
 import { heroSection } from './objects/heroSection'
 import { textWithImage } from './objects/textWithImage'
@@ -38,6 +39,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   tag,
   author,
   // Objekter
+  seo,
   blockContent,
   heroSection,
   textWithImage,

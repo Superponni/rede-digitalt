@@ -74,6 +74,13 @@ export const editorial = defineType({
       type: 'file',
       options: { accept: 'video/*' },
     }),
+    defineField({
+      name: 'seo',
+      title: 'Deling & søk',
+      type: 'seo',
+      description:
+        'Valgfritt. Overstyr hvordan lederen ser ut i Google og ved deling. Tom = utledes automatisk fra tittel, teaser og bilde.',
+    }),
   ],
   preview: {
     select: {

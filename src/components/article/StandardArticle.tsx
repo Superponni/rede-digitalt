@@ -59,7 +59,7 @@ export function StandardArticle({ article }: StandardArticleProps) {
           </h1>
 
           {article.teaser && (
-            <p className="mt-4 text-lg leading-relaxed text-navy/60 lg:text-xl">
+            <p data-speakable className="mt-4 text-lg leading-relaxed text-navy/60 lg:text-xl">
               {article.teaser}
             </p>
           )}
