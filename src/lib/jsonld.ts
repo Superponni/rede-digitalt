@@ -1,5 +1,8 @@
 import { absoluteUrl, siteName, sitePublisher, siteDescription, siteUrl } from './site'
 
+// Rede-logoen som bilde (genereres av app/rede-logo.png). 512×512 mint/navy.
+const LOGO_URL = absoluteUrl('/rede-logo.png')
+
 // Byggere for schema.org / JSON-LD. Strukturerte data er grunnmuren for BÅDE
 // Googles rik-resultater OG at AI-svarmotorer (ChatGPT, Perplexity, Google AI
 // Overviews) trygt kan sitere innholdet. Vi holder oss til godt etablerte typer
@@ -19,6 +22,13 @@ export function organizationLd() {
     name: siteName,
     url: siteUrl,
     description: siteDescription,
+    logo: {
+      '@type': 'ImageObject',
+      url: LOGO_URL,
+      width: 512,
+      height: 512,
+    },
+    image: LOGO_URL,
     parentOrganization: {
       '@type': 'Organization',
       name: sitePublisher,
