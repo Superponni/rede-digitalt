@@ -16,7 +16,7 @@ import type { FieldProps, ObjectInputProps } from 'sanity'
 const INTRO =
   'Her styrer du sidetittelen (den som vises i nettleserfanen) og hvordan ' +
   'siden ser ut i Google og når lenken deles. Står feltene tomme, hentes ' +
-  'tittel, ingress og hovedbilde automatisk fra innholdet.'
+  'tittel, beskrivelse og delebilde automatisk fra innholdet.'
 
 // Field-wrapper uten fieldset-ramme/overskrift — rendrer bare innholdet.
 export function SeoField(props: FieldProps) {
