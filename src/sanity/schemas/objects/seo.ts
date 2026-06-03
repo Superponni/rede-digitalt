@@ -12,20 +12,20 @@ export const seo = defineType({
   fields: [
     defineField({
       name: 'metaTitle',
-      title: 'Søketittel (valgfri)',
+      title: 'Tittel i Google og ved deling (valgfri)',
       type: 'string',
       description:
-        'Tittelen som vises i Google-treff og i fanen. La stå tom for å bruke artikkeltittelen. Hold den under ~60 tegn så den ikke kuttes.',
+        'Vises i Google-treff, i nettleserfanen og når lenken deles (Slack, Messenger osv.). Endrer IKKE overskriften på selve artikkelen — den styres av «Tittel» i Artikkel-fanen. La stå tom for å gjenbruke artikkeltittelen. Hold under ~60 tegn så den ikke kuttes.',
       validation: (rule) =>
         rule.max(70).warning('Lengre enn ~60 tegn kan bli kuttet i Google.'),
     }),
     defineField({
       name: 'metaDescription',
-      title: 'Søkebeskrivelse (valgfri)',
+      title: 'Beskrivelse i Google og ved deling (valgfri)',
       type: 'text',
       rows: 3,
       description:
-        'Den korte teksten under tittelen i Google og ved deling. La stå tom for å bruke ingressen/teaseren. Ideelt 120–155 tegn.',
+        'Den korte teksten under tittelen i Google-treff og ved deling. La stå tom for å bruke ingressen/teaseren. Ideelt 120–155 tegn.',
       validation: (rule) =>
         rule.max(170).warning('Lengre enn ~155 tegn kan bli kuttet.'),
     }),
