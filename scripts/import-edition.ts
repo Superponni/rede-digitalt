@@ -42,6 +42,7 @@ import mammoth from 'mammoth'
 import Anthropic from '@anthropic-ai/sdk'
 import fs from 'fs'
 import path from 'path'
+import { SEO_GUIDANCE } from './lib/seo-prompt'
 
 // --- Config ---
 
@@ -212,7 +213,8 @@ async function analyzeArticle(
   imageCount: number
 ): Promise<{
   teaser: string
-  ogDescription: string
+  metaTitle: string | null
+  metaDescription: string
   estimatedReadTime: number
   sections?: Array<{
     _type: string
@@ -244,11 +246,13 @@ Lag 5-8 seksjoner med god variasjon. Varier overganger.`
         content: `Analyser denne norske magasinartikkelen og gi meg:
 
 1. "teaser": En kort, engasjerende teaser på 1-2 setninger (norsk bokmål)
-2. "ogDescription": En SEO-vennlig beskrivelse på maks 160 tegn
-3. "estimatedReadTime": Estimert lesetid i minutter
+2. "estimatedReadTime": Estimert lesetid i minutter
+3. "metaTitle" og "metaDescription" etter disse SEO-reglene:
+
+${SEO_GUIDANCE}
 ${sectionPrompt}
 
-Svar KUN med gyldig JSON, ingen annen tekst.
+Svar KUN med gyldig JSON, ingen annen tekst. Felter: teaser, estimatedReadTime, metaTitle (string|null), metaDescription (string)${type === 'scrollytelling' ? ', sections' : ''}.
 
 Tittel: ${title}
 
@@ -563,7 +567,8 @@ async function main() {
       console.error(`   ✗ AI-analyse feilet: ${(err as Error).message}`)
       analysis = {
         teaser: fullText.substring(0, 150) + '...',
-        ogDescription: article.title,
+        metaTitle: null,
+        metaDescription: '',
         estimatedReadTime: Math.ceil(fullText.split(/\s+/).length / 200),
       }
     }
@@ -583,10 +588,15 @@ async function main() {
         _key: randomKey(),
       })),
       teaser: analysis.teaser,
-      // Søkebeskrivelse legges i seo-objektet (redaktør-fanen «Deling & søk»).
-      seo: { _type: 'seo', metaDescription: analysis.ogDescription },
       estimatedReadTime: analysis.estimatedReadTime,
     }
+
+    // Søkebeskrivelse/-tittel legges i seo-objektet (redaktør-fanen «Deling &
+    // søk») som anbefaling. metaTitle settes kun når Claude faktisk foreslår en.
+    const seoObj: Record<string, unknown> = { _type: 'seo' }
+    if (analysis.metaDescription) seoObj.metaDescription = analysis.metaDescription
+    if (analysis.metaTitle) seoObj.metaTitle = analysis.metaTitle
+    if (Object.keys(seoObj).length > 1) doc.seo = seoObj
 
     // Hero image
     if (uploadedImages.length > 0) {

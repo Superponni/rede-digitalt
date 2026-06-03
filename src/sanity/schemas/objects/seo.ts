@@ -9,7 +9,6 @@ export const seo = defineType({
   name: 'seo',
   title: 'Deling & søk',
   type: 'object',
-  options: { collapsible: true, collapsed: true },
   fields: [
     defineField({
       name: 'metaTitle',
