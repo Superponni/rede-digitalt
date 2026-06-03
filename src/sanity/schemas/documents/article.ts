@@ -10,7 +10,7 @@ export const article = defineType({
   // Faner i toppen av dokumentet (samme mønster som om-siden): selve innholdet
   // i «Artikkel», finnbarhet i «Deling & søk» — lett tilgjengelig for redaktør.
   groups: [
-    { name: 'innhold', title: 'Artikkel', default: true },
+    { name: 'innhold', title: 'Innhold', default: true },
     { name: 'seo', title: 'Deling & søk' },
     HIDDEN_ALL_FIELDS_GROUP,
   ],
