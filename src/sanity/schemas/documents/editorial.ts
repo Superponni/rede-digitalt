@@ -9,7 +9,7 @@ export const editorial = defineType({
   components: { input: PreviewInput },
   // Faner: innhold i «Leder», finnbarhet i «Deling & søk» (jf. artikkel/om-side).
   groups: [
-    { name: 'innhold', title: 'Leder', default: true },
+    { name: 'innhold', title: 'Innhold', default: true },
     { name: 'seo', title: 'Deling & søk' },
     HIDDEN_ALL_FIELDS_GROUP,
   ],
