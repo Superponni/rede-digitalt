@@ -3,10 +3,12 @@
 import { defineConfig, definePlugin } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool, defineDocuments } from 'sanity/presentation'
+import { nbNOLocale } from '@sanity/locale-nb-no'
 import { HomeIcon } from '@sanity/icons'
 import { schemaTypes } from '@/sanity/schemas'
 import { projectId, dataset } from '@/sanity/env'
 import { WelcomeGuide } from '@/sanity/components/WelcomeGuide'
+import { structure } from '@/sanity/structure'
 
 // Velkomstfane: legges først slik at studioet åpner på en veiviser i stedet
 // for en tom skjerm. Se WelcomeGuide.tsx for innholdet.
@@ -33,7 +35,10 @@ export default defineConfig({
 
   plugins: [
     welcomeTool(),
-    structureTool({ title: 'Struktur' }),
+    // Norsk bokmål på hele Studio-grensesnittet (Publiser, Alle felt, osv.).
+    // Velges én gang per bruker fra brukermenyen øverst til høyre.
+    nbNOLocale(),
+    structureTool({ title: 'Struktur', structure }),
     presentationTool({
       title: 'Forhåndsvisning',
       previewUrl: {

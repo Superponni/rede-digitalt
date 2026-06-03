@@ -42,24 +42,6 @@ export const videoSection = defineType({
       },
       initialValue: 'contained',
     }),
-    defineField({
-      name: 'transition',
-      title: 'Overgang',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Ingen', value: 'none' },
-          { title: 'Crossfade', value: 'crossfade' },
-          { title: 'Hard cut', value: 'hardCut' },
-        ],
-      },
-      initialValue: 'none',
-    }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: {

@@ -48,26 +48,6 @@ export const fullscreenParallax = defineType({
       validation: (rule) => rule.min(0).max(100),
       initialValue: 40,
     }),
-    defineField({
-      name: 'transition',
-      title: 'Overgang',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Ingen', value: 'none' },
-          { title: 'Crossfade', value: 'crossfade' },
-          { title: 'Wipe', value: 'wipe' },
-          { title: 'Fargeskift', value: 'colorShift' },
-          { title: 'Hard cut', value: 'hardCut' },
-        ],
-      },
-      initialValue: 'none',
-    }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: {

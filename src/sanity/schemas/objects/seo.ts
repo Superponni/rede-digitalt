@@ -15,7 +15,7 @@ export const seo = defineType({
       title: 'Tittel i Google og ved deling (valgfri)',
       type: 'string',
       description:
-        'Vises i Google-treff, i nettleserfanen og når lenken deles (Slack, Messenger osv.). Endrer IKKE overskriften på selve artikkelen — den styres av «Tittel» i Artikkel-fanen. La stå tom for å gjenbruke artikkeltittelen. Hold under ~60 tegn så den ikke kuttes.',
+        'Endrer ikke selve artikkeloverskriften. Tom = artikkeltittelen brukes.',
       validation: (rule) =>
         rule.max(70).warning('Lengre enn ~60 tegn kan bli kuttet i Google.'),
     }),
@@ -25,7 +25,7 @@ export const seo = defineType({
       type: 'text',
       rows: 3,
       description:
-        'Den korte teksten under tittelen i Google-treff og ved deling. La stå tom for å bruke ingressen/teaseren. Ideelt 120–155 tegn.',
+        'Den korte teksten under tittelen. Tom = ingressen/teaseren brukes.',
       validation: (rule) =>
         rule.max(170).warning('Lengre enn ~155 tegn kan bli kuttet.'),
     }),
@@ -34,8 +34,7 @@ export const seo = defineType({
       title: 'Delebilde (valgfri)',
       type: 'image',
       options: { hotspot: true },
-      description:
-        'Bildet som vises når lenken deles i Slack, Messenger, LinkedIn osv. La stå tom for å bruke hovedbildet.',
+      description: 'Bildet som vises når lenken deles. Tom = hovedbildet brukes.',
       fields: [
         {
           name: 'alt',
@@ -49,8 +48,7 @@ export const seo = defineType({
       title: 'Skjul fra Google',
       type: 'boolean',
       initialValue: false,
-      description:
-        'Slå på hvis denne siden IKKE skal dukke opp i søkemotorer (f.eks. utkast eller intern info). Normalt av.',
+      description: 'Slå på hvis siden ikke skal dukke opp i Google. Normalt av.',
     }),
   ],
 })

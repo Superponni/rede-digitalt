@@ -30,11 +30,6 @@ export const countUpFact = defineType({
       type: 'string',
       description: 'Kort tekst under tallet (f.eks. "kilometer langs ruten")',
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: { number: 'number', label: 'label' },

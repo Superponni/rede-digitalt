@@ -55,11 +55,6 @@ export const interactiveQuiz = defineType({
       rows: 3,
       description: 'For "Visste du at?": faktaen som avsløres. For quiz: tilleggforklaring etter svar.',
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: { question: 'question', style: 'style' },

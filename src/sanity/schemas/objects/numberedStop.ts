@@ -33,11 +33,6 @@ export const numberedStop = defineType({
         { name: 'photographer', title: 'Fotograf', type: 'string' },
       ],
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: { stopNumber: 'stopNumber', title: 'title' },

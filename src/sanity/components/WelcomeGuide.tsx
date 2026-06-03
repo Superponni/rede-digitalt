@@ -58,7 +58,7 @@ const arbeidsflyt: Steg[] = [
   {
     tittel: 'Finn saken',
     tekst:
-      'Gå til «Structure»-fanen øverst og velg det du vil jobbe med — som regel en artikkel som allerede ligger klar.',
+      'Gå til «Struktur»-fanen øverst og velg det du vil jobbe med — som regel en artikkel som allerede ligger klar.',
   },
   {
     tittel: 'Gå gjennom og finpuss',
@@ -283,7 +283,7 @@ export function WelcomeGuide() {
           >
             <span style={{ fontSize: 15, color: '#334' }}>
               Klar til å begynne? Gå til{' '}
-              <strong style={{ color: MARINE }}>Structure</strong>-fanen øverst.
+              <strong style={{ color: MARINE }}>Struktur</strong>-fanen øverst.
             </span>
             <button
               type="button"

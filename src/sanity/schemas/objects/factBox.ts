@@ -34,23 +34,6 @@ export const factBox = defineType({
       type: 'string',
       description: 'Valgfri visuell markør (emoji eller tekst)',
     }),
-    defineField({
-      name: 'transition',
-      title: 'Overgang',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Ingen', value: 'none' },
-          { title: 'Crossfade', value: 'crossfade' },
-        ],
-      },
-      initialValue: 'none',
-    }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: {

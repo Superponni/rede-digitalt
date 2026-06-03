@@ -38,11 +38,6 @@ export const recipeCard = defineType({
       type: 'text',
       rows: 4,
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: { title: 'title', media: 'image' },

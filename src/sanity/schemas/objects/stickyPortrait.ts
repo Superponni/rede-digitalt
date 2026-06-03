@@ -36,11 +36,6 @@ export const stickyPortrait = defineType({
       },
       initialValue: 'left',
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: { media: 'image' },

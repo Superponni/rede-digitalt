@@ -47,23 +47,6 @@ export const gallery = defineType({
       },
       initialValue: 'grid',
     }),
-    defineField({
-      name: 'transition',
-      title: 'Overgang',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Ingen', value: 'none' },
-          { title: 'Crossfade', value: 'crossfade' },
-        ],
-      },
-      initialValue: 'none',
-    }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-    }),
   ],
   preview: {
     select: {
