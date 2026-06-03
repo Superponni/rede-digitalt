@@ -17,12 +17,16 @@ interface PageProps {
 interface ArticleData {
   _id: string
   title: string
+  subtitle?: string
   slug: { current: string }
   type: 'scrollytelling' | 'standard'
+  accentColor?: 'navy' | 'teal' | 'purple' | 'magenta' | 'blue' | 'green' | 'gold'
+  colorMode?: 'light' | 'filled' | 'dark'
+  heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none'
   scrollyTheme?: 'warm' | 'documentary' | 'playful'
   scrollyBackground?: string
   teaser?: string
-  heroImage?: { asset: { _ref: string }; alt?: string; photographer?: string }
+  heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
   body?: unknown[]
   sections?: unknown[]
   publishedAt?: string

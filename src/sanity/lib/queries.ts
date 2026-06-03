@@ -36,9 +36,13 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
   `*[_type == "article" && slug.current == $slug][0] {
     _id,
     title,
+    subtitle,
     slug,
     type,
     teaser,
+    accentColor,
+    colorMode,
+    heroLayout,
     heroImage,
     body,
     sections,

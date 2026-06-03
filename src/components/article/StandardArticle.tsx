@@ -1,16 +1,27 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
 import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
+import { Reveal } from './Reveal'
+import { ArticleHeroImage } from './ArticleHeroImage'
+import {
+  getArticleTheme,
+  type AccentColor,
+  type ColorMode,
+  type HeroLayout,
+} from './theme'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface StandardArticleProps {
   article: {
     _id: string
     title: string
+    subtitle?: string
     teaser?: string
-    heroImage?: { asset: { _ref: string }; alt?: string; photographer?: string }
+    accentColor?: AccentColor
+    colorMode?: ColorMode
+    heroLayout?: HeroLayout
+    heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
     body?: any[]
     audioFileUrl?: string
     tags?: { _id: string; title: string; slug: { current: string } }[]
@@ -19,80 +30,168 @@ interface StandardArticleProps {
   }
 }
 
+// Henter bildets egne pikseldimensjoner fra Sanity-asset-referansen
+// (image-<hash>-<B>x<H>-<ext>) så vi kan beholde originalformatet.
+function parseImageDims(ref?: string): { width: number; height: number } {
+  const m = ref?.match(/-(\d+)x(\d+)-[a-z]+$/i)
+  return m ? { width: Number(m[1]), height: Number(m[2]) } : { width: 1600, height: 1000 }
+}
+
 export function StandardArticle({ article }: StandardArticleProps) {
-  return (
-    <article className="bg-mint pb-20">
-      {/* Hero image */}
-      {article.heroImage?.asset && (
-        <div className="relative h-[50vh] w-full lg:h-[60vh]">
-          <Image
-            src={urlFor(article.heroImage).width(1920).height(1080).url()}
-            alt={article.heroImage.alt || article.title}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-mint via-transparent to-transparent" />
+  const theme = getArticleTheme(article.accentColor, article.colorMode)
+  const hasImage = Boolean(article.heroImage?.asset)
+  // Ingen bilde tilgjengelig ⇒ fall tilbake til ren tittel-topp uansett valg.
+  const layout: HeroLayout = hasImage ? article.heroLayout || 'image-first' : 'none'
+  const heroSrc = article.heroImage?.asset ? urlFor(article.heroImage).width(1600).url() : ''
+  const heroAlt = article.heroImage?.alt || article.title
+  const heroDims = parseImageDims(article.heroImage?.asset?._ref)
+
+  // Magasin-logikk: venstrestilt KUN når tittel og bilde står ved siden av
+  // hverandre. Når teksten står alene eller over/under bilde ⇒ midtstilt.
+  const centered = layout !== 'side'
+
+  const header = (
+    <Reveal
+      as="header"
+      immediate
+      y={22}
+      duration={0.9}
+      className={`mx-auto max-w-prose px-6 lg:px-0 ${centered ? 'text-center' : ''}`}
+    >
+      {article.tags && article.tags.length > 0 && (
+        <div className={`mb-4 flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}>
+          {article.tags.map((tag) => (
+            <span
+              key={tag._id}
+              className="rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+              style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
+            >
+              {tag.title}
+            </span>
+          ))}
         </div>
       )}
 
-      {/* Article header */}
-      <header className="mx-auto max-w-prose px-6 lg:px-0">
-        <div className="-mt-16 relative z-10">
-          {/* Tags */}
-          {article.tags && article.tags.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {article.tags.map((tag) => (
-                <span
-                  key={tag._id}
-                  className="rounded-full bg-navy/10 px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em] text-navy/60"
-                >
-                  {tag.title}
-                </span>
-              ))}
-            </div>
-          )}
+      <h1
+        className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl"
+        style={{ color: theme.title }}
+      >
+        {article.title}
+      </h1>
 
-          <h1 className="font-display text-4xl leading-[1.1] text-navy md:text-5xl lg:text-6xl">
-            {article.title}
-          </h1>
+      {article.subtitle && (
+        <p
+          className="mt-3 font-display text-2xl italic leading-tight md:text-3xl"
+          style={{ color: theme.subtitle }}
+        >
+          {article.subtitle}
+        </p>
+      )}
 
-          {article.teaser && (
-            <p data-speakable className="mt-4 text-lg leading-relaxed text-navy/60 lg:text-xl">
-              {article.teaser}
-            </p>
-          )}
+      {article.teaser && (
+        <p
+          data-speakable
+          className={`mt-5 font-heading text-lg font-bold leading-snug lg:text-xl ${
+            centered ? 'mx-auto max-w-xl' : ''
+          }`}
+          style={{ color: theme.standfirst }}
+        >
+          {article.teaser}
+        </p>
+      )}
 
-          {/* Meta */}
-          <div className="mt-6 flex items-center gap-4 border-t border-navy/10 pt-4 text-sm text-navy/40">
-            {article.author && <span>Tekst: {article.author.name}</span>}
-            {article.edition && (
-              <span>Rede nr {article.edition.number} {article.edition.year}</span>
-            )}
-          </div>
+      <div
+        className={`mt-6 flex items-center gap-4 border-t pt-4 text-sm ${
+          centered ? 'justify-center' : ''
+        }`}
+        style={{ color: theme.muted, borderColor: theme.chipBg }}
+      >
+        {article.author && <span>Tekst: {article.author.name}</span>}
+        {article.edition && (
+          <span>
+            Rede nr {article.edition.number} {article.edition.year}
+          </span>
+        )}
+      </div>
 
-          {/* Audio player */}
-          {article.audioFileUrl && (
-            <div className="mt-6">
-              <AudioPlayer src={article.audioFileUrl} theme="light" />
-            </div>
-          )}
+      {article.audioFileUrl && (
+        <div className="mt-6">
+          <AudioPlayer src={article.audioFileUrl} theme={theme.isDark ? 'dark' : 'light'} />
         </div>
-      </header>
+      )}
+    </Reveal>
+  )
 
-      {/* Body */}
+  return (
+    <article className="pb-20" style={{ backgroundColor: theme.pageBg }}>
+      {/* Topp */}
+      {layout === 'image-first' && (
+        <>
+          <div className="relative">
+            <ArticleHeroImage
+              src={heroSrc}
+              alt={heroAlt}
+              width={heroDims.width}
+              height={heroDims.height}
+              priority
+              sizes="100vw"
+              className="w-full"
+            />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                backgroundImage: `linear-gradient(to top, ${theme.pageBg}, transparent 55%)`,
+              }}
+            />
+          </div>
+          <div className="relative z-10 -mt-16">{header}</div>
+        </>
+      )}
+
+      {layout === 'heading-first' && (
+        <>
+          <div className="pt-16 lg:pt-24">{header}</div>
+          <ArticleHeroImage
+            src={heroSrc}
+            alt={heroAlt}
+            width={heroDims.width}
+            height={heroDims.height}
+            sizes="(min-width: 1024px) 42rem, 100vw"
+            className="mx-auto mt-10 w-full max-w-2xl lg:mt-12"
+          />
+        </>
+      )}
+
+      {layout === 'side' && (
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 pt-16 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:pt-24">
+          {header}
+          <ArticleHeroImage
+            src={heroSrc}
+            alt={heroAlt}
+            width={heroDims.width}
+            height={heroDims.height}
+            priority
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            className="w-full"
+          />
+        </div>
+      )}
+
+      {layout === 'none' && <div className="pt-16 lg:pt-28">{header}</div>}
+
+      {/* Brødtekst */}
       {article.body && (
         <div className="mt-12">
-          <PortableTextRenderer value={article.body} />
+          <PortableTextRenderer value={article.body} theme={theme} />
         </div>
       )}
 
-      {/* Back link */}
+      {/* Tilbake */}
       <div className="mx-auto mt-16 max-w-prose px-6 lg:px-0">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 font-heading text-sm uppercase tracking-[0.2em] text-navy/50 hover:text-navy transition-colors"
+          className="inline-flex items-center gap-2 font-heading text-sm uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
+          style={{ color: theme.muted }}
         >
           <span>&larr;</span> Tilbake til forsiden
         </Link>

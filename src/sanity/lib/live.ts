@@ -8,7 +8,15 @@ import { token } from '../env'
 // fargematch eller embed-URL-er. Matches på feltnavn (siste sti-segment).
 // NB: matcher på basenavn, så et felt med samme navn i en annen type mister
 // også klikk-til-redigering — bevisst avveining (disse navnene er logikk-felter).
-const STEGA_SKIP_FIELDS = ['scrollyTheme', 'scrollyBackground', 'spotifyUrl', 'url']
+const STEGA_SKIP_FIELDS = [
+  'scrollyTheme',
+  'scrollyBackground',
+  'accentColor',
+  'colorMode',
+  'heroLayout',
+  'spotifyUrl',
+  'url',
+]
 
 // Live Content API: gir sanntidsoppdatering i forhåndsvisning (og på publisert
 // innhold). `sanityFetch` bytter automatisk til `drafts`-perspektiv når Next.js
