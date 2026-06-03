@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { PreviewInput } from '@/sanity/components/PreviewInput'
+import { HIDDEN_ALL_FIELDS_GROUP } from '@/sanity/lib/hideAllFields'
 
 // Innholdet på /om-siden. Tenkt som ett enkelt dokument (lag bare én).
 // Temaene og utgavene nederst hentes automatisk fra Sanity og styres ikke her.
@@ -12,6 +13,7 @@ export const aboutPage = defineType({
     { name: 'top', title: 'Topp', default: true },
     { name: 'feature', title: 'Fra papir til skjerm' },
     { name: 'rest', title: 'Temaer & utgaver' },
+    HIDDEN_ALL_FIELDS_GROUP,
   ],
   fields: [
     defineField({

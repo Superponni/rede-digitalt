@@ -1,5 +1,6 @@
 import { defineType, defineField } from 'sanity'
 import { PreviewInput } from '@/sanity/components/PreviewInput'
+import { HIDDEN_ALL_FIELDS_GROUP } from '@/sanity/lib/hideAllFields'
 
 export const article = defineType({
   name: 'article',
@@ -11,6 +12,7 @@ export const article = defineType({
   groups: [
     { name: 'innhold', title: 'Artikkel', default: true },
     { name: 'seo', title: 'Deling & søk' },
+    HIDDEN_ALL_FIELDS_GROUP,
   ],
   fields: [
     defineField({

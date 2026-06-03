@@ -17,7 +17,7 @@ export const seo = defineType({
   fields: [
     defineField({
       name: 'metaTitle',
-      title: 'Tittel i Google og ved deling (valgfri)',
+      title: 'Tittel (valgfri)',
       type: 'string',
       description: 'Vises i Google-treffet, i nettleserfanen og når lenken deles.',
       validation: (rule) =>
@@ -25,7 +25,7 @@ export const seo = defineType({
     }),
     defineField({
       name: 'metaDescription',
-      title: 'Beskrivelse i Google og ved deling (valgfri)',
+      title: 'Beskrivelse (valgfri)',
       type: 'text',
       rows: 3,
       description: 'Den korte teksten under tittelen i Google og ved deling.',
