@@ -38,7 +38,7 @@ Digital magasinplattform for TOBBs medlemsmagasin **Rede**. Bygges av Superponni
 
 ## Agent-team
 
-Prosjektet har 6 spesialiserte agenter. Les rollekortene i `.agents/`:
+Prosjektet har 7 spesialiserte agenter. Les rollekortene i `.agents/`:
 
 | Agent | Fil | Ansvar |
 |-------|-----|--------|
@@ -48,6 +48,7 @@ Prosjektet har 6 spesialiserte agenter. Les rollekortene i `.agents/`:
 | Frontend/UX-lead | `.agents/frontend-ux-lead.md` | Next.js-app, designsystem, forside, responsivt |
 | Animatør | `.agents/animator.md` | GSAP ScrollTrigger, seksjonsanimasjoner, wow-faktor |
 | QA-agent | `.agents/qa-agent.md` | Visuell QA, anti-AI-sjekk, performance, tilgjengelighet |
+| SEO- og AEO-spesialist | `.agents/seo-aeo-spesialist.md` | Finnbarhet i søk + AI-svarmotorer, schema, Search Console |
 
 ## Skills (verktøy agentene bruker)
 
