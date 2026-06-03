@@ -94,8 +94,7 @@ export const editorial = defineType({
       title: 'Deling & søk',
       type: 'seo',
       group: 'seo',
-      description:
-        'Valgfritt. Overstyr hvordan lederen ser ut i Google og ved deling. Tom = utledes automatisk fra tittel, teaser og bilde.',
+      // Introtekst + visning styres av SeoField/SeoInput (se SeoFields.tsx).
     }),
   ],
   preview: {

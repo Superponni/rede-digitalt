@@ -189,8 +189,7 @@ export const article = defineType({
       title: 'Deling & søk',
       type: 'seo',
       group: 'seo',
-      description:
-        'Valgfritt. Overstyr hvordan artikkelen ser ut i Google og ved deling. Tom = utledes automatisk fra tittel, ingress og hovedbilde.',
+      // Introtekst + visning styres av SeoField/SeoInput (se SeoFields.tsx).
     }),
   ],
   preview: {
