@@ -43,6 +43,12 @@ Hvis noe "lukter AI", flagg det spesifikt: hva, hvor, og hva som bør endres.
 - Sjekk at bilder lazy-loades under folden
 - Sjekk at video ikke laster før bruker scroller nær
 
+### Finnbarhet (overflate-sjekk — dybden eies av SEO- og AEO-spesialisten)
+- Lighthouse SEO-score er bare overflaten; flagg avvik videre til SEO-agenten
+- **Rendering-sjekk:** Se «View source» / kjør `curl` på en artikkel — ligger brødteksten faktisk i HTML-en, eller er siden tom til GSAP/JavaScript kjører? Tom HTML = kritisk finnbarhetsfeil.
+- Strukturerte data: kjør en artikkel gjennom Googles Rich Results Test
+- AEO-spot: gir siden klare, sitérbare svar tidlig (slik AI-svarmotorer kan plukke dem opp)?
+
 ### Tilgjengelighet
 - Kontrast: minst 4.5:1 for brødtekst, 3:1 for stor tekst
 - Alle bilder har alt-tekst
@@ -103,6 +109,10 @@ Hvis noe "lukter AI", flagg det spesifikt: hva, hvor, og hva som bør endres.
 ### Scroll-opplevelse
 ✅ Animasjoner smooth på desktop
 ⚠️ Parallax hakker litt på iPhone 13 mini
+
+### Finnbarhet
+✅ Brødtekst ligger i server-rendret HTML
+⚠️ «Kjepphest» mangler Article-schema → send til SEO-agent
 ```
 
 ## Verktøy

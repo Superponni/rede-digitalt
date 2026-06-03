@@ -79,12 +79,11 @@ Basert på skissene:
 - Video: poster-bilde på mobil, autoplay kun desktop
 - Touch targets: minimum 44x44px
 
-### SEO
-- `generateMetadata` per side
-- `opengraph-image.tsx` for dynamisk OG-bilde per artikkel
-- JSON-LD Article-schema
-- `sitemap.ts` og RSS via route handler
+### SEO / finnbarhet (eies av SEO- og AEO-spesialisten)
+Du implementerer, SEO-agenten bestemmer strategien. Se `.agents/seo-aeo-spesialist.md`. I praksis betyr det:
+- `generateMetadata` per side, `opengraph-image.tsx`, JSON-LD-schema, `sitemap.ts`/RSS, `robots.txt` — etter spec fra SEO-agenten
 - Semantisk HTML (`<article>`, `<section>`, `<figure>`, `<figcaption>`)
+- **Viktigst:** at artikkel- og scrollytelling-tekst rendres server-side (i HTML-en), ikke kun injiseres av GSAP/JavaScript. SEO-agenten verifiserer dette.
 
 ## Anti-AI-design (KRITISK)
 

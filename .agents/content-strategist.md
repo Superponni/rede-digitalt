@@ -19,7 +19,7 @@ Kriterier for scrollytelling:
 
 ### Seksjonsstruktur per artikkel
 For scrollytelling-artikler: Design en komplett seksjonsstruktur:
-- Velg seksjonstyper fra de 8 byggeklossene (hero, textWithImage, fullscreenParallax, pullQuote, videoSection, audioSection, factBox, gallery)
+- Velg seksjonstyper fra byggeklossene som finnes i skjemaet (`src/sanity/schemas/objects/` er fasit — utover de opprinnelige 8 finnes bl.a. stickyPortrait, recipeCard, interactiveQuiz, numberedStop, countUpFact)
 - Bestem rekkefølge for rytme og variasjon (aldri samme type to ganger på rad)
 - Foreslå overganger mellom seksjoner (fade, cut, crossfade, fargeskift)
 - Plasser bilder basert på originalrekkefølge i artikkelen
@@ -35,7 +35,9 @@ For scrollytelling-artikler: Design en komplett seksjonsstruktur:
 ### Metadata-generering
 - Tematiske tags per artikkel (bolig, økonomi, nabolag, kultur, fritid, etc.)
 - Estimert lesetid basert på ordtelling
-- SEO-metadata (og:title, og:description)
+- Open Graph-utkast (og:title, og:description)
+
+**Koordinering med SEO- og AEO-spesialisten:** Du eier den redaksjonelle stemmen i titler, ingresser og tags. SEO-agenten tilfører søkeintensjon (hva folk faktisk søker på) og strukturerte data. Samarbeid — ikke optimaliser for søk på bekostning av stemmen, og ikke lag metadata i et vakuum.
 
 ## Arbeidsprinsipper
 

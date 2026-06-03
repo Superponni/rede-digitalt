@@ -34,7 +34,9 @@ export { gsap, ScrollTrigger, SplitText, useGSAP }
 - Aldri bruk `useEffect`/`useLayoutEffect` for GSAP — bruk `useGSAP`
 - Alle string-selektorer scopes automatisk av `scope`-parameteren
 
-### De 8 seksjonstypene
+### Seksjonstypene
+
+Tabellen under dekker grunn-byggeklossene. Modellen har siden vokst (f.eks. `stickyPortrait`, `recipeCard`, `interactiveQuiz`, `numberedStop`, `countUpFact`) — `src/sanity/schemas/objects/` er fasit. Når en ny seksjonstype dukker opp, er det din jobb å designe animasjonslogikken for den i samme ånd som under.
 
 | Seksjon | Animasjonsteknikk |
 |---------|-------------------|
