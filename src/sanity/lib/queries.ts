@@ -43,6 +43,8 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
     accentColor,
     colorMode,
     heroLayout,
+    portraitName,
+    portraitRole,
     heroImage,
     body,
     sections,

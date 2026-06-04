@@ -17,7 +17,7 @@ export type AccentColor =
   | 'gold'
 
 export type ColorMode = 'light' | 'tinted' | 'filled' | 'dark'
-export type HeroLayout = 'image-first' | 'heading-first' | 'side' | 'none'
+export type HeroLayout = 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
 
 // base = TOBB-paletten (se globals.css). tint = lys pastell for tittel på mørk/farget
 // flate. pale = svært lys toning av fargen brukt som bakgrunn i «tinted»-modus

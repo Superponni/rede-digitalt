@@ -21,8 +21,10 @@ interface ArticleData {
   slug: { current: string }
   type: 'scrollytelling' | 'standard'
   accentColor?: 'navy' | 'teal' | 'purple' | 'magenta' | 'blue' | 'green' | 'gold'
-  colorMode?: 'light' | 'filled' | 'dark'
-  heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none'
+  colorMode?: 'light' | 'tinted' | 'filled' | 'dark'
+  heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
+  portraitName?: string
+  portraitRole?: string
   scrollyTheme?: 'warm' | 'documentary' | 'playful'
   scrollyBackground?: string
   teaser?: string

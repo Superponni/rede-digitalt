@@ -4,6 +4,7 @@ import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
 import { ArticleHeroImage } from './ArticleHeroImage'
+import { ExpertPortrait } from './ExpertPortrait'
 import {
   getArticleTheme,
   type AccentColor,
@@ -21,6 +22,8 @@ interface StandardArticleProps {
     accentColor?: AccentColor
     colorMode?: ColorMode
     heroLayout?: HeroLayout
+    portraitName?: string
+    portraitRole?: string
     heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
     body?: any[]
     audioFileUrl?: string
@@ -174,6 +177,21 @@ export function StandardArticle({ article }: StandardArticleProps) {
             sizes="(min-width: 1024px) 40vw, 100vw"
             className="w-full"
           />
+        </div>
+      )}
+
+      {layout === 'portrait' && (
+        <div className="pt-16 lg:pt-24">
+          <Reveal immediate y={20} duration={0.9} className="mb-10 px-6">
+            <ExpertPortrait
+              image={article.heroImage!}
+              alt={heroAlt}
+              name={article.portraitName}
+              role={article.portraitRole}
+              color={theme.title}
+            />
+          </Reveal>
+          {header}
         </div>
       )}
 
