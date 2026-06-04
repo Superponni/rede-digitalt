@@ -231,7 +231,7 @@ export function DiscoverView({
         {/* Row 3 — "I denne utgaven" (4 portrait cards) */}
         {curated.length > 0 && (
           <div>
-            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-white/30">
+            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
               I denne utgaven
             </p>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
@@ -257,7 +257,7 @@ export function DiscoverView({
         {/* Row 4+ — Remaining articles (2-col landscape grid) */}
         {remaining.length > 0 && (
           <div>
-            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-white/30">
+            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
               Flere saker
             </p>
             <div className="grid grid-cols-2 gap-2 lg:gap-3">

@@ -8,6 +8,7 @@ import { urlFor } from '@/sanity/lib/image'
 import { PortableTextRenderer } from '@/components/article/PortableTextRenderer'
 import { AudioPlayer } from '@/components/article/AudioPlayer'
 import { JsonLd } from '@/components/seo/JsonLd'
+import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
 import { articleLd, breadcrumbLd } from '@/lib/jsonld'
 import { clampDescription, metaRobots, ogImagesFrom } from '@/lib/seo'
 import type { SanityImageSource } from '@sanity/image-url'
@@ -92,6 +93,8 @@ export default async function LederPage() {
 
   return (
     <article className="bg-mint pb-20">
+      {/* Toppbilde ⇒ hvit logo over hero, ellers marineblå på mint. */}
+      <SetHeaderSurface surface={editorial.heroImage?.asset ? 'dark' : 'light'} />
       <JsonLd data={structuredData} />
       {/* Hero image */}
       {editorial.heroImage?.asset && (

@@ -2,6 +2,7 @@ import { draftMode } from 'next/headers'
 import { VisualEditing } from 'next-sanity/visual-editing'
 import { Header } from '@/components/forside/Header'
 import { Footer } from '@/components/forside/Footer'
+import { HeaderSurfaceProvider } from '@/components/layout/HeaderTheme'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { SanityLive } from '@/sanity/lib/live'
 import { DisableDraftMode } from '@/components/DisableDraftMode'
@@ -26,11 +27,13 @@ export default async function SiteLayout({
 
   return (
     <SmoothScroll>
-      <div className="flex min-h-screen flex-col bg-navy">
-        <Header tags={menuData.tags} featured={menuData.featured} />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </div>
+      <HeaderSurfaceProvider>
+        <div className="flex min-h-screen flex-col bg-canvas">
+          <Header tags={menuData.tags} featured={menuData.featured} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
+      </HeaderSurfaceProvider>
       <SanityLive />
       {isDraftMode && (
         <>

@@ -7,6 +7,9 @@
   --color-navy: #003865;
   --color-navy-light: #0a4a7a;
   --color-mint: #F1F8F0;
+  /* Forsidens bakgrunn — lys, tydelig blåtone som beholder en kjølig
+     TOBB-stemning men lar de fargerike kortene komme fram. */
+  --color-canvas: #D3E4F5;
   --color-gold: #F6BE00;
   --color-tobb-green: #74AA50;
   --color-teal: #487A7B;

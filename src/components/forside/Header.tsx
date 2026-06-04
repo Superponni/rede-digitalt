@@ -4,12 +4,14 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FullscreenMenu } from '@/components/layout/FullscreenMenu'
+import { RedeLogo } from '@/components/layout/RedeLogo'
+import { useHeaderSurface } from '@/components/layout/HeaderTheme'
 
-// Ruter med lys (mint) bakgrunn fra toppen → header i mørk marineblå.
-// Alt annet antar mørk topp (hero-bilde/navy) → header i hvitt.
-// Nye lyse sider legges til her.
-function hasLightBackground(pathname: string): boolean {
-  return pathname === '/om'
+// Ruter som er lyse helt fra toppen → menyen utledes synkront (ingen blink).
+// Andre ruter antar mørk topp (hero-bilde/navy) som standard, men kan overstyres
+// per side via <SetHeaderSurface> (f.eks. standard-artikler med lys mint-topp).
+function lightFromRoute(pathname: string): boolean {
+  return pathname === '/' || pathname === '/om'
 }
 
 interface Tag {
@@ -34,19 +36,35 @@ interface HeaderProps {
 export function Header({ tags = [], featured = null }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { override } = useHeaderSurface()
 
   // Når menyen er åpen ligger den mørke fullskjerm-overlayen over alt, så
-  // headeren må være hvit uansett rute.
-  const dark = !menuOpen && hasLightBackground(pathname)
-  const textColor = dark ? 'text-navy' : 'text-white'
-  const hoverColor = dark ? 'hover:text-navy/60' : 'hover:text-gold'
+  // menyen må være hvit uansett rute. Ellers: en sides eget signal (override)
+  // vinner over rute-gjettet.
+  const surface = menuOpen ? 'dark' : (override ?? (lightFromRoute(pathname) ? 'light' : 'dark'))
+  const onLight = surface === 'light'
+
+  const textColor = onLight ? 'text-navy' : 'text-white'
+  const hoverColor = onLight ? 'hover:text-navy/60' : 'hover:text-gold'
 
   return (
     <>
       <header className="fixed top-0 z-50 w-full">
-        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
-          <Link href="/" className={`font-display text-2xl transition-colors ${textColor}`}>
-            Rede
+        {/* Diskret scrim KUN når logoen er hvit — garanterer lesbarhet selv
+            over et lyst eller travelt toppbilde. På lys flate trengs den ikke. */}
+        {!onLight && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent"
+          />
+        )}
+        <div className="relative mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
+          <Link
+            href="/"
+            aria-label="Rede – til forsiden"
+            className={`transition-colors ${textColor} ${hoverColor}`}
+          >
+            <RedeLogo className="h-[22px] w-auto" />
           </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}

@@ -5,6 +5,7 @@ import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
 import { ArticleHeroImage } from './ArticleHeroImage'
 import { ExpertPortrait } from './ExpertPortrait'
+import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
 import {
   getArticleTheme,
   type AccentColor,
@@ -150,8 +151,14 @@ export function StandardArticle({ article }: StandardArticleProps) {
     </Reveal>
   )
 
+  // Menyfarge ut fra hva som faktisk ligger øverst: et heldekkende toppbilde
+  // (image-first) gir mørk flate ⇒ hvit logo. Ellers følger den artikkelens
+  // egen flate (mørk filled/dark ⇒ hvit, lys mint/tinted ⇒ marineblå logo).
+  const headerSurface = layout === 'image-first' ? 'dark' : theme.isDark ? 'dark' : 'light'
+
   return (
     <article className="pb-20" style={{ backgroundColor: theme.pageBg }}>
+      <SetHeaderSurface surface={headerSurface} />
       {/* Topp */}
       {layout === 'image-first' && (
         <>
