@@ -92,7 +92,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
     return (
       <section
         ref={sectionRef}
-        className="flex min-h-[60vh] items-center justify-center px-6 py-24 lg:px-16"
+        className="flex min-h-[48vh] items-center justify-center px-6 py-20 lg:px-16"
         style={{ backgroundColor: bgColor }}
       >
         <div ref={cardRef} className="mx-auto w-full max-w-xl text-center">

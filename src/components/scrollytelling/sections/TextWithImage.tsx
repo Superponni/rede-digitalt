@@ -192,11 +192,23 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
 
   const hasImage = !!data.image?.asset
 
+  // Redaktørens valg av plassering/størrelse styrer asymmetrien: store bilder
+  // går nær fullbredde og midtstilt, mindre bilder hugger en kant. Gir
+  // editorial rytme i stedet for at alt ligger likt midtstilt.
+  const sizeMax =
+    data.imageSize === 'small' ? 'max-w-2xl'
+    : data.imageSize === 'medium' ? 'max-w-3xl'
+    : 'max-w-5xl' // large / udefinert
+  const align =
+    data.imageSize === 'large' || !data.imagePosition ? 'mx-auto'
+    : data.imagePosition === 'left' ? 'mr-auto'
+    : 'ml-auto'
+
   const imageElement = hasImage && (
     <div className="px-6 py-16 lg:px-16 lg:py-24">
       <div
         ref={imageRef}
-        className="relative mx-auto max-w-5xl overflow-hidden"
+        className={`relative ${align} ${sizeMax} overflow-hidden`}
       >
         <div className="relative aspect-[16/10] w-full">
           <Image

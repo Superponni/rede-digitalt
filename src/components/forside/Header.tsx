@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FullscreenMenu } from '@/components/layout/FullscreenMenu'
@@ -35,8 +35,35 @@ interface HeaderProps {
 
 export function Header({ tags = [], featured = null }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
   const { override } = useHeaderSurface()
+
+  // Auto-skjul: baren glir bort når man scroller nedover (lesing) og kommer
+  // tilbake straks man scroller opp. Fjerner kollisjonen mellom store hvite
+  // overskrifter og menyen i scrollytelling-artiklene. Alltid synlig nær toppen
+  // og når menyen er åpen.
+  const lastY = useRef(0)
+  useEffect(() => {
+    lastY.current = window.scrollY
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        const y = window.scrollY
+        const goingDown = y > lastY.current
+        // Liten terskel demper vibrering ved bittesmå scroll-bevegelser.
+        if (Math.abs(y - lastY.current) > 6) {
+          setHidden(goingDown && y > 96)
+          lastY.current = y
+        }
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Når menyen er åpen ligger den mørke fullskjerm-overlayen over alt, så
   // menyen må være hvit uansett rute. Ellers: en sides eget signal (override)
@@ -49,7 +76,11 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
 
   return (
     <>
-      <header className="fixed top-0 z-50 w-full">
+      <header
+        className={`fixed top-0 z-50 w-full transition-transform duration-300 ease-out ${
+          hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
+        }`}
+      >
         {/* Diskret scrim KUN når logoen er hvit — garanterer lesbarhet selv
             over et lyst eller travelt toppbilde. På lys flate trengs den ikke. */}
         {!onLight && (

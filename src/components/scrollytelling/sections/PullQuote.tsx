@@ -26,9 +26,9 @@ export function PullQuote({ data }: PullQuoteProps) {
         const words = quoteRef.current.querySelectorAll('[data-word]')
         if (words.length > 0) {
           gsap.from(words, {
-            opacity: 0.15,
+            opacity: 0.3,
             duration: 0.8,
-            stagger: 0.06,
+            stagger: 0.05,
             ease: 'power2.out',
             scrollTrigger: {
               trigger: sectionRef.current,
@@ -50,7 +50,7 @@ export function PullQuote({ data }: PullQuoteProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 py-24"
+      className="relative flex min-h-[78vh] items-center justify-center overflow-hidden px-6 py-20"
       style={{ backgroundColor: data.backgroundColor || '#003865' }}
     >
       {/* Large decorative quote mark — background element */}

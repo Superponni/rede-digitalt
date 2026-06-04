@@ -71,7 +71,7 @@ export function CountUpFact({ data }: CountUpFactProps) {
   return (
     <section
       ref={sectionRef}
-      className="flex min-h-[70vh] items-center justify-center px-6 py-24 text-center lg:px-16"
+      className="flex min-h-[55vh] items-center justify-center px-6 py-20 text-center lg:px-16"
       style={{ backgroundColor: bgColor }}
     >
       <div>
