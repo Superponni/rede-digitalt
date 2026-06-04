@@ -24,6 +24,7 @@ interface StandardArticleProps {
     heroLayout?: HeroLayout
     portraitName?: string
     portraitRole?: string
+    expertPortrait?: { asset: { _ref: string }; alt?: string }
     heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
     body?: any[]
     audioFileUrl?: string
@@ -42,9 +43,18 @@ function parseImageDims(ref?: string): { width: number; height: number } {
 
 export function StandardArticle({ article }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
-  const hasImage = Boolean(article.heroImage?.asset)
-  // Ingen bilde tilgjengelig ⇒ fall tilbake til ren tittel-topp uansett valg.
-  const layout: HeroLayout = hasImage ? article.heroLayout || 'image-first' : 'none'
+  const hasHero = Boolean(article.heroImage?.asset)
+  const expert = article.expertPortrait?.asset ? article.expertPortrait : undefined
+  // Portrett-modus kan kjøre på ekspertbildet alene (uten eget hovedbilde).
+  const portraitImg = expert ?? article.heroImage
+  const layout: HeroLayout =
+    article.heroLayout === 'portrait'
+      ? portraitImg?.asset
+        ? 'portrait'
+        : 'none'
+      : hasHero
+        ? article.heroLayout || 'image-first'
+        : 'none'
   const heroSrc = article.heroImage?.asset ? urlFor(article.heroImage).width(1600).url() : ''
   const heroAlt = article.heroImage?.alt || article.title
   const heroDims = parseImageDims(article.heroImage?.asset?._ref)
@@ -52,6 +62,10 @@ export function StandardArticle({ article }: StandardArticleProps) {
   // Magasin-logikk: venstrestilt KUN når tittel og bilde står ved siden av
   // hverandre. Når teksten står alene eller over/under bilde ⇒ midtstilt.
   const centered = layout !== 'side'
+
+  // Lite ekspert-badge vises oppå andre topp-oppsett (ikke i ren portrett-modus),
+  // slik trykksaken gjør på saker med både illustrasjon og kilde-portrett.
+  const showExpertBadge = layout !== 'portrait' && Boolean(expert)
 
   const header = (
     <Reveal
@@ -61,6 +75,19 @@ export function StandardArticle({ article }: StandardArticleProps) {
       duration={0.9}
       className={`mx-auto max-w-prose px-6 lg:px-0 ${centered ? 'text-center' : ''}`}
     >
+      {showExpertBadge && (
+        <div className={`mb-5 ${centered ? 'mx-auto' : ''} w-[150px]`}>
+          <ExpertPortrait
+            image={expert!}
+            alt={expert!.alt || article.portraitName || article.title}
+            name={article.portraitName}
+            role={article.portraitRole}
+            color={theme.title}
+            size="sm"
+          />
+        </div>
+      )}
+
       {article.tags && article.tags.length > 0 && (
         <div className={`mb-4 flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}>
           {article.tags.map((tag) => (
@@ -182,10 +209,10 @@ export function StandardArticle({ article }: StandardArticleProps) {
 
       {layout === 'portrait' && (
         <div className="pt-16 lg:pt-24">
-          <Reveal immediate y={20} duration={0.9} className="mb-10 px-6">
+          <Reveal immediate y={20} duration={0.9} className="mb-10 flex justify-center px-6">
             <ExpertPortrait
-              image={article.heroImage!}
-              alt={heroAlt}
+              image={portraitImg!}
+              alt={portraitImg!.alt || article.portraitName || article.title}
               name={article.portraitName}
               role={article.portraitRole}
               color={theme.title}

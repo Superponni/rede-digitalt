@@ -13,13 +13,16 @@ interface ExpertPortraitProps {
   name?: string
   role?: string
   color: string
+  /** lg = stor frittstående topp, sm = lite badge oppå et annet topp-oppsett */
+  size?: 'lg' | 'sm'
 }
 
-export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortraitProps) {
+export function ExpertPortrait({ image, alt, name, role, color, size = 'lg' }: ExpertPortraitProps) {
   const src = urlFor(image).width(440).height(440).url()
+  const maxW = size === 'sm' ? 'max-w-[150px]' : 'max-w-[320px]'
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[320px]">
+    <div className={`relative aspect-square w-full ${maxW}`}>
       {/* Sirkulært foto */}
       <div
         className="absolute left-1/2 top-1/2 aspect-square w-[64%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"

@@ -25,6 +25,7 @@ interface ArticleData {
   heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
   portraitName?: string
   portraitRole?: string
+  expertPortrait?: { asset: { _ref: string }; alt?: string }
   scrollyTheme?: 'warm' | 'documentary' | 'playful'
   scrollyBackground?: string
   teaser?: string

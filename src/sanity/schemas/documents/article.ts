@@ -115,16 +115,33 @@ export const article = defineType({
       title: 'Ekspertnavn (buet over portrettet)',
       type: 'string',
       group: 'innhold',
-      description: 'Vises kun ved topp-oppsett «Rundt ekspertportrett». F.eks. «Marthe Frantzen».',
-      hidden: ({ parent }) => parent?.type !== 'standard' || parent?.heroLayout !== 'portrait',
+      description:
+        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «Marthe Frantzen».',
+      hidden: ({ parent }) =>
+        parent?.type !== 'standard' ||
+        (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
     }),
     defineField({
       name: 'portraitRole',
       title: 'Rolle/firma (buet under portrettet)',
       type: 'string',
       group: 'innhold',
-      description: 'Vises kun ved topp-oppsett «Rundt ekspertportrett». F.eks. «EiendomsMegler 1 Heimdal».',
-      hidden: ({ parent }) => parent?.type !== 'standard' || parent?.heroLayout !== 'portrait',
+      description:
+        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «EiendomsMegler 1 Heimdal».',
+      hidden: ({ parent }) =>
+        parent?.type !== 'standard' ||
+        (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
+    }),
+    defineField({
+      name: 'expertPortrait',
+      title: 'Ekspertportrett (lite, buet navn)',
+      type: 'image',
+      group: 'innhold',
+      options: { hotspot: true },
+      fields: [{ name: 'alt', title: 'Alt-tekst', type: 'string' }],
+      description:
+        'Valgfritt. Settes på saker som BÅDE har et hovedbilde/illustrasjon OG en ekspertkilde (f.eks. Boligmarkedet før sommeren). Vises da som et lite rundt portrett-badge med navn buet rundt, oppå det vanlige topp-oppsettet. (Ved topp-oppsett «Rundt ekspertportrett» brukes dette som det store portrettet.)',
+      hidden: ({ parent }) => parent?.type !== 'standard',
     }),
     defineField({
       name: 'edition',

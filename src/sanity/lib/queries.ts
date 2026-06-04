@@ -45,6 +45,7 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
     heroLayout,
     portraitName,
     portraitRole,
+    expertPortrait,
     heroImage,
     body,
     sections,
