@@ -1,4 +1,5 @@
 import { defineType, defineArrayMember } from 'sanity'
+import { BlockquoteStyle } from '../../components/BlockquoteStyle'
 
 export const blockContent = defineType({
   title: 'Brødtekst',
@@ -12,7 +13,7 @@ export const blockContent = defineType({
         { title: 'H2', value: 'h2' },
         { title: 'H3', value: 'h3' },
         { title: 'H4', value: 'h4' },
-        { title: 'Sitat', value: 'blockquote' },
+        { title: 'Sitat', value: 'blockquote', component: BlockquoteStyle },
       ],
       lists: [
         { title: 'Punktliste', value: 'bullet' },
