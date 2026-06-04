@@ -16,18 +16,20 @@ export type AccentColor =
   | 'green'
   | 'gold'
 
-export type ColorMode = 'light' | 'filled' | 'dark'
+export type ColorMode = 'light' | 'tinted' | 'filled' | 'dark'
 export type HeroLayout = 'image-first' | 'heading-first' | 'side' | 'none'
 
-// base = TOBB-paletten (se globals.css). tint = lys pastell for tittel på mørk/farget flate.
-const ACCENTS: Record<AccentColor, { base: string; tint: string }> = {
-  navy: { base: '#003865', tint: '#9DBBD6' },
-  teal: { base: '#487A7B', tint: '#AECECE' },
-  purple: { base: '#6B3077', tint: '#D8C2E0' },
-  magenta: { base: '#AA0061', tint: '#F0A9CC' },
-  blue: { base: '#0047BB', tint: '#A9C2EE' },
-  green: { base: '#74AA50', tint: '#C2DBAE' },
-  gold: { base: '#F6BE00', tint: '#FCE38C' },
+// base = TOBB-paletten (se globals.css). tint = lys pastell for tittel på mørk/farget
+// flate. pale = svært lys toning av fargen brukt som bakgrunn i «tinted»-modus
+// (som de fleste sakene i trykksaken: lys rosa/lilla/blå/grønn).
+const ACCENTS: Record<AccentColor, { base: string; tint: string; pale: string }> = {
+  navy: { base: '#003865', tint: '#9DBBD6', pale: '#E2EAF1' },
+  teal: { base: '#487A7B', tint: '#AECECE', pale: '#E4EDED' },
+  purple: { base: '#6B3077', tint: '#D8C2E0', pale: '#EDE4F1' },
+  magenta: { base: '#AA0061', tint: '#F0A9CC', pale: '#F7E2EE' },
+  blue: { base: '#0047BB', tint: '#A9C2EE', pale: '#E1E8F7' },
+  green: { base: '#74AA50', tint: '#C2DBAE', pale: '#EAF2E2' },
+  gold: { base: '#F6BE00', tint: '#FCE38C', pale: '#FBF1CE' },
 }
 
 const MINT = '#F1F8F0'
@@ -101,10 +103,12 @@ export function getArticleTheme(
     }
   }
 
-  // light (standard): lys mint-flate, farget tittel — som oppskrift A i print
-  return {
+  // light (standard): lys mint-flate, farget tittel — som oppskrift A i print.
+  // tinted: samme, men bakgrunnen er en lys toning av signaturfargen (oppskrift
+  // som de fleste print-sakene bruker).
+  const lightTheme: ArticleTheme = {
     isDark: false,
-    pageBg: MINT,
+    pageBg: colorMode === 'tinted' ? accent.pale : MINT,
     title: accent.base,
     subtitle: accent.base,
     standfirst: accent.base,
@@ -120,4 +124,5 @@ export function getArticleTheme(
     factText: 'rgba(255,255,255,0.90)',
     factRule: accent.tint,
   }
+  return lightTheme
 }

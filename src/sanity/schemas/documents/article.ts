@@ -81,7 +81,8 @@ export const article = defineType({
       group: 'innhold',
       options: {
         list: [
-          { title: 'Lys bakgrunn + farget tittel', value: 'light' },
+          { title: 'Lys mint-bakgrunn + farget tittel', value: 'light' },
+          { title: 'Lys tonet bakgrunn (signaturfargen)', value: 'tinted' },
           { title: 'Full farget bakgrunn', value: 'filled' },
           { title: 'Mørk (marineblå flate, lys tekst)', value: 'dark' },
         ],
