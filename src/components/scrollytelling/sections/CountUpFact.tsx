@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from '@/lib/gsap-config'
 import { useScrollyTheme } from '../ScrollyThemeContext'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 interface CountUpFactProps {
   data: {
@@ -19,6 +20,7 @@ export function CountUpFact({ data }: CountUpFactProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const numberRef = useRef<HTMLSpanElement>(null)
   const theme = useScrollyTheme()
+  const c = useScrollyColors()
 
   const targetNumber = data.number || 0
 
@@ -71,17 +73,17 @@ export function CountUpFact({ data }: CountUpFactProps) {
   return (
     <section
       ref={sectionRef}
-      className="flex min-h-[55vh] items-center justify-center px-6 py-20 text-center lg:px-16"
+      className="flex min-h-[42vh] items-center justify-center px-6 py-16 text-center lg:px-16"
       style={{ backgroundColor: bgColor }}
     >
       <div>
-        <p className="font-display text-6xl leading-none md:text-8xl lg:text-[10rem]" style={{ color: theme.colors.accent }}>
-          {data.prefix && <span className="mr-2 text-[0.6em] text-white/40">{data.prefix}</span>}
+        <p className="font-display text-6xl leading-none md:text-8xl lg:text-[10rem]" style={{ color: c.accent }}>
+          {data.prefix && <span className="mr-2 text-[0.6em]" style={{ color: c.muted }}>{data.prefix}</span>}
           <span ref={numberRef}>0</span>
-          {data.suffix && <span className="ml-2 text-[0.5em] text-white/50">{data.suffix}</span>}
+          {data.suffix && <span className="ml-2 text-[0.5em]" style={{ color: c.muted }}>{data.suffix}</span>}
         </p>
         {data.label && (
-          <p className="mt-6 font-heading text-[11px] uppercase tracking-[0.4em] text-white/50 lg:text-xs">
+          <p className="mt-6 font-heading text-[11px] uppercase tracking-[0.4em] lg:text-xs" style={{ color: c.muted }}>
             {data.label}
           </p>
         )}

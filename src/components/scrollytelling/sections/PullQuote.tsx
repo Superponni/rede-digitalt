@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { stegaClean } from 'next-sanity'
 import { gsap } from '@/lib/gsap-config'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 interface PullQuoteProps {
   data: {
@@ -17,6 +18,7 @@ interface PullQuoteProps {
 export function PullQuote({ data }: PullQuoteProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const quoteRef = useRef<HTMLQuoteElement>(null)
+  const c = useScrollyColors()
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -26,7 +28,7 @@ export function PullQuote({ data }: PullQuoteProps) {
         const words = quoteRef.current.querySelectorAll('[data-word]')
         if (words.length > 0) {
           gsap.from(words, {
-            opacity: 0.3,
+            opacity: 0.4,
             duration: 0.8,
             stagger: 0.05,
             ease: 'power2.out',
@@ -50,17 +52,20 @@ export function PullQuote({ data }: PullQuoteProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative flex min-h-[78vh] items-center justify-center overflow-hidden px-6 py-20"
+      className="relative flex min-h-[60vh] items-center justify-center overflow-hidden px-6 py-16"
       style={{ backgroundColor: data.backgroundColor || '#003865' }}
     >
       {/* Large decorative quote mark — background element */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[30vw] leading-none text-white/[0.03]">
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[30vw] leading-none"
+        style={{ color: `rgba(${c.accentRgb}, ${c.isDark ? 0.05 : 0.08})` }}
+      >
         &ldquo;
       </div>
 
       <blockquote ref={quoteRef} className="relative z-10 max-w-5xl text-center">
         {/* Quote text — word-by-word animation */}
-        <p className="font-display text-3xl leading-[1.2] text-white md:text-4xl lg:text-5xl xl:text-[3.5rem] xl:leading-[1.2]">
+        <p className="font-display text-3xl leading-[1.2] md:text-4xl lg:text-5xl xl:text-[3.5rem] xl:leading-[1.2]" style={{ color: c.heading }}>
           &ldquo;
           {words.map((word, i) => (
             <span key={i} data-word className="inline-block">
@@ -72,7 +77,7 @@ export function PullQuote({ data }: PullQuoteProps) {
         </p>
 
         {data.attribution && (
-          <footer className="mt-10 font-heading text-[11px] uppercase tracking-[0.4em] text-white/40">
+          <footer className="mt-10 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
             — {data.attribution}
           </footer>
         )}

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { gsap } from '@/lib/gsap-config'
 import { useScrollyTheme } from '../ScrollyThemeContext'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface RecipeCardProps {
@@ -23,6 +24,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const theme = useScrollyTheme()
+  const c = useScrollyColors()
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -49,20 +51,21 @@ export function RecipeCard({ data }: RecipeCardProps) {
   }, [theme])
 
   const bgColor = data.backgroundColor || '#003865'
-  const accent = theme.colors.accent
+  const accent = c.accent
 
   return (
     <section
       ref={sectionRef}
-      className="flex min-h-screen items-center justify-center px-6 py-24 lg:px-16"
+      className="flex min-h-[65vh] items-center justify-center px-6 py-16 lg:px-16"
       style={{ backgroundColor: bgColor }}
     >
       <div
         ref={cardRef}
-        className="relative mx-auto w-full max-w-lg overflow-hidden rounded-sm bg-white/[0.04] p-8 lg:p-12"
+        className="relative mx-auto w-full max-w-lg overflow-hidden rounded-sm p-8 lg:p-12"
         style={{
           transform: 'rotate(2deg)',
-          border: `2px solid rgba(${theme.colors.accentRgb}, 0.3)`,
+          backgroundColor: c.isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(255, 255, 255, 0.55)',
+          border: `2px solid rgba(${c.accentRgb}, 0.3)`,
         }}
       >
         {/* Decorative corner accents */}
@@ -73,7 +76,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
 
         {/* Subtitle */}
         {data.subtitle && (
-          <p className="mb-2 font-heading text-[10px] uppercase tracking-[0.4em] text-white/40">
+          <p className="mb-2 font-heading text-[10px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
             {data.subtitle}
           </p>
         )}
@@ -106,8 +109,8 @@ export function RecipeCard({ data }: RecipeCardProps) {
             </h4>
             <ul className="space-y-1.5">
               {data.ingredients.map((item, i) => (
-                <li key={i} className="flex items-baseline gap-2 text-[15px] text-white/70">
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: `rgba(${theme.colors.accentRgb}, 0.5)` }} />
+                <li key={i} className="flex items-baseline gap-2 text-[15px]" style={{ color: c.body }}>
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: `rgba(${c.accentRgb}, 0.6)` }} />
                   {item}
                 </li>
               ))}
@@ -121,7 +124,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
             <h4 className="mb-3 font-heading text-[11px] uppercase tracking-[0.3em]" style={{ color: accent }}>
               Fremgangsmate
             </h4>
-            <p className="text-[15px] leading-[1.7] text-white/70 whitespace-pre-line">
+            <p className="text-[15px] leading-[1.7] whitespace-pre-line" style={{ color: c.body }}>
               {data.instructions}
             </p>
           </div>

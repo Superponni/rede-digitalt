@@ -6,6 +6,7 @@ import { urlFor } from '@/sanity/lib/image'
 import { gsap } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
 import { useScrollyTheme } from '../ScrollyThemeContext'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface NumberedStopProps {
@@ -25,6 +26,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
   const circleRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const theme = useScrollyTheme()
+  const c = useScrollyColors()
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -77,7 +79,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
   }, [theme])
 
   const bgColor = data.backgroundColor || '#003865'
-  const accent = theme.colors.accent
+  const accent = c.accent
   const stopNum = data.stopNumber || 1
 
   const hotspot = data.image?.hotspot
@@ -88,16 +90,16 @@ export function NumberedStop({ data }: NumberedStopProps) {
   return (
     <section
       ref={sectionRef}
-      className="relative px-6 py-20 lg:px-16 lg:py-28"
+      className="relative px-6 py-12 lg:px-16 lg:py-16"
       style={{ backgroundColor: bgColor }}
     >
       <div className="mx-auto max-w-4xl">
         {/* Vertical connecting line (from previous stop) */}
         {stopNum > 1 && (
-          <svg className="mx-auto mb-6 h-20 w-px" aria-hidden="true">
+          <svg className="mx-auto mb-5 h-12 w-px" aria-hidden="true">
             <line
               ref={lineRef}
-              x1="0.5" y1="0" x2="0.5" y2="80"
+              x1="0.5" y1="0" x2="0.5" y2="48"
               stroke={accent}
               strokeWidth="2"
               strokeOpacity="0.3"
@@ -106,7 +108,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
         )}
 
         {/* Number circle */}
-        <div className="mb-10 flex justify-center">
+        <div className="mb-8 flex justify-center">
           <div
             ref={circleRef}
             className="flex h-16 w-16 items-center justify-center rounded-full border-2 lg:h-20 lg:w-20"
@@ -121,7 +123,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
         {/* Content */}
         <div ref={contentRef}>
           {data.title && (
-            <h3 className="mb-6 text-center font-display text-3xl leading-tight text-white lg:text-4xl">
+            <h3 className="mb-6 text-center font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
               {data.title}
             </h3>
           )}
@@ -151,19 +153,19 @@ export function NumberedStop({ data }: NumberedStopProps) {
                 components={{
                   block: {
                     normal: ({ children }) => (
-                      <p className="mb-6 text-[17px] leading-[1.75] text-white/80 lg:text-[18px]">
+                      <p className="mb-6 text-[17px] leading-[1.75] lg:text-[18px]" style={{ color: c.body }}>
                         {children}
                       </p>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight text-white lg:text-3xl">
+                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
                         className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
-                        style={{ borderColor: `rgba(${theme.colors.accentRgb}, 0.5)`, color: `rgba(${theme.colors.accentRgb}, 0.8)` }}
+                        style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}
                       </blockquote>

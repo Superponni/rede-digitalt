@@ -18,7 +18,9 @@ import { NumberedStop } from './sections/NumberedStop'
 import { InteractiveQuiz } from './sections/InteractiveQuiz'
 import { ProgressBar } from './ProgressBar'
 import { ScrollyThemeProvider } from './ScrollyThemeContext'
+import { ScrollyColorProvider, resolveScrollyColors } from './ScrollyColorContext'
 import { type ScrollyThemeName } from './theme-config'
+import { type AccentColor, type ColorMode } from '@/components/article/theme'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -38,6 +40,8 @@ interface ScrollytellingRendererProps {
     title: string
     scrollyTheme?: ScrollyThemeName
     scrollyBackground?: string
+    accentColor?: AccentColor
+    colorMode?: ColorMode
     sections?: any[]
     audioFileUrl?: string
     tags?: { _id: string; title: string }[]
@@ -65,10 +69,15 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
 
 export function ScrollytellingRenderer({ article, relatedArticles = [] }: ScrollytellingRendererProps) {
   const sections = article.sections || []
-  const bg = article.scrollyBackground || '#003865'
+  // Fargene følger samme system som standard-artikler. scrollyBackground
+  // beholdes som eksplisitt overstyring (bakoverkompatibelt), ellers utledes
+  // flaten av accentColor + colorMode.
+  const colors = resolveScrollyColors(article.accentColor, article.colorMode)
+  const bg = article.scrollyBackground || colors.bg
 
   return (
     <ScrollyThemeProvider theme={article.scrollyTheme}>
+    <ScrollyColorProvider accentColor={article.accentColor} colorMode={article.colorMode}>
     <article className="relative">
       <ProgressBar />
 
@@ -94,7 +103,7 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
         {relatedArticles.length > 0 && (
           <div className="px-6 py-16 lg:px-16 lg:py-24" style={{ backgroundColor: bg }}>
             <div className="mx-auto max-w-[1400px]">
-              <h2 className="mb-10 font-heading text-[11px] uppercase tracking-[0.3em] text-white/40">
+              <h2 className="mb-10 font-heading text-[11px] uppercase tracking-[0.3em]" style={{ color: colors.muted }}>
                 Les også
               </h2>
               <div className="flex justify-center gap-5">
@@ -119,7 +128,7 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       <div className="absolute inset-x-0 bottom-0 p-5">
                         {a.tags?.[0] && (
-                          <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.3em] text-gold">
+                          <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.3em] text-white/90">
                             {a.tags[0].title}
                           </span>
                         )}
@@ -139,7 +148,8 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
         <div className="pb-16 pt-4 text-center" style={{ backgroundColor: bg }}>
           <Link
             href="/"
-            className="inline-flex items-center gap-3 font-heading text-[11px] uppercase tracking-[0.3em] text-white/40 transition-colors hover:text-white/70"
+            className="inline-flex items-center gap-3 font-heading text-[11px] uppercase tracking-[0.3em] transition-opacity hover:opacity-100"
+            style={{ color: colors.muted }}
           >
             <span className="h-px w-8 bg-current" />
             Tilbake til magasinet
@@ -148,6 +158,7 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
         </div>
       </footer>
     </article>
+    </ScrollyColorProvider>
     </ScrollyThemeProvider>
   )
 }

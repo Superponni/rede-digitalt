@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { gsap } from '@/lib/gsap-config'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 interface QuizOption {
   text: string
@@ -21,16 +22,20 @@ interface InteractiveQuizProps {
   index: number
 }
 
-// Hardcoded gold for readability on all dark backgrounds
-const ACCENT = '#F6BE00'
-const ACCENT_RGB = '246, 190, 0'
-
 export function InteractiveQuiz({ data }: InteractiveQuizProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const [revealed, setRevealed] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const barRefs = useRef<(HTMLDivElement | null)[]>([])
+  const c = useScrollyColors()
+
+  // Signaturfargen + en nøytral «ink» som følger lys/mørk flate, slik at
+  // rammer/kort er lesbare uansett colorMode.
+  const ACCENT = c.accent
+  const ACCENT_RGB = c.accentRgb
+  const ink = c.isDark ? '255, 255, 255' : '20, 48, 73'
+  const neutral = (a: number) => `rgba(${ink}, ${a})`
 
   const style = data.style || 'quiz'
   const options = data.options || []
@@ -92,14 +97,14 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
     return (
       <section
         ref={sectionRef}
-        className="flex min-h-[48vh] items-center justify-center px-6 py-20 lg:px-16"
+        className="flex min-h-[40vh] items-center justify-center px-6 py-14 lg:px-16"
         style={{ backgroundColor: bgColor }}
       >
         <div ref={cardRef} className="mx-auto w-full max-w-xl text-center">
           <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
             Visste du at?
           </p>
-          <p className="mb-8 font-display text-2xl leading-snug text-white lg:text-3xl">
+          <p className="mb-8 font-display text-2xl leading-snug lg:text-3xl" style={{ color: c.heading }}>
             {data.question}
           </p>
 
@@ -122,7 +127,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
             </button>
           ) : (
             <div className="rounded-sm p-6" style={{ backgroundColor: `rgba(${ACCENT_RGB}, 0.1)`, border: `1px solid rgba(${ACCENT_RGB}, 0.2)` }}>
-              <p className="text-[17px] leading-[1.7] text-white/80">
+              <p className="text-[17px] leading-[1.7]" style={{ color: c.body }}>
                 {data.answer}
               </p>
             </div>
@@ -136,7 +141,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
   return (
     <section
       ref={sectionRef}
-      className="flex min-h-[60vh] items-center justify-center px-6 py-24 lg:px-16"
+      className="flex min-h-[48vh] items-center justify-center px-6 py-20 lg:px-16"
       style={{ backgroundColor: bgColor }}
     >
       <div ref={cardRef} className="mx-auto w-full max-w-xl">
@@ -146,7 +151,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
         </p>
 
         {/* Question — large and prominent */}
-        <h3 className="mb-10 font-display text-2xl leading-snug text-white lg:text-3xl">
+        <h3 className="mb-10 font-display text-2xl leading-snug lg:text-3xl" style={{ color: c.heading }}>
           {data.question}
         </h3>
 
@@ -157,8 +162,8 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
             const isCorrect = opt.isCorrect
             const showResult = revealed
 
-            let borderColor = 'rgba(255, 255, 255, 0.15)'
-            let bg = 'rgba(255, 255, 255, 0.04)'
+            let borderColor = neutral(0.15)
+            let bg = neutral(0.04)
 
             if (showResult && style === 'quiz') {
               if (isCorrect) {
@@ -177,7 +182,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
               <button
                 key={opt._key || i}
                 onClick={() => handleSelect(i)}
-                className="group relative w-full cursor-pointer overflow-hidden rounded-lg border-2 px-6 py-5 text-left transition-all hover:border-white/30"
+                className="group relative w-full cursor-pointer overflow-hidden rounded-lg border-2 px-6 py-5 text-left transition-all"
                 style={{ borderColor, backgroundColor: bg }}
                 disabled={style === 'quiz' && revealed}
               >
@@ -189,7 +194,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
                     style={{
                       backgroundColor: isSelected
                         ? `rgba(${ACCENT_RGB}, 0.2)`
-                        : 'rgba(255, 255, 255, 0.06)',
+                        : neutral(0.06),
                       width: '0%',
                     }}
                   />
@@ -200,17 +205,15 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
                   <span
                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold"
                     style={{
-                      backgroundColor: isSelected
-                        ? ACCENT
-                        : 'rgba(255, 255, 255, 0.1)',
-                      color: isSelected ? '#003865' : 'rgba(255, 255, 255, 0.6)',
+                      backgroundColor: isSelected ? ACCENT : neutral(0.1),
+                      color: isSelected ? c.bg : c.muted,
                     }}
                   >
                     {String.fromCharCode(65 + i)}
                   </span>
 
                   {/* Option text */}
-                  <span className="flex-1 text-[17px] leading-snug text-white/90">
+                  <span className="flex-1 text-[17px] leading-snug" style={{ color: c.body }}>
                     {opt.text}
                   </span>
 
@@ -218,7 +221,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
                   {showResult && style === 'poll' && opt.pollPercent != null && (
                     <span
                       className="shrink-0 font-heading text-lg font-bold"
-                      style={{ color: isSelected ? ACCENT : 'rgba(255, 255, 255, 0.5)' }}
+                      style={{ color: isSelected ? ACCENT : c.muted }}
                     >
                       {opt.pollPercent}%
                     </span>
@@ -240,7 +243,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
         {/* Answer explanation */}
         {revealed && data.answer && (
           <div className="mt-8 rounded-lg border p-6" style={{ backgroundColor: `rgba(${ACCENT_RGB}, 0.06)`, borderColor: `rgba(${ACCENT_RGB}, 0.15)` }}>
-            <p className="text-[16px] leading-[1.75] text-white/75">{data.answer}</p>
+            <p className="text-[16px] leading-[1.75]" style={{ color: c.body }}>{data.answer}</p>
           </div>
         )}
       </div>

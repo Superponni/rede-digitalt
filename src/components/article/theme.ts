@@ -22,7 +22,7 @@ export type HeroLayout = 'image-first' | 'heading-first' | 'side' | 'none' | 'po
 // base = TOBB-paletten (se globals.css). tint = lys pastell for tittel på mørk/farget
 // flate. pale = svært lys toning av fargen brukt som bakgrunn i «tinted»-modus
 // (som de fleste sakene i trykksaken: lys rosa/lilla/blå/grønn).
-const ACCENTS: Record<AccentColor, { base: string; tint: string; pale: string }> = {
+export const ACCENTS: Record<AccentColor, { base: string; tint: string; pale: string }> = {
   navy: { base: '#003865', tint: '#9DBBD6', pale: '#E2EAF1' },
   teal: { base: '#487A7B', tint: '#AECECE', pale: '#E4EDED' },
   purple: { base: '#6B3077', tint: '#D8C2E0', pale: '#EDE4F1' },

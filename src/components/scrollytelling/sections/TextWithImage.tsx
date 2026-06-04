@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { gsap } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
+import { useScrollyColors, type ScrollyColors } from '../ScrollyColorContext'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface TextWithImageProps {
@@ -29,8 +30,8 @@ function isInlineQuote(block: any): boolean {
 }
 
 /**
- * Pre-process blocks: pick only the first quote to style as gold blockquote.
- * The rest render as subtle italic to avoid walls of gold.
+ * Pre-process blocks: pick only the first quote to style as accent blockquote.
+ * The rest render as subtle italic to avoid walls of color.
  */
 function markQuoteBlocks(blocks: any[]): Set<number> {
   const styledQuotes = new Set<number>()
@@ -43,9 +44,9 @@ function markQuoteBlocks(blocks: any[]): Set<number> {
   return styledQuotes
 }
 
-function TextBlocks({ blocks, styledQuoteIndices, allBlocks }: { blocks: any[]; styledQuoteIndices: Set<number>; allBlocks: any[] }) {
+function TextBlocks({ blocks, styledQuoteIndices, allBlocks, c }: { blocks: any[]; styledQuoteIndices: Set<number>; allBlocks: any[]; c: ScrollyColors }) {
   return (
-    <div className="px-6 py-14 lg:px-16 lg:py-20">
+    <div className="px-6 py-8 lg:px-16 lg:py-12">
       <div className="mx-auto max-w-[680px]">
         <PortableText
           value={blocks}
@@ -56,46 +57,52 @@ function TextBlocks({ blocks, styledQuoteIndices, allBlocks }: { blocks: any[]; 
 
                 if (isInlineQuote(value) && styledQuoteIndices.has(blockIndex)) {
                   return (
-                    <blockquote className="my-8 border-l-2 border-[#ff9cca]/40 pl-6 font-display text-xl italic leading-relaxed text-[#ff9cca]/80 lg:text-2xl">
+                    <blockquote
+                      className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                      style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
+                    >
                       {children}
                     </blockquote>
                   )
                 }
                 if (isInlineQuote(value)) {
                   return (
-                    <p className="mb-6 text-[17px] italic leading-[1.75] text-white/60 lg:text-[18px]">
+                    <p className="mb-6 text-[17px] italic leading-[1.75] lg:text-[18px]" style={{ color: c.body }}>
                       {children}
                     </p>
                   )
                 }
                 return (
-                  <p className="mb-6 text-[17px] leading-[1.75] text-white/80 lg:text-[18px]">
+                  <p className="mb-6 text-[17px] leading-[1.75] lg:text-[18px]" style={{ color: c.body }}>
                     {children}
                   </p>
                 )
               },
               h2: ({ children }) => (
-                <h2 className="mb-6 mt-14 font-display text-3xl leading-tight text-white lg:text-4xl">
+                <h2 className="mb-6 mt-14 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="mb-6 mt-10 font-display text-2xl leading-tight text-white lg:text-3xl">
+                <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                   {children}
                 </h3>
               ),
               blockquote: ({ children }) => (
-                <blockquote className="my-10 border-l-2 border-[#ff9cca]/40 pl-6 font-display text-xl italic leading-relaxed text-[#ff9cca]/80 lg:text-2xl">
+                <blockquote
+                  className="my-10 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                  style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
+                >
                   {children}
                 </blockquote>
               ),
             },
             marks: {
               em: ({ children }) => (
-                <em className="italic text-white/70">{children}</em>
+                <em className="italic" style={{ color: c.body }}>{children}</em>
               ),
               strong: ({ children }) => (
-                <strong className="font-bold text-white">{children}</strong>
+                <strong className="font-bold" style={{ color: c.heading }}>{children}</strong>
               ),
             },
           }}
@@ -109,6 +116,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
   const ledeRef = useRef<HTMLDivElement>(null)
+  const c = useScrollyColors()
 
   const isFirstTextSection = index === 1 // Right after hero (index 0)
 
@@ -205,7 +213,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
     : 'ml-auto'
 
   const imageElement = hasImage && (
-    <div className="px-6 py-16 lg:px-16 lg:py-24">
+    <div className="px-6 py-8 lg:px-16 lg:py-12">
       <div
         ref={imageRef}
         className={`relative ${align} ${sizeMax} overflow-hidden`}
@@ -221,7 +229,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
           />
         </div>
         {(data.image!.caption || data.image!.photographer) && (
-          <p className="mt-3 text-center font-heading text-[10px] uppercase tracking-[0.3em] text-white/40">
+          <p className="mt-3 text-center font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
             {data.image!.caption}
             {data.image!.photographer && (
               <>{data.image!.caption ? ' — ' : ''}Foto: {data.image!.photographer}</>
@@ -240,26 +248,26 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
     >
       {/* Section title — prominent display */}
       {data.title && (
-        <div className="px-6 pt-16 lg:px-16 lg:pt-24">
+        <div className="px-6 pt-12 lg:px-16 lg:pt-16">
           <div className="mx-auto max-w-[680px]">
-            <h2 className="font-display text-2xl leading-tight text-white lg:text-3xl">
+            <h2 className="font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
               {data.title}
             </h2>
-            <div className="mt-4 h-px w-16 bg-gold/40" />
+            <div className="mt-4 h-px w-16" style={{ backgroundColor: `rgba(${c.accentRgb}, 0.5)` }} />
           </div>
         </div>
       )}
 
-      {/* LEDE — huge display font intro (Joshua's style) */}
+      {/* LEDE — huge display font intro */}
       {ledeBlock && (
-        <div ref={ledeRef} className="px-6 pt-16 lg:px-16 lg:pt-24">
+        <div ref={ledeRef} className="px-6 pt-12 lg:px-16 lg:pt-16">
           <div className="mx-auto max-w-5xl">
             <PortableText
               value={[ledeBlock]}
               components={{
                 block: {
                   normal: ({ children }) => (
-                    <p className="font-display text-2xl leading-[1.3] text-white md:text-3xl lg:text-[2.75rem] lg:leading-[1.25] xl:text-[3.25rem]">
+                    <p className="font-display text-2xl leading-[1.3] md:text-3xl lg:text-[2.75rem] lg:leading-[1.25] xl:text-[3.25rem]" style={{ color: c.title }}>
                       {children}
                     </p>
                   ),
@@ -276,7 +284,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
       {/* Body text */}
       {bodyBlocks.length > 0 && (
         <div data-text-block>
-          <TextBlocks blocks={bodyBlocks} styledQuoteIndices={styledQuoteIndices} allBlocks={bodyBlocks} />
+          <TextBlocks blocks={bodyBlocks} styledQuoteIndices={styledQuoteIndices} allBlocks={bodyBlocks} c={c} />
         </div>
       )}
     </section>

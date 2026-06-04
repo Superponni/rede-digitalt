@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 interface GalleryImage {
   asset: { _ref: string }
@@ -25,14 +26,15 @@ interface GalleryProps {
 export function Gallery({ data }: GalleryProps) {
   const images = data.images || []
   const bgColor = data.backgroundColor || '#003865'
+  const c = useScrollyColors()
 
   if (images.length === 0) return null
 
   return (
-    <section className="relative overflow-hidden py-16 lg:py-24" style={{ backgroundColor: bgColor }}>
+    <section className="relative overflow-hidden py-10 lg:py-14" style={{ backgroundColor: bgColor }}>
       {data.title && (
         <div className="px-6 pb-8 lg:px-16">
-          <h2 className="font-display text-2xl text-white lg:text-3xl">
+          <h2 className="font-display text-2xl lg:text-3xl" style={{ color: c.heading }}>
             {data.title}
           </h2>
         </div>
@@ -63,7 +65,7 @@ export function Gallery({ data }: GalleryProps) {
                 )}
               </div>
               {(img.caption || img.photographer) && (
-                <p className="mt-3 font-heading text-[10px] uppercase tracking-[0.2em] text-white/40">
+                <p className="mt-3 font-heading text-[10px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
                   {img.caption}
                   {img.photographer && (
                     <>{img.caption ? ' — ' : ''}Foto: {img.photographer}</>

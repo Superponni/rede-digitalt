@@ -6,6 +6,7 @@ import { urlFor } from '@/sanity/lib/image'
 import { gsap, ScrollTrigger } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
 import { useScrollyTheme } from '../ScrollyThemeContext'
+import { useScrollyColors } from '../ScrollyColorContext'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface StickyPortraitProps {
@@ -22,6 +23,7 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const imageColRef = useRef<HTMLDivElement>(null)
   const theme = useScrollyTheme()
+  const c = useScrollyColors()
 
   const isLeft = data.imagePosition !== 'right'
 
@@ -100,24 +102,24 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
                 components={{
                   block: {
                     normal: ({ children }) => (
-                      <p className="mb-6 text-[17px] leading-[1.75] text-white/80 lg:text-[18px]">
+                      <p className="mb-6 text-[17px] leading-[1.75] lg:text-[18px]" style={{ color: c.body }}>
                         {children}
                       </p>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight text-white lg:text-4xl">
+                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight text-white lg:text-3xl">
+                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
                         className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
-                        style={{ borderColor: `rgba(${theme.colors.accentRgb}, 0.5)`, color: `rgba(${theme.colors.accentRgb}, 0.8)` }}
+                        style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}
                       </blockquote>
@@ -148,7 +150,7 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
             />
           )}
           {data.image?.photographer && (
-            <p className="absolute bottom-4 left-4 z-10 font-heading text-[10px] uppercase tracking-[0.3em] text-white/30">
+            <p className="absolute bottom-4 left-4 z-10 font-heading text-[10px] uppercase tracking-[0.3em] text-white/60">
               Foto: {data.image.photographer}
             </p>
           )}
@@ -157,7 +159,7 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
         {/* Text column */}
         <div
           data-sticky-text
-          className={`px-12 py-24 xl:px-20 ${isLeft ? 'order-2' : 'order-1'}`}
+          className={`px-12 py-16 xl:px-20 ${isLeft ? 'order-2' : 'order-1'}`}
         >
           <div className="max-w-[560px]">
             {data.text && (
@@ -166,32 +168,32 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
                 components={{
                   block: {
                     normal: ({ children }) => (
-                      <p className="mb-6 text-[17px] leading-[1.75] text-white/80 lg:text-[18px]">
+                      <p className="mb-6 text-[17px] leading-[1.75] lg:text-[18px]" style={{ color: c.body }}>
                         {children}
                       </p>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight text-white lg:text-4xl">
+                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight text-white lg:text-3xl">
+                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
                         className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
-                        style={{ borderColor: `rgba(${theme.colors.accentRgb}, 0.5)`, color: `rgba(${theme.colors.accentRgb}, 0.8)` }}
+                        style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}
                       </blockquote>
                     ),
                   },
                   marks: {
-                    em: ({ children }) => <em className="italic text-white/70">{children}</em>,
-                    strong: ({ children }) => <strong className="font-bold text-white">{children}</strong>,
+                    em: ({ children }) => <em className="italic" style={{ color: c.body }}>{children}</em>,
+                    strong: ({ children }) => <strong className="font-bold" style={{ color: c.heading }}>{children}</strong>,
                   },
                 }}
               />
