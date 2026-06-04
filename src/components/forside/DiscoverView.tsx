@@ -93,7 +93,7 @@ function DiscoverCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
             <div className="absolute inset-0 flex flex-col items-center justify-end px-4 pb-6 text-center lg:px-6 lg:pb-8">
               {tag && (
-                <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.4em] text-gold lg:text-[11px]">
+                <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.4em] text-white/75 lg:text-[11px]">
                   {tag}
                 </span>
               )}
@@ -107,7 +107,7 @@ function DiscoverCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-3 lg:p-4">
               {tag && (
-                <span className="mb-1 inline-block font-heading text-[9px] uppercase tracking-[0.3em] text-gold lg:text-[10px]">
+                <span className="mb-1 inline-block font-heading text-[9px] uppercase tracking-[0.3em] text-white/75 lg:text-[10px]">
                   {tag}
                 </span>
               )}
@@ -197,7 +197,7 @@ export function DiscoverView({
                     <span className="mb-1 font-heading text-[9px] uppercase tracking-[0.3em] text-white/50 lg:text-[10px]">
                       Leder
                     </span>
-                    <h3 className="font-display text-sm leading-snug text-white transition-colors duration-300 group-hover:text-gold lg:text-lg">
+                    <h3 className="font-display text-sm leading-snug text-white transition-colors duration-300 group-hover:text-white/80 lg:text-lg">
                       {editorial.title}
                     </h3>
                     {editorial.teaserText && (
