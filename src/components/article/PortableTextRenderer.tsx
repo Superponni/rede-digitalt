@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
-import { urlFor } from '@/sanity/lib/image'
+import { naturalSrc, imageDims } from '@/sanity/lib/imageHelpers'
 import { getArticleTheme, type ArticleTheme } from './theme'
 import { Reveal } from './Reveal'
 
@@ -198,15 +198,19 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
       },
       image: ({ value }) => {
         if (!value?.asset) return null
+        // Behold bildets originalformat (ingen tvungen 16/10-beskjæring) så
+        // stående motiv — f.eks. et barn — ikke kuttes på topp og bunn.
+        const dims = imageDims(value)
         return (
           <Reveal as="figure" y={24} scale={1.03} duration={0.9} className="my-10 -mx-6 lg:-mx-16">
-            <div className="relative aspect-[16/10] overflow-hidden">
+            <div className="overflow-hidden">
               <Image
-                src={urlFor(value).width(1200).height(750).url()}
+                src={naturalSrc(value, 1600)}
                 alt={value.alt || ''}
-                fill
-                className="object-cover"
-                sizes="100vw"
+                width={dims.width}
+                height={dims.height}
+                className="h-auto w-full"
+                sizes="(min-width: 1024px) 48rem, 100vw"
               />
             </div>
             {(value.caption || value.credit) && (

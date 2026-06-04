@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { urlFor } from '@/sanity/lib/image'
+import { coverSrc } from '@/sanity/lib/imageHelpers'
 
 interface Article {
   _id: string
@@ -72,14 +72,14 @@ function DiscoverCard({
             muted
             loop
             playsInline
-            poster={imageRef?.asset ? urlFor(imageRef).width(imageWidth).height(imageHeight).fit('crop').url() : undefined}
+            poster={imageRef?.asset ? coverSrc(imageRef, imageWidth, imageHeight, 1400) : undefined}
             className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-110"
           >
             <source src={videoUrl} type="video/mp4" />
           </video>
         ) : imageRef?.asset ? (
           <Image
-            src={urlFor(imageRef).width(imageWidth).height(imageHeight).fit('crop').url()}
+            src={coverSrc(imageRef, imageWidth, imageHeight, 1400)}
             alt={imageAlt || title}
             fill
             className="object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-110"
@@ -184,7 +184,7 @@ export function DiscoverView({
                   {editorial.heroImage?.asset && (
                     <>
                       <Image
-                        src={urlFor(editorial.heroImage).width(600).height(338).fit('crop').url()}
+                        src={coverSrc(editorial.heroImage, 16, 9, 1400)}
                         alt={editorial.heroImage.alt || editorial.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"

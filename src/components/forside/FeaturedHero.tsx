@@ -1,14 +1,14 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { urlFor } from '@/sanity/lib/image'
+import { naturalSrc, focalPosition } from '@/sanity/lib/imageHelpers'
 
 interface Article {
   _id: string
   title: string
   slug: { current: string }
   teaser?: string
-  heroImage?: { asset: { _ref: string }; alt?: string }
+  heroImage?: { asset: { _ref: string }; alt?: string; hotspot?: { x: number; y: number } }
   heroVideoUrl?: string
   tags?: { _id: string; title: string }[]
   type: string
@@ -38,17 +38,19 @@ export function FeaturedHero({ articles }: FeaturedHeroProps) {
                 muted
                 loop
                 playsInline
-                poster={article.heroImage?.asset ? urlFor(article.heroImage).width(1920).height(1080).fit('crop').url() : undefined}
+                poster={article.heroImage?.asset ? naturalSrc(article.heroImage) : undefined}
+                style={{ objectPosition: focalPosition(article.heroImage) }}
                 className="absolute inset-0 h-full w-full object-cover"
               >
                 <source src={article.heroVideoUrl} type="video/mp4" />
               </video>
             ) : article.heroImage?.asset ? (
               <Image
-                src={urlFor(article.heroImage).width(1920).height(1080).fit('crop').url()}
+                src={naturalSrc(article.heroImage)}
                 alt={article.heroImage.alt || article.title}
                 fill
                 className="object-cover"
+                style={{ objectPosition: focalPosition(article.heroImage) }}
                 sizes="100vw"
                 priority={index === 0}
               />

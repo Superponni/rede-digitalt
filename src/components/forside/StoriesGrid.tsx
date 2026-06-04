@@ -3,14 +3,14 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { urlFor } from '@/sanity/lib/image'
+import { naturalSrc, focalPosition } from '@/sanity/lib/imageHelpers'
 
 interface Article {
   _id: string
   title: string
   slug: { current: string }
   teaser?: string
-  heroImage?: { asset: { _ref: string }; alt?: string }
+  heroImage?: { asset: { _ref: string }; alt?: string; hotspot?: { x: number; y: number } }
   tags?: { _id: string; title: string }[]
   type: string
 }
@@ -88,14 +88,11 @@ export function StoriesGrid({ articles }: StoriesGridProps) {
                 <div className="relative h-full min-h-[280px] overflow-hidden rounded-lg sm:min-h-[320px] lg:min-h-[380px]">
                   {article.heroImage?.asset ? (
                     <Image
-                      src={urlFor(article.heroImage)
-                        .width(isWide ? 1000 : 600)
-                        .height(isWide ? 500 : 500)
-                        .fit('crop')
-                        .url()}
+                      src={naturalSrc(article.heroImage, 2000)}
                       alt={article.heroImage.alt || article.title}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                      style={{ objectPosition: focalPosition(article.heroImage) }}
                       sizes={
                         isWide
                           ? '(max-width: 640px) 100vw, 66vw'

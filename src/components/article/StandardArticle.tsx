@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { urlFor } from '@/sanity/lib/image'
+import { naturalSrc, coverSrc, imageDims, focalPosition } from '@/sanity/lib/imageHelpers'
 import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
@@ -34,13 +34,6 @@ interface StandardArticleProps {
   }
 }
 
-// Henter bildets egne pikseldimensjoner fra Sanity-asset-referansen
-// (image-<hash>-<B>x<H>-<ext>) så vi kan beholde originalformatet.
-function parseImageDims(ref?: string): { width: number; height: number } {
-  const m = ref?.match(/-(\d+)x(\d+)-[a-z]+$/i)
-  return m ? { width: Number(m[1]), height: Number(m[2]) } : { width: 1600, height: 1000 }
-}
-
 export function StandardArticle({ article }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
@@ -55,9 +48,14 @@ export function StandardArticle({ article }: StandardArticleProps) {
       : hasHero
         ? article.heroLayout || 'image-first'
         : 'none'
-  const heroSrc = article.heroImage?.asset ? urlFor(article.heroImage).width(1600).url() : ''
+  // Toppbilde i full oppløsning og originalformat — next/image lager skarpe
+  // varianter per skjermstørrelse. Fikser kornete heldekkende toppbilder.
+  const heroSrc = article.heroImage?.asset ? naturalSrc(article.heroImage) : ''
+  // Side-oppsettet bruker en fast stående 3/4-ramme, fokus-bevisst beskjært.
+  const heroSideSrc = article.heroImage?.asset ? coverSrc(article.heroImage, 3, 4) : ''
   const heroAlt = article.heroImage?.alt || article.title
-  const heroDims = parseImageDims(article.heroImage?.asset?._ref)
+  const heroDims = imageDims(article.heroImage)
+  const heroFocal = focalPosition(article.heroImage)
 
   // Magasin-logikk: venstrestilt KUN når tittel og bilde står ved siden av
   // hverandre. Når teksten står alene eller over/under bilde ⇒ midtstilt.
@@ -157,15 +155,19 @@ export function StandardArticle({ article }: StandardArticleProps) {
       {/* Topp */}
       {layout === 'image-first' && (
         <>
-          <div className="relative">
+          {/* Heldekkende toppbilde, men høydebegrenset så tittelen alltid er
+              synlig over folden. Fokuspunktet holder motivet i ramme. */}
+          <div className="relative h-[58vh] w-full min-h-[380px] max-h-[820px] sm:h-[66vh] lg:h-[74vh]">
             <ArticleHeroImage
               src={heroSrc}
               alt={heroAlt}
               width={heroDims.width}
               height={heroDims.height}
+              cover
+              focal={heroFocal}
               priority
               sizes="100vw"
-              className="w-full"
+              className="h-full w-full"
             />
             <div
               className="pointer-events-none absolute inset-0"
@@ -196,13 +198,14 @@ export function StandardArticle({ article }: StandardArticleProps) {
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 pt-16 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:pt-24">
           {header}
           <ArticleHeroImage
-            src={heroSrc}
+            src={heroSideSrc}
             alt={heroAlt}
             width={heroDims.width}
             height={heroDims.height}
             priority
+            aspect="3 / 4"
             sizes="(min-width: 1024px) 40vw, 100vw"
-            className="w-full"
+            className="mx-auto w-full max-w-md"
           />
         </div>
       )}

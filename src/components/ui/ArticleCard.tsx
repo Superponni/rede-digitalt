@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { urlFor } from '@/sanity/lib/image'
+import { coverSrc } from '@/sanity/lib/imageHelpers'
 
 type CardSize = 'small' | 'medium' | 'large' | 'hero'
 
@@ -25,6 +25,15 @@ const sizeClasses: Record<CardSize, string> = {
   hero: 'aspect-[16/9] md:aspect-[21/9]',
 }
 
+// Be om bildet i samme format som boksen — da slipper vi en ekstra
+// object-cover-beskjæring oppå Sanitys fokus-bevisste beskjæring.
+const sizeCrop: Record<CardSize, { w: number; h: number; base: number }> = {
+  small: { w: 4, h: 5, base: 1000 },
+  medium: { w: 3, h: 4, base: 1200 },
+  large: { w: 16, h: 10, base: 1800 },
+  hero: { w: 16, h: 9, base: 2560 },
+}
+
 export function ArticleCard({
   title,
   slug,
@@ -42,7 +51,7 @@ export function ArticleCard({
     >
       {heroImage?.asset && (
         <Image
-          src={urlFor(heroImage).width(800).height(600).url()}
+          src={coverSrc(heroImage, sizeCrop[size].w, sizeCrop[size].h, sizeCrop[size].base)}
           alt={heroImage.alt || title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
