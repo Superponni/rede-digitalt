@@ -34,9 +34,9 @@ export function CountUpFact({ data }: CountUpFactProps) {
       const el = numberRef.current
       const proxy = { value: 0 }
 
-      // Duration scales with theme personality
-      const countDuration = theme.name === 'warm' ? 2.5 : theme.name === 'playful' ? 1.2 : 1.8
-      const countEase = theme.name === 'playful' ? 'back.out(1.2)' : animation.ease
+      // Rolig opptelling som matcher den filmatiske bevegelsesprofilen.
+      const countDuration = 1.8
+      const countEase = animation.ease
 
       gsap.to(proxy, {
         value: targetNumber,

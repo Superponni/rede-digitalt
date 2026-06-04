@@ -26,8 +26,6 @@ interface ArticleData {
   portraitName?: string
   portraitRole?: string
   expertPortrait?: { asset: { _ref: string }; alt?: string }
-  scrollyTheme?: 'warm' | 'documentary' | 'playful'
-  scrollyBackground?: string
   teaser?: string
   heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
   body?: unknown[]

@@ -40,7 +40,7 @@ function hexToRgb(hex: string): string {
 
 export function resolveScrollyColors(
   accentColor: AccentColor = 'navy',
-  colorMode: ColorMode = 'dark',
+  colorMode: ColorMode = 'light',
 ): ScrollyColors {
   const at = getArticleTheme(accentColor, colorMode)
   // Signaturfargen: på lys/tinted er det den fulle fargen, på mørk/filled en

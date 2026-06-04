@@ -45,12 +45,14 @@ export const article = defineType({
       group: 'innhold',
       options: {
         list: [
-          { title: 'Scrollytelling', value: 'scrollytelling' },
+          { title: 'Feature', value: 'scrollytelling' },
           { title: 'Standard', value: 'standard' },
         ],
         layout: 'radio',
       },
       initialValue: 'standard',
+      description:
+        'Feature: ligger øverst på forsiden og har mer animasjon. Standard: pen lesevisning. Begge styrer farge likt (signaturfarge + fargemodus under).',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -71,7 +73,6 @@ export const article = defineType({
         layout: 'dropdown',
       },
       initialValue: 'navy',
-      hidden: ({ parent }) => parent?.type !== 'standard',
       description: 'Fargen som preger tittel, sitater og faktabokser — som i trykksaken',
     }),
     defineField({
@@ -89,7 +90,8 @@ export const article = defineType({
         layout: 'radio',
       },
       initialValue: 'light',
-      hidden: ({ parent }) => parent?.type !== 'standard',
+      description:
+        'Styrer bakgrunn og metning — som i trykksaken. På feature-saker bestemmer dette flaten bak alt innholdet (helskjerm-coveret øverst ligger alltid over hovedbildet).',
     }),
     defineField({
       name: 'heroLayout',
@@ -220,40 +222,6 @@ export const article = defineType({
       description: 'MP3-opplesning av artikkelen',
     }),
     defineField({
-      name: 'scrollyTheme',
-      title: 'Scrollytelling-tema',
-      type: 'string',
-      group: 'innhold',
-      options: {
-        list: [
-          { title: 'Varm / intim (gylne, mørke toner)', value: 'warm' },
-          { title: 'Dokumentarisk / rolig (grønn/teal)', value: 'documentary' },
-          { title: 'Leken / energisk (lilla)', value: 'playful' },
-        ],
-        layout: 'radio',
-      },
-      hidden: ({ parent }) => parent?.type !== 'scrollytelling',
-      description: 'Styrer stemningen: aksentfarger og hvordan animasjonene føles (rolig vs. energisk). Ikke bakgrunnsfargen — den settes i feltet under.',
-    }),
-    defineField({
-      name: 'scrollyBackground',
-      title: 'Bakgrunnsfarge',
-      type: 'string',
-      group: 'innhold',
-      options: {
-        list: [
-          { title: 'Mørk marineblå', value: '#003865' },
-          { title: 'Magenta', value: '#AA0061' },
-          { title: 'Lilla', value: '#6B3077' },
-          { title: 'Teal', value: '#048A7B' },
-        ],
-        layout: 'radio',
-      },
-      initialValue: '#003865',
-      hidden: ({ parent }) => parent?.type !== 'scrollytelling',
-      description: 'Bakgrunnsfarge for hele scrollytelling-artikkelen',
-    }),
-    defineField({
       name: 'sections',
       title: 'Seksjoner',
       type: 'array',
@@ -274,7 +242,7 @@ export const article = defineType({
         { type: 'interactiveQuiz' },
       ],
       hidden: ({ parent }) => parent?.type !== 'scrollytelling',
-      description: 'Byggeklosser for scrollytelling-artikler',
+      description: 'Byggeklosser for feature-artikler',
     }),
     defineField({
       name: 'body',
@@ -301,7 +269,7 @@ export const article = defineType({
     prepare({ title, type, media }) {
       return {
         title,
-        subtitle: type === 'scrollytelling' ? '📜 Scrollytelling' : '📄 Standard',
+        subtitle: type === 'scrollytelling' ? '📜 Feature' : '📄 Standard',
         media,
       }
     },

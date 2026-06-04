@@ -49,8 +49,6 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
     heroImage,
     body,
     sections,
-    scrollyTheme,
-    scrollyBackground,
     publishedAt,
     _updatedAt,
     estimatedReadTime,

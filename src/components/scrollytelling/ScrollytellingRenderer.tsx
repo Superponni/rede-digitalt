@@ -19,7 +19,6 @@ import { InteractiveQuiz } from './sections/InteractiveQuiz'
 import { ProgressBar } from './ProgressBar'
 import { ScrollyThemeProvider } from './ScrollyThemeContext'
 import { ScrollyColorProvider, resolveScrollyColors } from './ScrollyColorContext'
-import { type ScrollyThemeName } from './theme-config'
 import { type AccentColor, type ColorMode } from '@/components/article/theme'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -38,8 +37,6 @@ interface ScrollytellingRendererProps {
   article: {
     _id: string
     title: string
-    scrollyTheme?: ScrollyThemeName
-    scrollyBackground?: string
     accentColor?: AccentColor
     colorMode?: ColorMode
     sections?: any[]
@@ -69,14 +66,14 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
 
 export function ScrollytellingRenderer({ article, relatedArticles = [] }: ScrollytellingRendererProps) {
   const sections = article.sections || []
-  // Fargene følger samme system som standard-artikler. scrollyBackground
-  // beholdes som eksplisitt overstyring (bakoverkompatibelt), ellers utledes
-  // flaten av accentColor + colorMode.
+  // Fargene følger NØYAKTIG samme system som standard-artikler: flaten og all
+  // tekst utledes av accentColor + colorMode (trykksaken). Ingen scrolly-egne
+  // fargevalg lenger.
   const colors = resolveScrollyColors(article.accentColor, article.colorMode)
-  const bg = article.scrollyBackground || colors.bg
+  const bg = colors.bg
 
   return (
-    <ScrollyThemeProvider theme={article.scrollyTheme}>
+    <ScrollyThemeProvider>
     <ScrollyColorProvider accentColor={article.accentColor} colorMode={article.colorMode}>
     <article className="relative">
       <ProgressBar />

@@ -4,13 +4,11 @@ import { client } from './client'
 import { token } from '../env'
 
 // Felter som IKKE skal stega-kodes: verdiene brukes i logikk (oppslagsnøkler,
-// hex-farger, URL-er) der usynlige stega-tegn bryter f.eks. THEME_MAP-oppslag,
+// hex-farger, URL-er) der usynlige stega-tegn bryter f.eks. farge-/modus-oppslag,
 // fargematch eller embed-URL-er. Matches på feltnavn (siste sti-segment).
 // NB: matcher på basenavn, så et felt med samme navn i en annen type mister
 // også klikk-til-redigering — bevisst avveining (disse navnene er logikk-felter).
 const STEGA_SKIP_FIELDS = [
-  'scrollyTheme',
-  'scrollyBackground',
   'accentColor',
   'colorMode',
   'heroLayout',
@@ -30,7 +28,7 @@ const { sanityFetch: liveFetch, SanityLive } = defineLive({
     stega: {
       studioUrl: '/studio',
       // Ikke kod inn verdier som brukes i logikk (oppslagsnøkler, hex-farger,
-      // URL-er) — usynlige stega-tegn der bryter f.eks. THEME_MAP-oppslag.
+      // URL-er) — usynlige stega-tegn der bryter f.eks. farge-/modus-oppslag.
       filter: (props) => {
         const key = props.sourcePath[props.sourcePath.length - 1]
         if (typeof key === 'string' && STEGA_SKIP_FIELDS.includes(key)) return false

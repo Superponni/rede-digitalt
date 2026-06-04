@@ -1,20 +1,16 @@
 'use client'
 
 import { createContext, useContext } from 'react'
-import { type ThemeConfig, getThemeConfig, type ScrollyThemeName } from './theme-config'
+import { type ThemeConfig, getThemeConfig } from './theme-config'
 
-const ScrollyThemeContext = createContext<ThemeConfig>(getThemeConfig('warm'))
+// Bevegelsesprofilen er nå én felles, rolig profil for alle feature-saker.
+// Provideren beholdes så seksjonene kan lese animasjonsverdiene via hook, men
+// den tar ikke lenger noe tema-valg — farge styres separat (ScrollyColorContext).
+const ScrollyThemeContext = createContext<ThemeConfig>(getThemeConfig())
 
-export function ScrollyThemeProvider({
-  theme,
-  children,
-}: {
-  theme?: ScrollyThemeName
-  children: React.ReactNode
-}) {
-  const config = getThemeConfig(theme)
+export function ScrollyThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <ScrollyThemeContext.Provider value={config}>
+    <ScrollyThemeContext.Provider value={getThemeConfig()}>
       {children}
     </ScrollyThemeContext.Provider>
   )
