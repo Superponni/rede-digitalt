@@ -43,9 +43,7 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
     accentColor,
     colorMode,
     heroLayout,
-    portraitName,
-    portraitRole,
-    expertPortrait,
+    experts[]{ name, role, portrait },
     heroImage,
     body,
     sections,
@@ -117,7 +115,8 @@ export const FRONTPAGE_QUERY = defineQuery(
       _id, title, number, year, coverImage
     },
     "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
-      _id, title, slug, type, teaser, heroImage, expertPortrait,
+      _id, title, slug, type, teaser, heroImage,
+      "expertPortrait": experts[0].portrait,
       "heroVideoUrl": heroVideo.asset->url,
       tags[]->{ _id, title, slug }
     },
@@ -150,7 +149,7 @@ export const ABOUT_PAGE_QUERY = defineQuery(
 export const EDITORIAL_PAGE_QUERY = defineQuery(
   `*[_type == "editorial"] | order(publishedAt desc) [0] {
     _id, title, subtitle, slug, teaserText, heroImage, fullText,
-    accentColor, colorMode, heroLayout, portraitName, portraitRole, expertPortrait,
+    accentColor, colorMode, heroLayout, experts[]{ name, role, portrait },
     publishedAt, _updatedAt,
     "audioFileUrl": audioFile.asset->url,
     edition->{ _id, title, number, year },

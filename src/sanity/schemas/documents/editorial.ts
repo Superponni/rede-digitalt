@@ -95,32 +95,14 @@ export const editorial = defineType({
       description: 'Mangler bildet, vises tittel-toppen uansett',
     }),
     defineField({
-      name: 'portraitName',
-      title: 'Ekspertnavn (buet over portrettet)',
-      type: 'string',
+      name: 'experts',
+      title: 'Eksperter / kilder (med portrett)',
+      type: 'array',
       group: 'innhold',
+      of: [{ type: 'expertSource' }],
+      validation: (Rule) => Rule.max(3),
       description:
-        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt.',
-      hidden: ({ parent }) => parent?.heroLayout !== 'portrait' && !parent?.expertPortrait,
-    }),
-    defineField({
-      name: 'portraitRole',
-      title: 'Rolle/firma (buet under portrettet)',
-      type: 'string',
-      group: 'innhold',
-      description:
-        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt.',
-      hidden: ({ parent }) => parent?.heroLayout !== 'portrait' && !parent?.expertPortrait,
-    }),
-    defineField({
-      name: 'expertPortrait',
-      title: 'Ekspertportrett (lite, buet navn)',
-      type: 'image',
-      group: 'innhold',
-      options: { hotspot: true },
-      fields: [{ name: 'alt', title: 'Alt-tekst', type: 'string' }],
-      description:
-        'Valgfritt. Vises som et lite rundt portrett-badge med navn buet rundt, oppå det vanlige topp-oppsettet. (Ved topp-oppsett «Rundt ekspertportrett» brukes dette som det store portrettet.)',
+        'Valgfritt, maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt ekspertportrett» er de toppen.',
     }),
     defineField({
       name: 'edition',

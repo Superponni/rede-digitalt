@@ -4,7 +4,7 @@ import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
 import { ArticleHeroImage } from './ArticleHeroImage'
-import { ExpertPortrait } from './ExpertPortrait'
+import { ExpertRow, type ExpertItem } from './ExpertRow'
 import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
 import {
   getArticleTheme,
@@ -23,9 +23,7 @@ interface StandardArticleProps {
     accentColor?: AccentColor
     colorMode?: ColorMode
     heroLayout?: HeroLayout
-    portraitName?: string
-    portraitRole?: string
-    expertPortrait?: { asset: { _ref: string }; alt?: string }
+    experts?: ExpertItem[]
     heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
     body?: any[]
     audioFileUrl?: string
@@ -40,12 +38,12 @@ interface StandardArticleProps {
 export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
-  const expert = article.expertPortrait?.asset ? article.expertPortrait : undefined
-  // Portrett-modus kan kjøre på ekspertbildet alene (uten eget hovedbilde).
-  const portraitImg = expert ?? article.heroImage
+  // Én eller flere ekspertkilder med portrett. Portrett-modus krever minst én.
+  const experts = (article.experts ?? []).filter((e) => e.portrait?.asset)
+  const hasExperts = experts.length > 0
   const layout: HeroLayout =
     article.heroLayout === 'portrait'
-      ? portraitImg?.asset
+      ? hasExperts
         ? 'portrait'
         : 'none'
       : hasHero
@@ -64,9 +62,9 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
   // hverandre. Når teksten står alene eller over/under bilde ⇒ midtstilt.
   const centered = layout !== 'side'
 
-  // Lite ekspert-badge vises oppå andre topp-oppsett (ikke i ren portrett-modus),
+  // Ekspert-badge(r) vises oppå andre topp-oppsett (ikke i ren portrett-modus),
   // slik trykksaken gjør på saker med både illustrasjon og kilde-portrett.
-  const showExpertBadge = layout !== 'portrait' && Boolean(expert)
+  const showExpertBadge = layout !== 'portrait' && hasExperts
 
   const header = (
     <Reveal
@@ -77,14 +75,8 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
       className={`mx-auto max-w-prose px-6 lg:px-0 ${centered ? 'text-center' : ''}`}
     >
       {showExpertBadge && (
-        <div className={`mb-5 ${centered ? 'mx-auto' : ''} w-[230px]`}>
-          <ExpertPortrait
-            image={expert!}
-            alt={expert!.alt || article.portraitName || article.title}
-            name={article.portraitName}
-            role={article.portraitRole}
-            color={theme.title}
-          />
+        <div className="mb-5">
+          <ExpertRow experts={experts} color={theme.title} fallbackAlt={article.title} />
         </div>
       )}
 
@@ -231,14 +223,8 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
 
       {layout === 'portrait' && (
         <div className="pt-16 lg:pt-24">
-          <Reveal immediate y={20} duration={0.9} className="mb-10 flex justify-center px-6">
-            <ExpertPortrait
-              image={portraitImg!}
-              alt={portraitImg!.alt || article.portraitName || article.title}
-              name={article.portraitName}
-              role={article.portraitRole}
-              color={theme.title}
-            />
+          <Reveal immediate y={20} duration={0.9} className="mb-10 px-6">
+            <ExpertRow experts={experts} color={theme.title} fallbackAlt={article.title} />
           </Reveal>
           {header}
         </div>

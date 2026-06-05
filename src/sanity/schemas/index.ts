@@ -27,6 +27,7 @@ import { recipeCard } from './objects/recipeCard'
 import { countUpFact } from './objects/countUpFact'
 import { numberedStop } from './objects/numberedStop'
 import { interactiveQuiz } from './objects/interactiveQuiz'
+import { expertSource } from './objects/expertSource'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Dokumenter
@@ -55,4 +56,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   countUpFact,
   numberedStop,
   interactiveQuiz,
+  expertSource,
 ]

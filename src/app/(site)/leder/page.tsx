@@ -20,9 +20,7 @@ interface EditorialData {
   accentColor?: 'navy' | 'teal' | 'purple' | 'magenta' | 'blue' | 'green' | 'gold'
   colorMode?: 'light' | 'tinted' | 'filled' | 'dark'
   heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
-  portraitName?: string
-  portraitRole?: string
-  expertPortrait?: { asset: { _ref: string }; alt?: string }
+  experts?: { portrait: { asset: { _ref: string }; alt?: string }; name?: string; role?: string }[]
   publishedAt?: string
   _updatedAt?: string
   audioFileUrl?: string
@@ -105,9 +103,7 @@ export default async function LederPage() {
     accentColor: editorial.accentColor,
     colorMode: editorial.colorMode,
     heroLayout: editorial.heroLayout,
-    portraitName: editorial.portraitName,
-    portraitRole: editorial.portraitRole,
-    expertPortrait: editorial.expertPortrait,
+    experts: editorial.experts,
     heroImage: editorial.heroImage,
     body: editorial.fullText,
     audioFileUrl: editorial.audioFileUrl,

@@ -113,36 +113,14 @@ export const article = defineType({
       description: 'Mangler bildet, vises tittel-toppen uansett',
     }),
     defineField({
-      name: 'portraitName',
-      title: 'Ekspertnavn (buet over portrettet)',
-      type: 'string',
+      name: 'experts',
+      title: 'Eksperter / kilder (med portrett)',
+      type: 'array',
       group: 'innhold',
+      of: [{ type: 'expertSource' }],
+      validation: (Rule) => Rule.max(3),
       description:
-        'Vises buet rundt ekspertportrettet – både ved «Rundt ekspertportrett» og oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «Marthe Frantzen».',
-      hidden: ({ parent }) =>
-        parent?.type !== 'standard' ||
-        (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
-    }),
-    defineField({
-      name: 'portraitRole',
-      title: 'Rolle/firma (buet under portrettet)',
-      type: 'string',
-      group: 'innhold',
-      description:
-        'Vises buet rundt ekspertportrettet – både ved «Rundt ekspertportrett» og oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «EiendomsMegler 1 Heimdal».',
-      hidden: ({ parent }) =>
-        parent?.type !== 'standard' ||
-        (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
-    }),
-    defineField({
-      name: 'expertPortrait',
-      title: 'Ekspertportrett (buet navn)',
-      type: 'image',
-      group: 'innhold',
-      options: { hotspot: true },
-      fields: [{ name: 'alt', title: 'Alt-tekst', type: 'string' }],
-      description:
-        'Last alltid ekspert-/kildefotoet opp HER (ikke som hovedbilde). Vises som et rundt portrett med navn buet rundt – i samme størrelse enten saken også har et hovedbilde/illustrasjon (f.eks. Boligmarkedet før sommeren) eller ikke. Ved topp-oppsett «Rundt ekspertportrett» er dette det store toppen. Har saken ikke noe hovedbilde, brukes dette også som forsidebilde på forsiden.',
+        'Legg til ekspert-/kildefoto HER (ikke som hovedbilde), maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under – i samme størrelse uansett om saken også har et hovedbilde/illustrasjon. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt ekspertportrett» er de toppen av saken. Har saken ikke noe hovedbilde, brukes første ekspert også som forsidebilde.',
       hidden: ({ parent }) => parent?.type !== 'standard',
     }),
     defineField({
