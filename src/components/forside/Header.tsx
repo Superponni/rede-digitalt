@@ -90,13 +90,22 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
           />
         )}
         <div className="relative mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
-          <Link
-            href="/"
-            aria-label="Rede – til forsiden"
-            className={`transition-colors ${textColor} ${hoverColor}`}
-          >
-            <RedeLogo className="h-[22px] w-auto" />
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              aria-label="Rede – til forsiden"
+              className={`transition-colors ${textColor} ${hoverColor}`}
+            >
+              <RedeLogo className="h-[22px] w-auto" />
+            </Link>
+            <span
+              className={`hidden border-l pl-3 font-heading text-[11px] uppercase leading-tight tracking-[0.12em] transition-colors sm:inline-block ${
+                onLight ? 'border-navy/20 text-navy/70' : 'border-white/30 text-white/80'
+              }`}
+            >
+              Et medlemsmagasin fra TOBB
+            </span>
+          </div>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`flex cursor-pointer items-center gap-2 font-heading text-base tracking-[0.1em] transition-colors ${textColor} ${hoverColor}`}
