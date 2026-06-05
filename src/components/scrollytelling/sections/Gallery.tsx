@@ -39,22 +39,34 @@ const objPos = (img: GalleryImage) =>
  *
  * Liggende kildebilder beskjæres til vekslende format via hotspot: venstre
  * kolonne får liggende/vide format, høyre kolonne stående — det gir kontrasten.
+ *
+ * Bildeformatet er orienterings-smart: stående kilder får et stående utsnitt,
+ * liggende får et liggende — så ansikter/motiv aldri kuttes på tvers. Innen hver
+ * orientering veksler utsnittet litt (pos) for variasjon mellom bildene.
  */
-const LEFT_ASPECTS = ['4 / 3', '16 / 10', '4 / 3', '3 / 2']
-const RIGHT_ASPECTS = ['3 / 4', '1 / 1', '4 / 5', '3 / 4']
+const PORTRAIT_ASPECTS = ['3 / 4', '4 / 5']
+const LANDSCAPE_ASPECTS = ['4 / 3', '16 / 10']
+
+function aspectFor(ref: string, pos: number): string {
+  const m = ref.match(/-(\d+)x(\d+)-/)
+  const portrait = m ? Number(m[2]) > Number(m[1]) : false
+  const set = portrait ? PORTRAIT_ASPECTS : LANDSCAPE_ASPECTS
+  return set[pos % set.length]
+}
 
 function MontageImage({
   img,
-  aspect,
+  pos,
   par,
   c,
 }: {
   img: GalleryImage
-  aspect: string
+  pos: number
   par: number
   c: ReturnType<typeof useScrollyColors>
 }) {
   const ref = useRef<HTMLDivElement>(null)
+  const aspect = aspectFor(img.asset._ref, pos)
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -115,13 +127,13 @@ function Montage({ images, c }: { images: GalleryImage[]; c: ReturnType<typeof u
       <div className="mx-auto hidden max-w-[1200px] grid-cols-[1.5fr_1fr] gap-8 px-6 md:grid lg:gap-14 lg:px-16">
         <div className="flex flex-col gap-12 lg:gap-20">
           {left.map((img, i) => (
-            <MontageImage key={img._key || `l${i}`} img={img} aspect={LEFT_ASPECTS[i % LEFT_ASPECTS.length]} par={-5} c={c} />
+            <MontageImage key={img._key || `l${i}`} img={img} pos={i} par={-5} c={c} />
           ))}
         </div>
         {/* Høyre kolonne senkes ned for det forskjøvede, redaksjonelle blikket */}
         <div className="flex flex-col gap-12 pt-16 lg:gap-20 lg:pt-28">
           {right.map((img, i) => (
-            <MontageImage key={img._key || `r${i}`} img={img} aspect={RIGHT_ASPECTS[i % RIGHT_ASPECTS.length]} par={8} c={c} />
+            <MontageImage key={img._key || `r${i}`} img={img} pos={i} par={8} c={c} />
           ))}
         </div>
       </div>
