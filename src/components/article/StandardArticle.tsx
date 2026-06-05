@@ -77,14 +77,13 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
       className={`mx-auto max-w-prose px-6 lg:px-0 ${centered ? 'text-center' : ''}`}
     >
       {showExpertBadge && (
-        <div className={`mb-5 ${centered ? 'mx-auto' : ''} w-[150px]`}>
+        <div className={`mb-5 ${centered ? 'mx-auto' : ''} w-[230px]`}>
           <ExpertPortrait
             image={expert!}
             alt={expert!.alt || article.portraitName || article.title}
             name={article.portraitName}
             role={article.portraitRole}
             color={theme.title}
-            size="sm"
           />
         </div>
       )}

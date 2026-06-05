@@ -118,7 +118,7 @@ export const article = defineType({
       type: 'string',
       group: 'innhold',
       description:
-        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «Marthe Frantzen».',
+        'Vises buet rundt ekspertportrettet – både ved «Rundt ekspertportrett» og oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «Marthe Frantzen».',
       hidden: ({ parent }) =>
         parent?.type !== 'standard' ||
         (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
@@ -129,20 +129,20 @@ export const article = defineType({
       type: 'string',
       group: 'innhold',
       description:
-        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «EiendomsMegler 1 Heimdal».',
+        'Vises buet rundt ekspertportrettet – både ved «Rundt ekspertportrett» og oppå andre topp-oppsett når ekspertportrett-bildet er satt. F.eks. «EiendomsMegler 1 Heimdal».',
       hidden: ({ parent }) =>
         parent?.type !== 'standard' ||
         (parent?.heroLayout !== 'portrait' && !parent?.expertPortrait),
     }),
     defineField({
       name: 'expertPortrait',
-      title: 'Ekspertportrett (lite, buet navn)',
+      title: 'Ekspertportrett (buet navn)',
       type: 'image',
       group: 'innhold',
       options: { hotspot: true },
       fields: [{ name: 'alt', title: 'Alt-tekst', type: 'string' }],
       description:
-        'Valgfritt. Settes på saker som BÅDE har et hovedbilde/illustrasjon OG en ekspertkilde (f.eks. Boligmarkedet før sommeren). Vises da som et lite rundt portrett-badge med navn buet rundt, oppå det vanlige topp-oppsettet. (Ved topp-oppsett «Rundt ekspertportrett» brukes dette som det store portrettet.)',
+        'Last alltid ekspert-/kildefotoet opp HER (ikke som hovedbilde). Vises som et rundt portrett med navn buet rundt – i samme størrelse enten saken også har et hovedbilde/illustrasjon (f.eks. Boligmarkedet før sommeren) eller ikke. Ved topp-oppsett «Rundt ekspertportrett» er dette det store toppen. Har saken ikke noe hovedbilde, brukes dette også som forsidebilde på forsiden.',
       hidden: ({ parent }) => parent?.type !== 'standard',
     }),
     defineField({

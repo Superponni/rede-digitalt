@@ -12,6 +12,7 @@ export default async function Home() {
       type: string
       teaser?: string
       heroImage?: { asset: { _ref: string }; alt?: string }
+      expertPortrait?: { asset: { _ref: string }; alt?: string }
       heroVideoUrl?: string
       tags?: { _id: string; title: string }[]
     }>
@@ -23,9 +24,16 @@ export default async function Home() {
     } | null
   }>({ query: FRONTPAGE_QUERY })
 
+  // Mangler hovedbilde? Fall tilbake til ekspertportrettet som forsidebilde, slik
+  // at saker med kun ekspertkilde (f.eks. portrett-oppsett) ikke får tomt kort.
+  const articles = (data.articles || []).map((a) => ({
+    ...a,
+    heroImage: a.heroImage?.asset ? a.heroImage : a.expertPortrait,
+  }))
+
   return (
     <ForsideController
-      articles={data.articles || []}
+      articles={articles}
       editorial={data.editorial}
       podcast={data.podcast}
       edition={data.edition}

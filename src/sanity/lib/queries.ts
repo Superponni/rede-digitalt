@@ -117,7 +117,7 @@ export const FRONTPAGE_QUERY = defineQuery(
       _id, title, number, year, coverImage
     },
     "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
-      _id, title, slug, type, teaser, heroImage,
+      _id, title, slug, type, teaser, heroImage, expertPortrait,
       "heroVideoUrl": heroVideo.asset->url,
       tags[]->{ _id, title, slug }
     },
