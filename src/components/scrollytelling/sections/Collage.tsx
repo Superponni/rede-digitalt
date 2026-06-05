@@ -25,64 +25,74 @@ interface CollageProps {
 }
 
 /**
- * Overlappende bilde-collage som glir i lag på scroll (ulik parallax-fart gir
- * dybde), og som kan klikkes for å forstørre/fokusere ett bilde. På mobil faller
- * den tilbake til en pen, lett overlappende stabel — overlapp i full bredde
- * fungerer ikke på liten skjerm.
+ * Asymmetrisk «scrapbook» — to forskjøvede kolonner (venstre bredere, høyre
+ * senket) UTEN rotasjon. Bildene beskjæres til et lavere format (stående 4:5,
+ * liggende 16:10) slik at seksjonen blir kompakt og ikke krever lang scroll,
+ * samtidig som ansikter beholdes (hotspot styrer beskjæringen). Klikk forstørrer
+ * til fullt, ubeskåret bilde.
  */
-const SLOTS = [
-  { left: '1%', top: '3%', width: '44%', aspect: '4 / 5', z: 4, rot: -2, par: -7 },
-  { left: '42%', top: '0%', width: '40%', aspect: '4 / 3', z: 6, rot: 1.4, par: 9 },
-  { left: '60%', top: '38%', width: '36%', aspect: '4 / 5', z: 5, rot: -1.2, par: -11 },
-  { left: '8%', top: '50%', width: '40%', aspect: '4 / 3', z: 7, rot: 2, par: 7 },
-  { left: '40%', top: '60%', width: '30%', aspect: '1 / 1', z: 8, rot: -2.6, par: -13 },
-  { left: '74%', top: '6%', width: '23%', aspect: '3 / 4', z: 3, rot: 2.8, par: 13 },
-]
+function isPortraitRef(ref: string): boolean {
+  const m = ref.match(/-(\d+)x(\d+)-/)
+  return m ? Number(m[2]) > Number(m[1]) : true
+}
+
+function CollageImage({ img, onZoom }: { img: CollageImage; onZoom: () => void }) {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      if (!ref.current) return
+      gsap.from(ref.current, {
+        y: 26,
+        opacity: 0,
+        duration: 0.7,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: ref.current, start: 'top 90%', toggleActions: 'play none none reverse' },
+      })
+    })
+    return () => mm.revert()
+  }, [])
+
+  const aspect = isPortraitRef(img.asset._ref) ? '4 / 5' : '16 / 10'
+  const objectPosition = img.hotspot ? `${img.hotspot.x * 100}% ${img.hotspot.y * 100}%` : 'center center'
+
+  return (
+    <button
+      ref={ref}
+      onClick={onZoom}
+      className="group block w-full cursor-zoom-in"
+      aria-label={img.alt || 'Forstørr bilde'}
+    >
+      <div
+        className="relative w-full overflow-hidden rounded-sm shadow-[0_8px_24px_-16px_rgba(0,0,0,0.35)] ring-1 ring-black/5 transition-transform duration-500 group-hover:scale-[1.02]"
+        style={{ aspectRatio: aspect }}
+      >
+        <Image
+          src={urlFor(img).width(1000).url()}
+          alt={img.alt || ''}
+          fill
+          className="object-cover"
+          style={{ objectPosition }}
+          sizes="(max-width: 1024px) 50vw, 40vw"
+        />
+      </div>
+      {(img.caption || img.credit) && (
+        <p className="mt-2 font-heading text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: 'inherit' }}>
+          {img.caption}
+          {img.credit && <>{img.caption ? ' — ' : ''}Foto: {img.credit}</>}
+        </p>
+      )}
+    </button>
+  )
+}
 
 export function Collage({ data }: CollageProps) {
   const images = data.images || []
   const bg = data.backgroundColor
   const c = useScrollyColors()
-  const containerRef = useRef<HTMLDivElement>(null)
-  const slotRefs = useRef<(HTMLDivElement | null)[]>([])
   const [focused, setFocused] = useState<number | null>(null)
-
   const close = useCallback(() => setFocused(null), [])
-
-  useEffect(() => {
-    const mm = gsap.matchMedia()
-
-    // Parallax + entré kun på tablet/desktop der bildene faktisk overlapper.
-    mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-      slotRefs.current.forEach((el, i) => {
-        if (!el) return
-        const slot = SLOTS[i % SLOTS.length]
-        gsap.fromTo(
-          el,
-          { y: 28, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
-          },
-        )
-        gsap.to(el, {
-          yPercent: slot.par,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          },
-        })
-      })
-    })
-
-    return () => mm.revert()
-  }, [images.length])
 
   // Esc lukker lightbox
   useEffect(() => {
@@ -96,88 +106,50 @@ export function Collage({ data }: CollageProps) {
 
   if (images.length === 0) return null
 
-  const objPos = (img: CollageImage) =>
-    img.hotspot ? `${img.hotspot.x * 100}% ${img.hotspot.y * 100}%` : 'center center'
+  // Fordel annenhver i hver kolonne; høyre senkes for det forskjøvede blikket
+  const left = images.map((img, i) => ({ img, i })).filter((_, k) => k % 2 === 0)
+  const right = images.map((img, i) => ({ img, i })).filter((_, k) => k % 2 === 1)
 
   return (
     <section className="relative overflow-hidden py-14 lg:py-20" style={{ backgroundColor: bg }}>
       {data.title && (
-        <div className="mx-auto mb-8 max-w-[1200px] px-6 lg:mb-10 lg:px-16">
+        <div className="mx-auto mb-8 max-w-[1080px] px-6 lg:mb-10 lg:px-16">
           <h2 className="font-display text-2xl lg:text-3xl" style={{ color: c.heading }}>
             {data.title}
           </h2>
         </div>
       )}
 
-      {/* Tablet / desktop — overlappende collage */}
-      <div
-        ref={containerRef}
-        className="relative mx-auto hidden h-[640px] max-w-[1200px] px-6 md:block md:h-[760px] lg:h-[900px] lg:px-16"
-      >
-        {images.map((img, i) => {
-          const slot = SLOTS[i % SLOTS.length]
-          return (
-            <div
-              key={img._key || i}
-              ref={(el) => {
-                slotRefs.current[i] = el
-              }}
-              className="absolute"
-              style={{ left: slot.left, top: slot.top, width: slot.width, zIndex: slot.z }}
-            >
-              <button
-                onClick={() => setFocused(i)}
-                className="group block w-full cursor-zoom-in"
-                style={{ transform: `rotate(${slot.rot}deg)` }}
-                aria-label={img.alt || 'Forstørr bilde'}
-              >
-                <div
-                  className="relative w-full overflow-hidden rounded-sm shadow-[0_18px_50px_-20px_rgba(0,0,0,0.5)] ring-1 ring-black/5 transition-transform duration-500 group-hover:scale-[1.02]"
-                  style={{ aspectRatio: slot.aspect }}
-                >
-                  <Image
-                    src={urlFor(img).width(900).height(1100).fit('crop').url()}
-                    alt={img.alt || ''}
-                    fill
-                    className="object-cover"
-                    style={{ objectPosition: objPos(img) }}
-                    sizes="(max-width: 1024px) 45vw, 40vw"
-                  />
-                </div>
-              </button>
-            </div>
-          )
-        })}
+      {/* Tablet / desktop — to forskjøvede kolonner, asymmetrisk, ingen rotasjon */}
+      <div className="mx-auto hidden max-w-[1080px] grid-cols-[1.35fr_1fr] gap-7 px-6 md:grid lg:gap-12 lg:px-16" style={{ color: c.muted }}>
+        <div className="flex flex-col gap-7 lg:gap-12">
+          {left.map(({ img, i }) => (
+            <CollageImage key={img._key || i} img={img} onZoom={() => setFocused(i)} />
+          ))}
+        </div>
+        <div className="flex flex-col gap-7 pt-10 lg:gap-12 lg:pt-20" style={{ color: c.muted }}>
+          {right.map(({ img, i }) => (
+            <CollageImage key={img._key || i} img={img} onZoom={() => setFocused(i)} />
+          ))}
+        </div>
       </div>
 
-      {/* Mobil — pen, lett overlappende stabel */}
-      <div className="flex flex-col px-5 md:hidden">
-        {images.map((img, i) => (
-          <button
-            key={img._key || i}
-            onClick={() => setFocused(i)}
-            className={`group relative block w-[86%] cursor-zoom-in ${i === 0 ? '' : '-mt-6'} ${
-              i % 2 === 0 ? 'self-start' : 'self-end'
-            }`}
-            style={{ transform: `rotate(${i % 2 === 0 ? -1.5 : 1.5}deg)`, zIndex: i + 1 }}
-            aria-label={img.alt || 'Forstørr bilde'}
-          >
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-sm shadow-[0_14px_40px_-18px_rgba(0,0,0,0.55)] ring-1 ring-black/5">
-              <Image
-                src={urlFor(img).width(700).height(875).fit('crop').url()}
-                alt={img.alt || ''}
-                fill
-                className="object-cover"
-                style={{ objectPosition: objPos(img) }}
-                sizes="86vw"
-              />
-            </div>
-          </button>
-        ))}
+      {/* Mobil — to kompakte kolonner */}
+      <div className="grid grid-cols-2 gap-4 px-5 md:hidden" style={{ color: c.muted }}>
+        <div className="flex flex-col gap-4">
+          {left.map(({ img, i }) => (
+            <CollageImage key={img._key || i} img={img} onZoom={() => setFocused(i)} />
+          ))}
+        </div>
+        <div className="flex flex-col gap-4 pt-7">
+          {right.map(({ img, i }) => (
+            <CollageImage key={img._key || i} img={img} onZoom={() => setFocused(i)} />
+          ))}
+        </div>
       </div>
 
       <p
-        className="mt-8 text-center font-heading text-[10px] uppercase tracking-[0.3em]"
+        className="mt-9 text-center font-heading text-[10px] uppercase tracking-[0.3em]"
         style={{ color: c.muted }}
       >
         Trykk på et bilde for å forstørre

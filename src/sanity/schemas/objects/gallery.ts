@@ -43,6 +43,7 @@ export const gallery = defineType({
           { title: 'Grid', value: 'grid' },
           { title: 'Karusell', value: 'carousel' },
           { title: 'Masonry', value: 'masonry' },
+          { title: 'Asymmetrisk montasje', value: 'montage' },
         ],
       },
       initialValue: 'grid',

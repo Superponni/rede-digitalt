@@ -154,10 +154,15 @@ export function FullscreenParallax({ data }: FullscreenParallaxProps) {
         </div>
       )}
 
-      {/* Caption */}
+      {/* Caption — myk bunn-gradient vises KUN når det finnes bildetekst, så
+          rene bilder uten tekst forblir helt rene. Gir lesbarhet uansett hvor
+          lyst motivet er, uten å mørklegge hele bildet. */}
       {(data.backgroundImage?.caption || data.backgroundImage?.photographer) && (
-        <div className="absolute inset-x-0 bottom-4 z-10 text-center">
-          <p className="font-heading text-[10px] uppercase tracking-[0.3em] text-white/30">
+        <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/65 via-black/25 to-transparent px-6 pb-6 pt-24 lg:px-16 lg:pb-8">
+          <p
+            className="mx-auto max-w-[1100px] text-center font-heading text-[11px] uppercase leading-relaxed tracking-[0.28em] text-white/90"
+            style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
+          >
             {data.backgroundImage.caption}
             {data.backgroundImage.photographer && (
               <>{data.backgroundImage.caption ? ' — ' : ''}Foto: {data.backgroundImage.photographer}</>
