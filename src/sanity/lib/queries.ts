@@ -149,7 +149,8 @@ export const ABOUT_PAGE_QUERY = defineQuery(
 
 export const EDITORIAL_PAGE_QUERY = defineQuery(
   `*[_type == "editorial"] | order(publishedAt desc) [0] {
-    _id, title, slug, teaserText, heroImage, fullText,
+    _id, title, subtitle, slug, teaserText, heroImage, fullText,
+    accentColor, colorMode, heroLayout, portraitName, portraitRole, expertPortrait,
     publishedAt, _updatedAt,
     "audioFileUrl": audioFile.asset->url,
     edition->{ _id, title, number, year },

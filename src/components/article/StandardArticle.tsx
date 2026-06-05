@@ -33,9 +33,11 @@ interface StandardArticleProps {
     author?: { _id: string; name: string }
     edition?: { title: string; number: number; year: number }
   }
+  // Liten etikett over tittelen (f.eks. «Leder») når saken ikke har emnetagger.
+  eyebrow?: string
 }
 
-export function StandardArticle({ article }: StandardArticleProps) {
+export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
   const expert = article.expertPortrait?.asset ? article.expertPortrait : undefined
@@ -84,6 +86,17 @@ export function StandardArticle({ article }: StandardArticleProps) {
             color={theme.title}
             size="sm"
           />
+        </div>
+      )}
+
+      {eyebrow && (
+        <div className={`mb-4 ${centered ? 'flex justify-center' : ''}`}>
+          <span
+            className="inline-block rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+            style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
+          >
+            {eyebrow}
+          </span>
         </div>
       )}
 

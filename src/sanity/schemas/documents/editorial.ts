@@ -22,12 +22,105 @@ export const editorial = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'subtitle',
+      title: 'Undertittel',
+      type: 'string',
+      group: 'innhold',
+      description: 'Vises i kursiv rett under tittelen (valgfri)',
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       group: 'innhold',
       options: { source: 'title', maxLength: 96 },
       validation: (rule) => rule.required(),
+    }),
+    // Samme topp- og farge-verktøykasse som standard-artikler (jf. article.ts):
+    // signaturfarge + fargemodus + topp-oppsett, slik at lederen kan settes opp
+    // akkurat som en standard-artikkel.
+    defineField({
+      name: 'accentColor',
+      title: 'Signaturfarge',
+      type: 'string',
+      group: 'innhold',
+      options: {
+        list: [
+          { title: 'Marineblå', value: 'navy' },
+          { title: 'Teal', value: 'teal' },
+          { title: 'Lilla', value: 'purple' },
+          { title: 'Magenta', value: 'magenta' },
+          { title: 'Blå', value: 'blue' },
+          { title: 'Grønn', value: 'green' },
+          { title: 'Gull', value: 'gold' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'navy',
+      description: 'Fargen som preger tittel, sitater og faktabokser — som i trykksaken',
+    }),
+    defineField({
+      name: 'colorMode',
+      title: 'Fargemodus',
+      type: 'string',
+      group: 'innhold',
+      options: {
+        list: [
+          { title: 'Lys mint-bakgrunn + farget tittel', value: 'light' },
+          { title: 'Lys tonet bakgrunn (signaturfargen)', value: 'tinted' },
+          { title: 'Full farget bakgrunn', value: 'filled' },
+          { title: 'Mørk (marineblå flate, lys tekst)', value: 'dark' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'light',
+      description: 'Styrer bakgrunn og metning — som i trykksaken.',
+    }),
+    defineField({
+      name: 'heroLayout',
+      title: 'Topp-oppsett',
+      type: 'string',
+      group: 'innhold',
+      options: {
+        list: [
+          { title: 'Bilde øverst (fullbredde)', value: 'image-first' },
+          { title: 'Tittel først, bilde under', value: 'heading-first' },
+          { title: 'Tittel og bilde ved siden', value: 'side' },
+          { title: 'Ingen bilde (kun farge + tittel)', value: 'none' },
+          { title: 'Rundt ekspertportrett (navn buet rundt)', value: 'portrait' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'image-first',
+      description: 'Mangler bildet, vises tittel-toppen uansett',
+    }),
+    defineField({
+      name: 'portraitName',
+      title: 'Ekspertnavn (buet over portrettet)',
+      type: 'string',
+      group: 'innhold',
+      description:
+        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt.',
+      hidden: ({ parent }) => parent?.heroLayout !== 'portrait' && !parent?.expertPortrait,
+    }),
+    defineField({
+      name: 'portraitRole',
+      title: 'Rolle/firma (buet under portrettet)',
+      type: 'string',
+      group: 'innhold',
+      description:
+        'Vises ved «Rundt ekspertportrett», eller som lite badge oppå andre topp-oppsett når ekspertportrett-bildet er satt.',
+      hidden: ({ parent }) => parent?.heroLayout !== 'portrait' && !parent?.expertPortrait,
+    }),
+    defineField({
+      name: 'expertPortrait',
+      title: 'Ekspertportrett (lite, buet navn)',
+      type: 'image',
+      group: 'innhold',
+      options: { hotspot: true },
+      fields: [{ name: 'alt', title: 'Alt-tekst', type: 'string' }],
+      description:
+        'Valgfritt. Vises som et lite rundt portrett-badge med navn buet rundt, oppå det vanlige topp-oppsettet. (Ved topp-oppsett «Rundt ekspertportrett» brukes dette som det store portrettet.)',
     }),
     defineField({
       name: 'edition',
