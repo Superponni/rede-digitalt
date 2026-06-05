@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import { gsap, ScrollTrigger } from '@/lib/gsap-config'
+import { gsap } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
 import { stegaClean } from 'next-sanity'
 
@@ -71,9 +71,11 @@ export function FullscreenParallax({ data }: FullscreenParallaxProps) {
     return () => mm.revert()
   }, [])
 
-  // Ensure minimum darken for text legibility
-  const rawDarken = data.darkenOverlay ?? 40
-  const darken = Math.max(rawDarken, 50)
+  // Mørklegging tvinges kun når det faktisk ligger tekst oppå (lesbarhet).
+  // Uten overlay-tekst er seksjonen et rent, pustende helbilde — ingen slør.
+  const hasOverlay = !!(data.overlayText && data.overlayText.length > 0)
+  const rawDarken = data.darkenOverlay ?? (hasOverlay ? 40 : 0)
+  const darken = hasOverlay ? Math.max(rawDarken, 50) : rawDarken
 
   // Use hotspot for object-position if available
   const hotspot = data.backgroundImage?.hotspot
@@ -103,12 +105,16 @@ export function FullscreenParallax({ data }: FullscreenParallaxProps) {
         </div>
       )}
 
-      {/* Darken overlay — stronger gradient at bottom for text */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-      <div
-        className="absolute inset-0"
-        style={{ backgroundColor: `rgba(0,0,0,${darken / 100})` }}
-      />
+      {/* Mørklegging kun når det ligger tekst oppå */}
+      {hasOverlay && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: `rgba(0,0,0,${darken / 100})` }}
+          />
+        </>
+      )}
 
       {/* Overlay text */}
       {data.overlayText && data.overlayText.length > 0 && (

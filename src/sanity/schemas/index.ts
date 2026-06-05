@@ -22,6 +22,8 @@ import { audioSection } from './objects/audioSection'
 import { factBox } from './objects/factBox'
 import { inlineFactBox } from './objects/inlineFactBox'
 import { gallery } from './objects/gallery'
+import { collage } from './objects/collage'
+import { statementPanel } from './objects/statementPanel'
 import { stickyPortrait } from './objects/stickyPortrait'
 import { recipeCard } from './objects/recipeCard'
 import { countUpFact } from './objects/countUpFact'
@@ -51,6 +53,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   factBox,
   inlineFactBox,
   gallery,
+  collage,
+  statementPanel,
   stickyPortrait,
   recipeCard,
   countUpFact,

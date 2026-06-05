@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { gsap } from '@/lib/gsap-config'
 import { PortableText } from '@portabletext/react'
+import { stegaClean } from 'next-sanity'
 import { useScrollyColors, type ScrollyColors } from '../ScrollyColorContext'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -14,6 +15,7 @@ interface TextWithImageProps {
     image?: { asset: { _ref: string }; alt?: string; caption?: string; photographer?: string; hotspot?: { x: number; y: number } }
     imagePosition?: 'left' | 'right'
     imageSize?: 'small' | 'medium' | 'large'
+    imageRatio?: 'standard' | 'natural'
     backgroundColor?: string
     title?: string
   }
@@ -203,24 +205,54 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
   // Redaktørens valg av plassering/størrelse styrer asymmetrien: store bilder
   // går nær fullbredde og midtstilt, mindre bilder hugger en kant. Gir
   // editorial rytme i stedet for at alt ligger likt midtstilt.
+  // Rens stega-tegn FØR sammenligning. I preview-modus legger Sanity usynlige
+  // tegn på tekstfelt, så `data.imageSize === 'small'` blir falsk uten dette —
+  // og alle valg (plassering/størrelse/format) faller til standard.
+  const imageSize = stegaClean(data.imageSize)
+  const imagePosition = stegaClean(data.imagePosition)
+  const imageRatio = stegaClean(data.imageRatio)
+  const assetRef = stegaClean(data.image?.asset?._ref) || ''
+
   const sizeMax =
-    data.imageSize === 'small' ? 'max-w-2xl'
-    : data.imageSize === 'medium' ? 'max-w-3xl'
+    imageSize === 'small' ? 'max-w-2xl'
+    : imageSize === 'medium' ? 'max-w-3xl'
     : 'max-w-5xl' // large / udefinert
   const align =
-    data.imageSize === 'large' || !data.imagePosition ? 'mx-auto'
-    : data.imagePosition === 'left' ? 'mr-auto'
+    imageSize === 'large' || !imagePosition ? 'mx-auto'
+    : imagePosition === 'left' ? 'mr-auto'
     : 'ml-auto'
+
+  // «Naturlig» format: behold bildets egen høyde (ingen beskjæring). Formatet
+  // utledes av målene som ligger i asset-referansen (…-1365x2048-…). Stående
+  // bilder sentreres og får en roligere maksbredde så de leses som portrett,
+  // ikke som et gigantbilde.
+  const naturalRatio = imageRatio === 'natural'
+  const refDims = assetRef.match(/-(\d+)x(\d+)-/)
+  const isPortrait = refDims ? Number(refDims[2]) > Number(refDims[1]) : false
+  const naturalAspect = refDims ? `${refDims[1]} / ${refDims[2]}` : undefined
+  const portraitMax =
+    imageSize === 'small' ? 'max-w-xs'
+    : imageSize === 'large' ? 'max-w-xl'
+    : 'max-w-md'
+  const boxMax = naturalRatio && isPortrait ? portraitMax : sizeMax
+  const boxAlign = naturalRatio ? 'mx-auto' : align
 
   const imageElement = hasImage && (
     <div className="px-6 py-8 lg:px-16 lg:py-12">
       <div
         ref={imageRef}
-        className={`relative ${align} ${sizeMax} overflow-hidden`}
+        className={`relative ${boxAlign} ${boxMax} overflow-hidden`}
       >
-        <div className="relative aspect-[16/10] w-full">
+        <div
+          className={naturalRatio ? 'relative w-full' : 'relative aspect-[16/10] w-full'}
+          style={naturalRatio && naturalAspect ? { aspectRatio: naturalAspect } : undefined}
+        >
           <Image
-            src={urlFor(data.image!).width(1400).height(875).fit('crop').url()}
+            src={
+              naturalRatio
+                ? urlFor(data.image!).width(1200).url()
+                : urlFor(data.image!).width(1400).height(875).fit('crop').url()
+            }
             alt={data.image!.alt || ''}
             fill
             className="object-cover"

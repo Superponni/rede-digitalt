@@ -213,6 +213,8 @@ export const article = defineType({
         { type: 'audioSection' },
         { type: 'factBox' },
         { type: 'gallery' },
+        { type: 'collage' },
+        { type: 'statementPanel' },
         { type: 'stickyPortrait' },
         { type: 'recipeCard' },
         { type: 'countUpFact' },

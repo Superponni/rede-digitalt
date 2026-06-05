@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { stegaClean } from 'next-sanity'
 import { gsap } from '@/lib/gsap-config'
 
 interface VideoSectionProps {
@@ -56,7 +57,7 @@ export function VideoSection({ data }: VideoSectionProps) {
     return () => mm.revert()
   }, [])
 
-  const isFullWidth = data.layout === 'fullWidth'
+  const isFullWidth = stegaClean(data.layout) === 'fullWidth'
   const isYouTube = data.url?.includes('youtube') || data.url?.includes('youtu.be')
   const isVimeo = data.url?.includes('vimeo')
 

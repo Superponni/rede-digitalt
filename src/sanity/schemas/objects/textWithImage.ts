@@ -47,6 +47,20 @@ export const textWithImage = defineType({
       },
       initialValue: 'medium',
     }),
+    defineField({
+      name: 'imageRatio',
+      title: 'Bildeformat',
+      type: 'string',
+      description: 'Standard beskjærer til liggende. «Stående/naturlig» beholder bildets egen høyde uten beskjæring.',
+      options: {
+        list: [
+          { title: 'Standard (liggende 16:10)', value: 'standard' },
+          { title: 'Stående / naturlig (ikke beskjær)', value: 'natural' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'standard',
+    }),
   ],
   preview: {
     select: {

@@ -1,8 +1,10 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { ScrollTrigger } from '@/lib/gsap-config'
 import { HeroSection } from './sections/HeroSection'
 import { TextWithImage } from './sections/TextWithImage'
 import { FullscreenParallax } from './sections/FullscreenParallax'
@@ -11,6 +13,8 @@ import { VideoSection } from './sections/VideoSection'
 import { AudioSection } from './sections/AudioSection'
 import { FactBox } from './sections/FactBox'
 import { Gallery } from './sections/Gallery'
+import { Collage } from './sections/Collage'
+import { StatementPanel } from './sections/StatementPanel'
 import { StickyPortrait } from './sections/StickyPortrait'
 import { RecipeCard } from './sections/RecipeCard'
 import { CountUpFact } from './sections/CountUpFact'
@@ -57,6 +61,8 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
   audioSection: AudioSection,
   factBox: FactBox,
   gallery: Gallery,
+  collage: Collage,
+  statementPanel: StatementPanel,
   stickyPortrait: StickyPortrait,
   recipeCard: RecipeCard,
   countUpFact: CountUpFact,
@@ -71,6 +77,35 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
   // fargevalg lenger.
   const colors = resolveScrollyColors(article.accentColor, article.colorMode)
   const bg = colors.bg
+
+  // Animasjonenes triggere regnes ut ved mount, men sidehøyden vokser etterpå
+  // (lazy-bilder lastes, hero pinnes, fonter byttes inn). Da blir posisjonene
+  // utdaterte og seksjonene fyrer for sent. Vi tvinger en omberegning når bilder
+  // og fonter faktisk er ferdige — det fikser «innhold laster etter at jeg har
+  // forlatt vinduet» for ALLE seksjoner, ikke bare én.
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>
+    const refresh = () => ScrollTrigger.refresh()
+    const debounced = () => {
+      clearTimeout(t)
+      t = setTimeout(refresh, 120)
+    }
+    const imgs = Array.from(document.querySelectorAll('article img')) as HTMLImageElement[]
+    imgs.forEach((img) => {
+      if (!img.complete) img.addEventListener('load', debounced)
+    })
+    window.addEventListener('load', refresh)
+    document.fonts?.ready?.then(refresh)
+    const t1 = setTimeout(refresh, 400)
+    const t2 = setTimeout(refresh, 1500)
+    return () => {
+      imgs.forEach((img) => img.removeEventListener('load', debounced))
+      window.removeEventListener('load', refresh)
+      clearTimeout(t)
+      clearTimeout(t1)
+      clearTimeout(t2)
+    }
+  }, [])
 
   return (
     <ScrollyThemeProvider>
