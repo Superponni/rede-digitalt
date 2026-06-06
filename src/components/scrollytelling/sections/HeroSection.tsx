@@ -14,6 +14,7 @@ interface HeroSectionProps {
     titlePosition?: 'center' | 'bottom-left' | 'bottom-right'
     backgroundColor?: string
     author?: string
+    photographer?: string
     date?: string
     audioFileUrl?: string
   }
@@ -159,10 +160,12 @@ export function HeroSection({ data }: HeroSectionProps) {
               {data.subtitle}
             </p>
           )}
-          {(data.author || data.date) && (
+          {(data.author || data.photographer || data.date) && (
             <p className="mt-6 font-heading text-[10px] uppercase tracking-[0.4em] text-white/40">
               {data.author && <span>Tekst: {data.author}</span>}
-              {data.author && data.date && <span className="mx-2">&middot;</span>}
+              {data.author && data.photographer && <span className="mx-2">&middot;</span>}
+              {data.photographer && <span>Foto: {data.photographer}</span>}
+              {(data.author || data.photographer) && data.date && <span className="mx-2">&middot;</span>}
               {data.date && <span>{data.date}</span>}
             </p>
           )}

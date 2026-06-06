@@ -118,7 +118,7 @@ export function ScrollytellingRenderer({ article, relatedArticles = [] }: Scroll
         const Component = SECTION_MAP[section._type]
         if (!Component) return null
         const sectionData = section._type === 'heroSection'
-          ? { ...section, backgroundColor: bg, audioFileUrl: article.audioFileUrl, author: article.author?.name }
+          ? { ...section, backgroundColor: bg, audioFileUrl: article.audioFileUrl, author: article.author?.name, photographer: section.image?.credit }
           : { ...section, backgroundColor: bg }
         return (
           <Component
