@@ -56,8 +56,11 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
         </div>
       ) : (
         <>
-          {/* Sticky filterbar */}
-          <div className="sticky top-0 z-20 border-y border-navy/10 bg-canvas/85 backdrop-blur-md">
+          {/* Filterbar — bevisst IKKE sticky. Den faste toppmenyen er
+              gjennomsiktig, så en sticky filterrad kolliderte med logo/meny og
+              lot kortene skinne gjennom. Filtrene skroller heller vekk med
+              innholdet og er tilbake straks man skroller opp til toppen. */}
+          <div className="border-y border-navy/10 bg-canvas">
             <div className="mx-auto max-w-[1400px] px-6 py-4 lg:px-12">
               {/* Kategorier */}
               <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
