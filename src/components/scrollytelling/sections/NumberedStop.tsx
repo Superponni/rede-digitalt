@@ -14,7 +14,7 @@ interface NumberedStopProps {
     stopNumber?: number
     title?: string
     text?: any[]
-    image?: { asset: { _ref: string }; alt?: string; photographer?: string; hotspot?: { x: number; y: number } }
+    image?: { asset: { _ref: string }; alt?: string; caption?: string; photographer?: string; hotspot?: { x: number; y: number } }
     backgroundColor?: string
   }
   index: number
@@ -144,6 +144,12 @@ export function NumberedStop({ data }: NumberedStopProps) {
                 </p>
               )}
             </div>
+          )}
+
+          {data.image?.asset && data.image.caption && (
+            <p className="mx-auto -mt-4 mb-8 max-w-3xl text-center font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
+              {data.image.caption}
+            </p>
           )}
 
           {data.text && (

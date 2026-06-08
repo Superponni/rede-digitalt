@@ -30,6 +30,7 @@ export const numberedStop = defineType({
       options: { hotspot: true },
       fields: [
         { name: 'alt', title: 'Alt-tekst', type: 'string' },
+        { name: 'caption', title: 'Bildetekst', type: 'string' },
         { name: 'photographer', title: 'Fotograf', type: 'string' },
       ],
     }),

@@ -162,9 +162,15 @@ export function HeroSection({ data }: HeroSectionProps) {
           )}
           {(data.author || data.photographer || data.date) && (
             <p className="mt-6 font-heading text-[10px] uppercase tracking-[0.4em] text-white/40">
-              {data.author && <span>Tekst: {data.author}</span>}
-              {data.author && data.photographer && <span className="mx-2">&middot;</span>}
-              {data.photographer && <span>Foto: {data.photographer}</span>}
+              {data.author && data.photographer && data.author === data.photographer ? (
+                <span>Tekst &amp; Foto: {data.author}</span>
+              ) : (
+                <>
+                  {data.author && <span>Tekst: {data.author}</span>}
+                  {data.author && data.photographer && <span className="mx-2">&middot;</span>}
+                  {data.photographer && <span>Foto: {data.photographer}</span>}
+                </>
+              )}
               {(data.author || data.photographer) && data.date && <span className="mx-2">&middot;</span>}
               {data.date && <span>{data.date}</span>}
             </p>
