@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
@@ -35,30 +35,9 @@ const NAV_LINKS = [
 
 export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMenuProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-  const [showTopics, setShowTopics] = useState(false)
-  const [hoveredTopic, setHoveredTopic] = useState<string | null>(null)
-  const topicsTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const openTopics = useCallback(() => {
-    if (topicsTimeout.current) clearTimeout(topicsTimeout.current)
-    setShowTopics(true)
-    setHoveredItem('temaer')
-  }, [])
-
-  const closeTopics = useCallback(() => {
-    topicsTimeout.current = setTimeout(() => {
-      setShowTopics(false)
-      setHoveredTopic(null)
-    }, 400)
-  }, [])
 
   useEffect(() => {
-    if (!isOpen) {
-      if (topicsTimeout.current) clearTimeout(topicsTimeout.current)
-      setShowTopics(false)
-      setHoveredItem(null)
-      setHoveredTopic(null)
-    }
+    if (!isOpen) setHoveredItem(null)
   }, [isOpen])
 
   useEffect(() => {
@@ -79,38 +58,47 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
     >
       <div className="absolute inset-0 bg-navy" />
 
-      {/* 3-column layout: nav | topics | featured */}
-      <div className="relative z-10 flex h-full px-8 lg:px-16">
-        {/* Column 1 — Main nav */}
-        <div className="flex w-[280px] flex-col justify-center lg:w-[320px]">
+      {/* 2-column layout: nav + temaer-seksjon | featured */}
+      <div className="relative z-10 flex h-full flex-col justify-center gap-12 px-8 lg:flex-row lg:items-center lg:gap-20 lg:px-16">
+        {/* Left — Main nav + Temaer-seksjon + sosialt */}
+        <div className="flex flex-col justify-center lg:w-[48%] lg:max-w-2xl">
           <nav className="space-y-1" onMouseLeave={() => setHoveredItem(null)}>
-            {/* Temaer — with hover to show topics */}
-            <div
-              onMouseEnter={openTopics}
-            >
-              <span
-                className={`cursor-default font-display text-5xl text-white transition-all duration-500 hover:text-gold md:text-6xl lg:text-7xl ${
-                  itemBlurred('temaer') ? 'opacity-20 blur-[2px]' : 'opacity-100'
-                }`}
-              >
-                Temaer
-              </span>
-            </div>
-
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.key}
                 href={item.href}
                 onClick={onClose}
-                onMouseEnter={() => { setHoveredItem(item.key); closeTopics() }}
-                className={`block font-display text-5xl text-white transition-all duration-500 hover:text-gold md:text-6xl lg:text-7xl ${
-                  itemBlurred(item.key) ? 'opacity-20 blur-[2px]' : 'opacity-100'
+                onMouseEnter={() => setHoveredItem(item.key)}
+                className={`block font-display text-4xl text-white/70 transition-all duration-500 hover:text-mint md:text-5xl lg:text-6xl ${
+                  itemBlurred(item.key) ? 'opacity-25 blur-[2px]' : 'opacity-100'
                 }`}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
+
+          {/* Temaer — egen seksjon, alltid synlig */}
+          <div className="mt-10">
+            <div className="mb-4 flex items-center gap-3">
+              <span className="h-px w-8 bg-gold/70" />
+              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-gold">
+                Temaer
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-1">
+              {tags.map((tag) => (
+                <Link
+                  key={tag._id}
+                  href={`/tema/${tag.slug.current}`}
+                  onClick={onClose}
+                  className="font-display text-2xl capitalize text-white/55 transition-colors duration-300 hover:text-mint"
+                >
+                  {tag.title}
+                </Link>
+              ))}
+            </div>
+          </div>
 
           {/* Social links */}
           <div className="mt-12 flex gap-6">
@@ -126,36 +114,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
           </div>
         </div>
 
-        {/* Column 2 — Topic subtopics (shown on Temaer hover) */}
-        <div
-          className={`flex w-[250px] flex-col justify-center transition-all duration-400 ${
-            showTopics ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0 pointer-events-none'
-          }`}
-          onMouseEnter={openTopics}
-          onMouseLeave={closeTopics}
-        >
-          <div className="flex flex-col gap-1">
-            {tags.map((tag) => {
-              const blurred = hoveredTopic !== null && hoveredTopic !== tag._id
-              return (
-                <Link
-                  key={tag._id}
-                  href={`/tema/${tag.slug.current}`}
-                  onClick={onClose}
-                  onMouseEnter={() => setHoveredTopic(tag._id)}
-                  onMouseLeave={() => setHoveredTopic(null)}
-                  className={`font-display text-2xl capitalize transition-all duration-400 hover:text-gold md:text-3xl ${
-                    blurred ? 'text-white/20' : 'text-white/70'
-                  }`}
-                >
-                  {tag.title}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Column 3 — Featured article (right half, prominent) */}
+        {/* Right — Featured article */}
         {/* slug kan mangle på uferdige utkast i forhåndsvisning — da hopper vi over */}
         {featured?.slug?.current && (
           <div
@@ -186,7 +145,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
                     {featured.tags[0].title}
                   </span>
                 )}
-                <h3 className="max-w-md font-display text-3xl leading-[1.1] text-white transition-colors duration-300 group-hover:text-gold lg:text-4xl">
+                <h3 className="max-w-md font-display text-3xl leading-[1.1] text-white/80 transition-colors duration-300 group-hover:text-mint lg:text-4xl">
                   {featured.title}
                 </h3>
                 <span className="mt-5 inline-block rounded-full border border-white/20 px-5 py-2 font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors group-hover:border-white/40 group-hover:text-white">
