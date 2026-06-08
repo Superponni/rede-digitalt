@@ -96,12 +96,12 @@ export default async function AboutPage() {
   const heroCover = editions.find((e) => e.coverImage?.asset) ?? null
 
   return (
-    <div className="bg-mint">
+    <div className="bg-canvas">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
         {/* ① Tittelblokk + magasincover */}
         <header className="grid grid-cols-12 items-start gap-x-6 gap-y-12 pt-24 lg:pt-36">
           <div className="col-span-12 lg:col-span-7">
-            <span className="inline-block border-b-2 border-gold pb-1 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/50">
+            <span className="font-heading text-[11px] uppercase tracking-[0.4em] text-navy/50">
               {c.label}
             </span>
             <h1 className="mt-7 font-display text-[2.75rem] leading-[1.05] text-navy sm:text-6xl lg:text-7xl">
