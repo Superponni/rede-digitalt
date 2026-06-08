@@ -11,7 +11,7 @@ import { useHeaderSurface } from '@/components/layout/HeaderTheme'
 // Andre ruter antar mørk topp (hero-bilde/navy) som standard, men kan overstyres
 // per side via <SetHeaderSurface> (f.eks. standard-artikler med lys mint-topp).
 function lightFromRoute(pathname: string): boolean {
-  return pathname === '/' || pathname === '/om'
+  return pathname === '/' || pathname === '/om' || pathname === '/medlemstilbud'
 }
 
 interface Tag {

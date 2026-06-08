@@ -130,6 +130,25 @@ export const FRONTPAGE_QUERY = defineQuery(
   }`
 )
 
+export const MEMBER_OFFERS_QUERY = defineQuery(
+  `*[_type == "memberOffer"] | order(category asc, businessName asc) {
+    _id,
+    businessName,
+    category,
+    regions,
+    discountSummary,
+    shortDescription,
+    discountDetails,
+    howToRedeem,
+    website,
+    phone,
+    locations,
+    featured,
+    "logo": logo{ asset, alt },
+    "relatedArticleSlug": relatedArticle->slug.current
+  }`
+)
+
 export const ABOUT_PAGE_QUERY = defineQuery(
   `{
     "page": *[_type == "aboutPage"][0] {

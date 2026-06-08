@@ -28,6 +28,7 @@ interface FullscreenMenuProps {
 
 const NAV_LINKS = [
   { label: 'Utgaver', href: '/', key: 'utgaver' },
+  { label: 'Medlemstilbud', href: '/medlemstilbud', key: 'medlemstilbud' },
   { label: 'Om', href: '/om', key: 'om' },
   { label: 'Kontakt', href: '/kontakt', key: 'kontakt' },
 ]

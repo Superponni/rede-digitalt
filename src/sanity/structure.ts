@@ -8,6 +8,7 @@ import {
   BookIcon,
   UsersIcon,
   TagsIcon,
+  TagIcon,
 } from '@sanity/icons'
 
 // Egendefinert venstremeny. Default-lista blander daglig arbeid med ting man
@@ -33,6 +34,14 @@ export const structure: StructureResolver = (S) =>
         .title('Podkast-episoder')
         .icon(MicrophoneIcon)
         .child(S.documentTypeList('podcastEpisode').title('Podkast-episoder')),
+      S.listItem()
+        .title('Medlemstilbud')
+        .icon(TagIcon)
+        .child(
+          S.documentTypeList('memberOffer')
+            .title('Medlemstilbud')
+            .defaultOrdering([{ field: 'category', direction: 'asc' }]),
+        ),
 
       S.divider(),
 

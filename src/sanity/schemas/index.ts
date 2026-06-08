@@ -9,6 +9,7 @@ import { videoPost } from './documents/videoPost'
 import { podcastEpisode } from './documents/podcastEpisode'
 import { tag } from './documents/tag'
 import { author } from './documents/author'
+import { memberOffer } from './documents/memberOffer'
 
 // Objekttyper (seksjoner + blockContent)
 import { seo } from './objects/seo'
@@ -39,6 +40,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   editorial,
   videoPost,
   podcastEpisode,
+  memberOffer,
   tag,
   author,
   // Objekter
