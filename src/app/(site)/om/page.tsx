@@ -92,40 +92,65 @@ export default async function AboutPage() {
     }
   }
 
+  // Nyeste utgave med coverbilde brukes som det fysiske magasinet i hero.
+  const heroCover = editions.find((e) => e.coverImage?.asset) ?? null
+
   return (
     <div className="bg-mint">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
-        {/* ① Tittelblokk — forskjøvet */}
-        <header className="grid grid-cols-12 gap-x-6 pt-24 lg:pt-36">
-          <span className="col-span-12 mb-6 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/40 lg:col-span-2">
-            {c.label}
-          </span>
-          <h1 className="col-span-12 font-display text-[2.75rem] leading-[1.05] text-navy sm:text-6xl lg:col-span-9 lg:col-start-3 lg:text-7xl">
-            {c.title}
-          </h1>
+        {/* ① Tittelblokk + magasincover */}
+        <header className="grid grid-cols-12 items-start gap-x-6 gap-y-12 pt-24 lg:pt-36">
+          <div className="col-span-12 lg:col-span-7">
+            <span className="inline-block border-b-2 border-gold pb-1 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/50">
+              {c.label}
+            </span>
+            <h1 className="mt-7 font-display text-[2.75rem] leading-[1.05] text-navy sm:text-6xl lg:text-7xl">
+              {c.title}
+            </h1>
+          </div>
+
+          {heroCover?.coverImage?.asset && (
+            <div className="col-span-12 lg:col-span-4 lg:col-start-9">
+              <div className="relative mx-auto w-full max-w-[260px] rotate-[1.5deg] lg:mx-0 lg:max-w-none">
+                <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm shadow-[0_30px_60px_-22px_rgba(0,56,101,0.4)] ring-1 ring-navy/10">
+                  <Image
+                    src={urlFor(heroCover.coverImage).width(640).height(853).fit('crop').url()}
+                    alt={
+                      heroCover.coverImage.alt ||
+                      `Forsiden til Rede nr ${heroCover.number} ${heroCover.year}`
+                    }
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 260px, 33vw"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </header>
 
         {/* ② Ingress */}
-        <div className="grid grid-cols-12 gap-x-6 pb-24 pt-12 lg:pb-36 lg:pt-20">
-          <p className="col-span-12 max-w-2xl text-xl leading-relaxed text-navy/70 sm:text-2xl lg:col-span-8 lg:col-start-3">
+        <div className="grid grid-cols-12 gap-x-6 pb-24 pt-14 lg:pb-36 lg:pt-16">
+          <p className="col-span-12 max-w-2xl text-xl leading-relaxed text-navy/70 sm:text-2xl lg:col-span-7">
             {c.intro}
           </p>
         </div>
       </div>
 
-      {/* ③ Fra papir til skjerm — gull fargeblokk + tekst */}
-      <section className="border-y border-navy/10">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 items-stretch lg:grid-cols-2">
-          <div className="flex min-h-[280px] flex-col justify-end bg-gold p-10 lg:min-h-[420px] lg:p-16">
-            <span className="font-heading text-[11px] uppercase tracking-[0.4em] text-navy/60">
+      {/* ③ Fra papir til skjerm — navy fullbredde-bånd */}
+      <section className="bg-navy">
+        <div className="mx-auto grid max-w-[1200px] grid-cols-12 items-center gap-x-6 gap-y-6 px-6 py-20 lg:px-12 lg:py-28">
+          <div className="col-span-12 lg:col-span-5">
+            <span className="font-heading text-[11px] uppercase tracking-[0.4em] text-gold">
               {c.featureLabel}
             </span>
-            <p className="mt-4 font-display text-3xl leading-tight text-navy lg:text-5xl">
+            <p className="mt-4 font-display text-3xl leading-tight text-mint lg:text-5xl">
               {c.featureHeading}
             </p>
           </div>
-          <div className="flex flex-col justify-center px-6 py-12 lg:px-16">
-            <p className="max-w-md text-lg leading-relaxed text-navy/70 lg:text-xl">
+          <div className="col-span-12 lg:col-span-6 lg:col-start-7">
+            <p className="max-w-md text-lg leading-relaxed text-mint/70 lg:text-xl">
               {c.featureBody}
             </p>
           </div>
@@ -136,15 +161,15 @@ export default async function AboutPage() {
         {/* ④ Hva du finner — temaer som fargeord */}
         {tags.length > 0 && (
           <section className="grid grid-cols-12 gap-x-6 py-24 lg:py-36">
-            <span className="col-span-12 mb-8 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/40 lg:col-span-3">
+            <span className="col-span-12 mb-8 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/40 lg:col-span-3 lg:mb-0">
               {c.topicsLabel}
             </span>
-            <div className="col-span-12 flex flex-wrap items-baseline gap-x-6 gap-y-2 lg:col-span-9">
+            <div className="col-span-12 grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3 lg:col-span-9">
               {tags.map((tag, i) => (
                 <Link
                   key={tag._id}
                   href={`/tema/${tag.slug.current}`}
-                  className={`font-display text-4xl capitalize transition-opacity hover:opacity-60 sm:text-5xl lg:text-6xl ${
+                  className={`font-display text-3xl capitalize underline-offset-[6px] transition-all hover:underline sm:text-4xl lg:text-5xl ${
                     TAG_COLORS[i % TAG_COLORS.length]
                   }`}
                 >
@@ -166,10 +191,10 @@ export default async function AboutPage() {
             <h2 className="mb-10 font-display text-3xl text-navy lg:text-4xl">
               {c.editionsHeading}
             </h2>
-            <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="flex flex-wrap gap-x-6 gap-y-8">
               {editions.map((edition) => (
-                <Link key={edition._id} href="/" className="group block">
-                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-navy/5">
+                <Link key={edition._id} href="/" className="group block w-36 sm:w-44">
+                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-navy/5 ring-1 ring-navy/10">
                     {edition.coverImage?.asset ? (
                       <Image
                         src={urlFor(edition.coverImage)
@@ -180,7 +205,7 @@ export default async function AboutPage() {
                         alt={edition.coverImage.alt || `Rede nr ${edition.number} ${edition.year}`}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                        sizes="176px"
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center p-4 text-center">
