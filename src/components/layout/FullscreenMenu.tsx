@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
@@ -34,12 +34,6 @@ const NAV_LINKS = [
 ]
 
 export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMenuProps) {
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!isOpen) setHoveredItem(null)
-  }, [isOpen])
-
   useEffect(() => {
     // Lås scroll når menyen er åpen. Scrollbar-gutteren er permanent reservert
     // i globals.css (scrollbar-gutter: stable), så headeren hopper ikke sidelengs
@@ -47,8 +41,6 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
-
-  const itemBlurred = (key: string) => hoveredItem !== null && hoveredItem !== key
 
   return (
     <div
@@ -62,16 +54,13 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
       <div className="relative z-10 flex h-full flex-col justify-center gap-12 px-8 lg:flex-row lg:items-center lg:gap-20 lg:px-16">
         {/* Left — Main nav + Temaer-seksjon + sosialt */}
         <div className="flex flex-col justify-center lg:w-[48%] lg:max-w-2xl">
-          <nav className="space-y-1" onMouseLeave={() => setHoveredItem(null)}>
+          <nav className="space-y-1">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.key}
                 href={item.href}
                 onClick={onClose}
-                onMouseEnter={() => setHoveredItem(item.key)}
-                className={`block font-display text-4xl text-white/70 transition-all duration-500 hover:text-mint md:text-5xl lg:text-6xl ${
-                  itemBlurred(item.key) ? 'opacity-25 blur-[2px]' : 'opacity-100'
-                }`}
+                className="block font-display text-4xl text-white/70 transition-colors duration-300 hover:text-mint md:text-5xl lg:text-6xl"
               >
                 {item.label}
               </Link>
@@ -81,8 +70,8 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
           {/* Temaer — egen seksjon, alltid synlig */}
           <div className="mt-10">
             <div className="mb-4 flex items-center gap-3">
-              <span className="h-px w-8 bg-gold/70" />
-              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-gold">
+              <span className="h-px w-8 bg-white/30" />
+              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-white/45">
                 Temaer
               </span>
             </div>
@@ -141,7 +130,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
               )}
               <div className="mt-6 flex flex-col items-center">
                 {featured.tags?.[0] && (
-                  <span className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em] text-gold">
+                  <span className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em] text-white/50">
                     {featured.tags[0].title}
                   </span>
                 )}
