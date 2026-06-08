@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { coverSrc } from '@/sanity/lib/imageHelpers'
+import { getArticleTheme, type AccentColor, type ColorMode } from '@/components/article/theme'
 
 interface Article {
   _id: string
@@ -21,6 +22,8 @@ interface DiscoverViewProps {
     slug: { current: string }
     teaserText?: string
     heroImage?: { asset: { _ref: string }; alt?: string }
+    accentColor?: string
+    colorMode?: string
   } | null
   podcast: {
     _id: string
@@ -172,43 +175,68 @@ export function DiscoverView({
         {/* Row 2 — Leder + Podcast (stacked on mobile, side by side on desktop) */}
         {(editorial || podcast) && (
           <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 lg:gap-3">
-            {/* Leder */}
-            {editorial && (
-              <Link
-                href="/leder"
-                className="group block h-full"
-              >
-                <div
-                  className="relative flex h-full flex-col justify-end overflow-hidden rounded-lg bg-tobb-blue p-4 aspect-[16/9] lg:aspect-auto lg:p-6"
-                >
-                  {editorial.heroImage?.asset && (
-                    <>
-                      <Image
-                        src={coverSrc(editorial.heroImage, 16, 9, 1400)}
-                        alt={editorial.heroImage.alt || editorial.title}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        sizes="50vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                    </>
-                  )}
-                  <div className="relative">
-                    <span className="mb-1 font-heading text-[9px] uppercase tracking-[0.3em] text-white/50 lg:text-[10px]">
-                      Leder
-                    </span>
-                    <h3 className="font-display text-sm leading-snug text-white transition-colors duration-300 group-hover:text-white/80 lg:text-lg">
-                      {editorial.title}
-                    </h3>
-                    {editorial.teaserText && (
-                      <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-white/50 lg:text-sm">
-                        {editorial.teaserText}
-                      </p>
+            {/* Leder — delt kort: farget tekstpanel + lederens hovedbilde, farge fra saken */}
+            {editorial && (() => {
+              const accentKey = (editorial.accentColor ?? 'navy') as AccentColor
+              const theme = getArticleTheme(accentKey, (editorial.colorMode ?? 'light') as ColorMode)
+              const hasImage = Boolean(editorial.heroImage?.asset)
+              return (
+                <Link href="/leder" className="group block h-full">
+                  <div
+                    className="relative flex h-full min-h-[220px] overflow-hidden rounded-lg"
+                    style={{ backgroundColor: theme.pageBg }}
+                  >
+                    {/* Venstre: tekst */}
+                    <div className="flex flex-1 flex-col justify-between p-5 lg:p-7">
+                      <div>
+                        <span
+                          className="font-heading text-[10px] uppercase tracking-[0.3em] lg:text-[11px]"
+                          style={{ color: theme.muted }}
+                        >
+                          Leder
+                        </span>
+                        <h3
+                          className="mt-2 font-display text-lg leading-[1.12] transition-opacity duration-300 group-hover:opacity-80 lg:text-2xl xl:text-3xl"
+                          style={{ color: theme.title }}
+                        >
+                          {editorial.title}
+                        </h3>
+                        {editorial.teaserText && (
+                          <p
+                            className="mt-3 line-clamp-3 text-sm leading-relaxed lg:text-base"
+                            style={{ color: theme.bodyText }}
+                          >
+                            {editorial.teaserText}
+                          </p>
+                        )}
+                      </div>
+                      <span
+                        className="mt-5 inline-flex items-center gap-1.5 font-heading text-xs uppercase tracking-[0.18em] lg:text-[13px]"
+                        style={{ color: theme.link }}
+                      >
+                        Les lederen
+                        <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
+                          →
+                        </span>
+                      </span>
+                    </div>
+
+                    {/* Høyre: hovedbilde */}
+                    {hasImage && (
+                      <div className="relative w-[38%] shrink-0 self-stretch sm:w-[42%]">
+                        <Image
+                          src={coverSrc(editorial.heroImage!, 3, 4, 800)}
+                          alt={editorial.heroImage!.alt || editorial.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          sizes="(max-width: 1024px) 42vw, 22vw"
+                        />
+                      </div>
                     )}
                   </div>
-                </div>
-              </Link>
-            )}
+                </Link>
+              )
+            })()}
 
             {/* Podcast — full Spotify embed, stretched to match leder height */}
             {podcast?.spotifyUrl && (

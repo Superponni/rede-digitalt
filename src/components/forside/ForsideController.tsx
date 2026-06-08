@@ -26,6 +26,8 @@ interface ForsideControllerProps {
     slug: { current: string }
     teaserText?: string
     heroImage?: { asset: { _ref: string }; alt?: string }
+    accentColor?: string
+    colorMode?: string
   } | null
   podcast: {
     _id: string

@@ -121,7 +121,7 @@ export const FRONTPAGE_QUERY = defineQuery(
       tags[]->{ _id, title, slug }
     },
     "editorial": *[_type == "editorial"] | order(publishedAt desc) [0] {
-      _id, title, slug, teaserText, heroImage
+      _id, title, slug, teaserText, heroImage, accentColor, colorMode
     },
     "podcast": *[_type == "podcastEpisode"] | order(publishedAt desc) [0] {
       _id, title, slug, description, spotifyUrl, thumbnail, duration, episodeNumber,
