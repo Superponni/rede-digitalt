@@ -150,15 +150,18 @@ function FilterTab({
   return (
     <button
       onClick={onClick}
-      className="group flex items-baseline gap-1.5 font-heading text-sm transition-colors"
-      style={{ color: active ? color ?? '#003865' : undefined }}
+      className="group flex items-baseline gap-1.5 font-heading text-sm"
     >
+      {/* Teksten holdes alltid i marineblått for lesbarhet — kategorifargen
+          (kan være gull/grønn) brukes kun som understrek-aksent, der lav
+          kontrast er greit. */}
       <span
         className={`border-b-2 pb-0.5 transition-colors ${
           active
-            ? 'border-current'
+            ? 'font-semibold text-navy'
             : 'border-transparent text-navy/60 group-hover:text-navy'
         }`}
+        style={active ? { borderColor: color ?? '#003865' } : undefined}
       >
         {label}
       </span>
