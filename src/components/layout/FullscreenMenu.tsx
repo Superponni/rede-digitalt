@@ -61,6 +61,9 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
   }, [isOpen])
 
   useEffect(() => {
+    // Lås scroll når menyen er åpen. Scrollbar-gutteren er permanent reservert
+    // i globals.css (scrollbar-gutter: stable), så headeren hopper ikke sidelengs
+    // når scrollbaren forsvinner.
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [isOpen])

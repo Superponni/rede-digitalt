@@ -108,9 +108,10 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
           </div>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-expanded={menuOpen}
             className={`flex cursor-pointer items-center gap-2 font-heading text-base tracking-[0.1em] transition-colors ${textColor} ${hoverColor}`}
           >
-            Meny
+            {menuOpen ? 'Lukk' : 'Meny'}
             <span className="transition-transform duration-300" style={{ display: 'inline-block', transform: menuOpen ? 'rotate(45deg)' : 'none' }}>
               +
             </span>

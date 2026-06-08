@@ -23,6 +23,13 @@
   --font-heading: var(--font-face-heading), "Varela Round", system-ui, sans-serif;
 }
 
+/* Reserver alltid plass til scrollbaren, slik at den sentrerte headeren
+   (logo + tekst) ikke hopper sidelengs når menyen låser scroll og
+   scrollbaren forsvinner. */
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: var(--font-body);
   color: var(--color-navy);
