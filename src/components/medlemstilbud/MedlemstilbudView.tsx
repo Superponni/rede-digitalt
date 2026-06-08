@@ -226,10 +226,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
               {initialsFor(offer.businessName)}
             </div>
           )}
-          <span
-            className="mt-1 text-right font-heading text-[10px] uppercase tracking-[0.25em]"
-            style={{ color: s.color }}
-          >
+          <span className="mt-1 text-right font-heading text-[10px] uppercase tracking-[0.25em] text-navy/50">
             {offer.category}
           </span>
         </div>
@@ -246,10 +243,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
 
         {/* Rabatt — kortets blikkfang */}
         {offer.discountSummary && (
-          <p
-            className="mt-5 font-display text-3xl leading-none"
-            style={{ color: s.color }}
-          >
+          <p className="mt-5 font-display text-3xl leading-none text-navy">
             {offer.discountSummary}
           </p>
         )}
@@ -267,8 +261,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
             {offer.relatedArticleSlug && (
               <Link
                 href={`/artikler/${offer.relatedArticleSlug}`}
-                className="font-heading text-[12px] font-semibold tracking-wide"
-                style={{ color: s.color }}
+                className="font-heading text-[12px] font-semibold tracking-wide text-navy transition-colors hover:text-navy/60"
               >
                 Les saken →
               </Link>
