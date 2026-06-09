@@ -16,7 +16,7 @@ export type AccentColor =
   | 'green'
   | 'gold'
 
-export type ColorMode = 'light' | 'tinted' | 'filled' | 'dark'
+export type ColorMode = 'light' | 'tinted' | 'filled' | 'dark' | 'canvas'
 export type HeroLayout = 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
 
 // base = TOBB-paletten (se globals.css). tint = lys pastell for tittel på mørk/farget
@@ -35,6 +35,8 @@ export const ACCENTS: Record<AccentColor, { base: string; tint: string; pale: st
 const MINT = '#F1F8F0'
 const NAVY = '#003865'
 const GOLD = '#F6BE00'
+// Lys blå «canvas» — samme flate som forsiden (--color-canvas i globals.css).
+const CANVAS = '#D3E4F5'
 
 export interface ArticleTheme {
   isDark: boolean
@@ -106,9 +108,10 @@ export function getArticleTheme(
   // light (standard): lys mint-flate, farget tittel — som oppskrift A i print.
   // tinted: samme, men bakgrunnen er en lys toning av signaturfargen (oppskrift
   // som de fleste print-sakene bruker).
+  // canvas: lys blå flate som forsiden, ellers samme lyse oppsett som «light».
   const lightTheme: ArticleTheme = {
     isDark: false,
-    pageBg: colorMode === 'tinted' ? accent.pale : MINT,
+    pageBg: colorMode === 'tinted' ? accent.pale : colorMode === 'canvas' ? CANVAS : MINT,
     title: accent.base,
     subtitle: accent.base,
     standfirst: accent.base,

@@ -29,6 +29,15 @@ import { stickyPortrait } from './objects/stickyPortrait'
 import { recipeCard } from './objects/recipeCard'
 import { countUpFact } from './objects/countUpFact'
 import { numberedStop } from './objects/numberedStop'
+import { illustratedCover } from './objects/illustratedCover'
+import { illustratedScene } from './objects/illustratedScene'
+import { ansiennitetSlider } from './objects/ansiennitetSlider'
+import { koeSlider } from './objects/koeSlider'
+import { stickyVei } from './objects/stickyVei'
+import { veideling } from './objects/veideling'
+import { storbyKart } from './objects/storbyKart'
+import { ansiennitetSjekk } from './objects/ansiennitetSjekk'
+import { gifKort } from './objects/gifKort'
 import { interactiveQuiz } from './objects/interactiveQuiz'
 import { expertSource } from './objects/expertSource'
 
@@ -61,6 +70,15 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   recipeCard,
   countUpFact,
   numberedStop,
+  illustratedCover,
+  illustratedScene,
+  ansiennitetSlider,
+  koeSlider,
+  stickyVei,
+  veideling,
+  storbyKart,
+  ansiennitetSjekk,
+  gifKort,
   interactiveQuiz,
   expertSource,
 ]

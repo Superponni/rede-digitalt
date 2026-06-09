@@ -83,6 +83,7 @@ export const article = defineType({
       options: {
         list: [
           { title: 'Lys mint-bakgrunn + farget tittel', value: 'light' },
+          { title: 'Lys blå bakgrunn (som forsiden)', value: 'canvas' },
           { title: 'Lys tonet bakgrunn (signaturfargen)', value: 'tinted' },
           { title: 'Full farget bakgrunn', value: 'filled' },
           { title: 'Mørk (marineblå flate, lys tekst)', value: 'dark' },
@@ -219,6 +220,15 @@ export const article = defineType({
         { type: 'recipeCard' },
         { type: 'countUpFact' },
         { type: 'numberedStop' },
+        { type: 'illustratedCover' },
+        { type: 'illustratedScene' },
+        { type: 'ansiennitetSlider' },
+        { type: 'koeSlider' },
+        { type: 'stickyVei' },
+        { type: 'veideling' },
+        { type: 'storbyKart' },
+        { type: 'ansiennitetSjekk' },
+        { type: 'gifKort' },
         { type: 'interactiveQuiz' },
       ],
       hidden: ({ parent }) => parent?.type !== 'scrollytelling',
