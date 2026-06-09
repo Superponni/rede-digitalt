@@ -22,7 +22,7 @@ import { NumberedStop } from './sections/NumberedStop'
 import { IllustratedCover } from './sections/IllustratedCover'
 import { IllustratedScene } from './sections/IllustratedScene'
 import { AnsiennitetSlider } from './sections/AnsiennitetSlider'
-import { KoeSlider } from './sections/KoeSlider'
+import { KoeLapp } from './sections/KoeLapp'
 import { StickyVei } from './sections/StickyVei'
 import { Veideling } from './sections/Veideling'
 import { StorbyKart } from './sections/StorbyKart'
@@ -79,7 +79,7 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
   illustratedCover: IllustratedCover,
   illustratedScene: IllustratedScene,
   ansiennitetSlider: AnsiennitetSlider,
-  koeSlider: KoeSlider,
+  koeSlider: KoeLapp,
   stickyVei: StickyVei,
   veideling: Veideling,
   storbyKart: StorbyKart,

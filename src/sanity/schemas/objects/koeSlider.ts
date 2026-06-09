@@ -1,13 +1,13 @@
 import { defineType, defineField } from 'sanity'
 
 /**
- * Køen (snik-slider) — interaktiv: du er den røde personen i køen, dra deg
- * fremover. All visuell logikk ligger i KoeSlider-komponenten; her er bare
- * antallet andre i køen redigerbart.
+ * Køen (kølapp) — scroll-drevet: en fysisk kølapp der nummeret ditt ruller fra
+ * X+1 ned mot 01 mens du scroller, til det er «din tur». All visuell logikk
+ * ligger i KoeLapp-komponenten; her er bare antallet andre i køen redigerbart.
  */
 export const koeSlider = defineType({
   name: 'koeSlider',
-  title: 'Køen (snik-slider)',
+  title: 'Køen (kølapp)',
   type: 'object',
   fields: [
     defineField({
@@ -21,7 +21,7 @@ export const koeSlider = defineType({
   preview: {
     select: { competitors: 'competitors' },
     prepare({ competitors }) {
-      return { title: 'Snik i køen', subtitle: `${competitors ?? 29} andre i køen` }
+      return { title: 'Snik i køen (kølapp)', subtitle: `${competitors ?? 29} andre i køen` }
     },
   },
 })

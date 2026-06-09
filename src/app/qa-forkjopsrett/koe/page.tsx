@@ -9,7 +9,7 @@ import { ScrollyThemeProvider } from '@/components/scrollytelling/ScrollyThemeCo
 import { ScrollyColorProvider, resolveScrollyColors } from '@/components/scrollytelling/ScrollyColorContext'
 import { IllustratedCover } from '@/components/scrollytelling/sections/IllustratedCover'
 import { IllustratedScene } from '@/components/scrollytelling/sections/IllustratedScene'
-import { KoeSlider } from '@/components/scrollytelling/sections/KoeSlider'
+import { KoeLapp } from '@/components/scrollytelling/sections/KoeLapp'
 import { StickyVei } from '@/components/scrollytelling/sections/StickyVei'
 import { Veideling } from '@/components/scrollytelling/sections/Veideling'
 import { AnsiennitetSjekk } from '@/components/scrollytelling/sections/AnsiennitetSjekk'
@@ -103,8 +103,8 @@ export default function KoeQaPage() {
             }}
           />
 
-          {/* Interaktiv slider: snik i køen, med levende teller over antall foran deg */}
-          <KoeSlider index={2} data={{ backgroundColor: COLORS.bg, competitors: 29 }} />
+          {/* Køen — scroll-drevet kølapp (samme komponent som produksjon) */}
+          <KoeLapp index={2} data={{ backgroundColor: COLORS.bg, competitors: 29 }} />
 
           <IllustratedScene
             index={3}
