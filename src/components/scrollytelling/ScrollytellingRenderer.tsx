@@ -22,6 +22,12 @@ import { NumberedStop } from './sections/NumberedStop'
 import { IllustratedCover } from './sections/IllustratedCover'
 import { IllustratedScene } from './sections/IllustratedScene'
 import { AnsiennitetSlider } from './sections/AnsiennitetSlider'
+import { KoeSlider } from './sections/KoeSlider'
+import { StickyVei } from './sections/StickyVei'
+import { Veideling } from './sections/Veideling'
+import { StorbyKart } from './sections/StorbyKart'
+import { AnsiennitetSjekk } from './sections/AnsiennitetSjekk'
+import { GifKort } from './sections/GifKort'
 import { InteractiveQuiz } from './sections/InteractiveQuiz'
 import { ProgressBar } from './ProgressBar'
 import { ScrollyThemeProvider } from './ScrollyThemeContext'
@@ -73,6 +79,12 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
   illustratedCover: IllustratedCover,
   illustratedScene: IllustratedScene,
   ansiennitetSlider: AnsiennitetSlider,
+  koeSlider: KoeSlider,
+  stickyVei: StickyVei,
+  veideling: Veideling,
+  storbyKart: StorbyKart,
+  ansiennitetSjekk: AnsiennitetSjekk,
+  gifKort: GifKort,
   interactiveQuiz: InteractiveQuiz,
 }
 

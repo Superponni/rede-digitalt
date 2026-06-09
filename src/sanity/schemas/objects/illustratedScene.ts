@@ -49,6 +49,20 @@ export const illustratedScene = defineType({
       description: 'Valgfritt lite ekstra-ikon som dukker opp ved siden av hovedillustrasjonen.',
     }),
     defineField({
+      name: 'animateIllustration',
+      title: 'Sett illustrasjonen sammen bit for bit',
+      type: 'boolean',
+      initialValue: false,
+      description: 'I stedet for å fade ikonet inn, bygges det opp del for del når scenen scrolles inn.',
+    }),
+    defineField({
+      name: 'centerBody',
+      title: 'Midtstill brødteksten',
+      type: 'boolean',
+      initialValue: false,
+      description: 'På for korte broer/utsagn (1–2 linjer). Av for lange avsnitt (da står teksten venstrestilt for lesbarhet).',
+    }),
+    defineField({
       name: 'ctaLabel',
       title: 'CTA-lenketekst',
       type: 'string',

@@ -6,6 +6,7 @@ import { PortableText } from '@portabletext/react'
 import { useScrollyTheme } from '../ScrollyThemeContext'
 import { useScrollyColors } from '../ScrollyColorContext'
 import { iconSrc } from '@/lib/forkjopsrett-icons'
+import { AssembledIllustration } from '../AssembledIllustration'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface IllustratedSceneProps {
@@ -15,6 +16,11 @@ interface IllustratedSceneProps {
     text?: any[]
     icon?: string
     secondaryIcon?: string
+    /** Sett delene sammen bit for bit (inline SVG) i stedet for å fade ikonet. */
+    animateIllustration?: boolean
+    /** Midtstill brødteksten (for korte broer/utsagn på 1–2 linjer). Lange avsnitt
+     *  bør stå venstrestilt for lesbarhet — da lar du denne være av. */
+    centerBody?: boolean
     ctaLabel?: string
     ctaHref?: string
     backgroundColor?: string
@@ -45,7 +51,9 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       if (!sectionRef.current) return
 
-      if (figureRef.current) {
+      // Når illustrasjonen settes sammen bit for bit, håndterer den sin egen
+      // entré — da skal vi IKKE også fade hele figuren (det ville skjult delene).
+      if (figureRef.current && !data.animateIllustration) {
         gsap.from(figureRef.current, {
           y: 48,
           opacity: 0,
@@ -54,7 +62,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
           scrollTrigger: {
             trigger: figureRef.current,
             start: 'top 82%',
-            toggleActions: 'play none none reverse',
+            toggleActions: 'play none none none',
           },
         })
       }
@@ -70,7 +78,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 72%',
-            toggleActions: 'play none none reverse',
+            toggleActions: 'play none none none',
           },
         })
       }
@@ -97,7 +105,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
     })
 
     return () => mm.revert()
-  }, [theme])
+  }, [theme, data.animateIllustration])
 
   const blockComponents = {
     block: {
@@ -134,13 +142,21 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
         {hasImage && (
           <div ref={figureRef} className="mb-12 flex items-center justify-center">
             <div ref={imgWrapRef} className="relative w-full max-w-[400px]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={iconSrc(data.icon)}
-                alt=""
-                className="h-auto w-full object-contain"
-                style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
-              />
+              {data.animateIllustration ? (
+                <AssembledIllustration
+                  slug={data.icon!}
+                  className="h-auto w-full"
+                  style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
+                />
+              ) : (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={iconSrc(data.icon)}
+                  alt=""
+                  className="h-auto w-full object-contain"
+                  style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
+                />
+              )}
               {data.secondaryIcon && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -169,7 +185,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
             </h2>
           )}
           {data.text && (
-            <div className="mx-auto max-w-[600px] text-left">
+            <div className={`mx-auto max-w-[600px] ${data.centerBody ? 'text-center' : 'text-left'}`}>
               <PortableText value={data.text} components={blockComponents} />
             </div>
           )}
