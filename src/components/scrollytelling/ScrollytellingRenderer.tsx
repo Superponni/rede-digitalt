@@ -19,6 +19,9 @@ import { StickyPortrait } from './sections/StickyPortrait'
 import { RecipeCard } from './sections/RecipeCard'
 import { CountUpFact } from './sections/CountUpFact'
 import { NumberedStop } from './sections/NumberedStop'
+import { IllustratedCover } from './sections/IllustratedCover'
+import { IllustratedScene } from './sections/IllustratedScene'
+import { AnsiennitetSlider } from './sections/AnsiennitetSlider'
 import { InteractiveQuiz } from './sections/InteractiveQuiz'
 import { ProgressBar } from './ProgressBar'
 import { ScrollyThemeProvider } from './ScrollyThemeContext'
@@ -67,6 +70,9 @@ const SECTION_MAP: Record<string, React.ComponentType<{ data: any; index: number
   recipeCard: RecipeCard,
   countUpFact: CountUpFact,
   numberedStop: NumberedStop,
+  illustratedCover: IllustratedCover,
+  illustratedScene: IllustratedScene,
+  ansiennitetSlider: AnsiennitetSlider,
   interactiveQuiz: InteractiveQuiz,
 }
 
