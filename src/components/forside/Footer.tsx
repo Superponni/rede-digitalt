@@ -8,6 +8,11 @@ export function Footer() {
             Rede er TOBBs medlemsmagasin med historier om bolig, nabolag og
             livet i Trøndelag.
           </p>
+          <p className="font-heading text-sm text-white/40">
+            Ansvarlig redaktør: Torkil R. Iversen
+            <br />
+            Nettredaktør: Christoffer Isdahl
+          </p>
           <div className="mt-4 font-heading text-[11px] uppercase tracking-widest text-white/30">
             &copy; {new Date().getFullYear()} TOBB
           </div>
