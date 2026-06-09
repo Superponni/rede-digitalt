@@ -56,6 +56,15 @@ export const article = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: 'menuFeatured',
+      title: 'Fremhevet i menyen',
+      type: 'boolean',
+      group: 'innhold',
+      initialValue: false,
+      description:
+        'På: denne saken vises som det store kortet i menyen (overstyrer «nyeste»). Bruk på én sak om gangen.',
+    }),
+    defineField({
       name: 'accentColor',
       title: 'Signaturfarge',
       type: 'string',
