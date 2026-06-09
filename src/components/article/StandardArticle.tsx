@@ -1,11 +1,12 @@
-import Link from 'next/link'
 import { naturalSrc, coverSrc, imageDims, focalPosition } from '@/sanity/lib/imageHelpers'
 import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
 import { ArticleHeroImage } from './ArticleHeroImage'
 import { ExpertRow, type ExpertItem } from './ExpertRow'
+import { ArticleOutro } from './ArticleOutro'
 import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
+import type { RelatedArticle } from '@/lib/related'
 import {
   getArticleTheme,
   type AccentColor,
@@ -33,9 +34,12 @@ interface StandardArticleProps {
   }
   // Liten etikett over tittelen (f.eks. «Leder») når saken ikke har emnetagger.
   eyebrow?: string
+  related?: RelatedArticle[]
+  primaryTag?: { title: string; slug?: { current: string } }
+  shareUrl: string
 }
 
-export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
+export function StandardArticle({ article, eyebrow, related = [], primaryTag, shareUrl }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
   // Én eller flere ekspertkilder med portrett. Portrett-modus krever minst én.
@@ -161,7 +165,7 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
   const headerSurface = layout === 'image-first' ? 'dark' : theme.isDark ? 'dark' : 'light'
 
   return (
-    <article className="pb-20" style={{ backgroundColor: theme.pageBg }}>
+    <article style={{ backgroundColor: theme.pageBg }}>
       <SetHeaderSurface surface={headerSurface} />
       {/* Topp */}
       {layout === 'image-first' && (
@@ -234,21 +238,20 @@ export function StandardArticle({ article, eyebrow }: StandardArticleProps) {
 
       {/* Brødtekst */}
       {article.body && (
-        <div className="mt-12">
+        <div className="mb-16 mt-12 lg:mb-24">
           <PortableTextRenderer value={article.body} theme={theme} />
         </div>
       )}
 
-      {/* Tilbake */}
-      <div className="mx-auto mt-16 max-w-prose px-6 lg:px-0">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 font-heading text-sm uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
-          style={{ color: theme.muted }}
-        >
-          <span>&larr;</span> Tilbake til forsiden
-        </Link>
-      </div>
+      {/* Veien videre — delt på tvers av alle artikkeltyper */}
+      <ArticleOutro
+        accentColor={article.accentColor}
+        colorMode={article.colorMode}
+        related={related}
+        primaryTag={primaryTag}
+        shareUrl={shareUrl}
+        shareTitle={article.title}
+      />
     </article>
   )
 }

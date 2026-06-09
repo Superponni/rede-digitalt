@@ -16,5 +16,5 @@ export default async function QaForkjopsrettPage() {
   if (!article) return <div style={{ padding: 40 }}>Fant ingen draft for «forkjopsrett».</div>
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <ScrollytellingRenderer article={article as any} />
+  return <ScrollytellingRenderer article={article as any} shareUrl="/qa-forkjopsrett" />
 }

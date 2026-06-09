@@ -4,9 +4,24 @@ interface ShareButtonsProps {
   url: string
   title: string
   className?: string
+  // Lys flate (mint/tinted) krever marineblå ikoner; mørk flate (filled/dark)
+  // krever hvite. Følger artikkelens colorMode via theme.isDark.
+  tone?: 'light' | 'dark'
 }
 
-export function ShareButtons({ url, title, className = '' }: ShareButtonsProps) {
+const TONES = {
+  dark: {
+    label: 'text-white/40',
+    button: 'bg-white/10 text-white/60 hover:bg-white/20 hover:text-white',
+  },
+  light: {
+    label: 'text-navy/40',
+    button: 'bg-navy/10 text-navy/55 hover:bg-navy/20 hover:text-navy',
+  },
+} as const
+
+export function ShareButtons({ url, title, className = '', tone = 'dark' }: ShareButtonsProps) {
+  const t = TONES[tone]
   const encodedUrl = encodeURIComponent(url)
   const encodedTitle = encodeURIComponent(title)
 
@@ -52,7 +67,7 @@ export function ShareButtons({ url, title, className = '' }: ShareButtonsProps) 
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <span className="font-heading text-xs uppercase tracking-widest text-white/40">
+      <span className={`font-heading text-xs uppercase tracking-widest ${t.label}`}>
         Del
       </span>
       {shareLinks.map((link) => (
@@ -62,7 +77,7 @@ export function ShareButtons({ url, title, className = '' }: ShareButtonsProps) 
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Del på ${link.label}`}
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/60 transition-colors hover:bg-white/20 hover:text-white"
+          className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${t.button}`}
         >
           {link.icon}
         </a>

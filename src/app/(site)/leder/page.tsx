@@ -1,12 +1,14 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
-import { EDITORIAL_PAGE_QUERY } from '@/sanity/lib/queries'
+import { EDITORIAL_PAGE_QUERY, RELATED_ARTICLES_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
 import { StandardArticle } from '@/components/article/StandardArticle'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { articleLd, breadcrumbLd } from '@/lib/jsonld'
 import { clampDescription, metaRobots, ogImagesFrom } from '@/lib/seo'
+import { absoluteUrl } from '@/lib/site'
+import { mergeRelated, type RelatedArticle } from '@/lib/related'
 import type { SanityImageSource } from '@sanity/image-url'
 
 interface EditorialData {
@@ -111,10 +113,25 @@ export default async function LederPage() {
     edition: editorial.edition,
   }
 
+  // Leder har ingen emnetagger ⇒ «Les også» fylles av nyeste saker.
+  const relatedData = await sanityFetch<{
+    sameTheme: RelatedArticle[]
+    recent: RelatedArticle[]
+  }>({
+    query: RELATED_ARTICLES_QUERY,
+    params: { id: editorial._id, tagIds: [] },
+  })
+  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent)
+
   return (
     <>
       <JsonLd data={structuredData} />
-      <StandardArticle article={article} eyebrow="Leder" />
+      <StandardArticle
+        article={article}
+        eyebrow="Leder"
+        related={related}
+        shareUrl={absoluteUrl('/leder')}
+      />
     </>
   )
 }

@@ -8,6 +8,8 @@ import { StandardArticle } from '@/components/article/StandardArticle'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { articleLd, breadcrumbLd } from '@/lib/jsonld'
 import { clampDescription, metaRobots, ogImagesFrom } from '@/lib/seo'
+import { absoluteUrl } from '@/lib/site'
+import { mergeRelated, type RelatedArticle } from '@/lib/related'
 import type { SanityImageSource } from '@sanity/image-url'
 
 interface PageProps {
@@ -100,15 +102,17 @@ export default async function ArticlePage({ params }: PageProps) {
 
   if (!article) notFound()
 
-  const relatedArticles = await sanityFetch<{
-    _id: string
-    title: string
-    slug: { current: string }
-    type: string
-    teaser?: string
-    heroImage?: { asset: { _ref: string }; alt?: string }
-    tags?: { _id: string; title: string }[]
-  }[]>({ query: RELATED_ARTICLES_QUERY, params: { id: article._id } })
+  // Tema-først «Les også»: deler tag-treff fra nyeste-fallback, fletter til 3.
+  const relatedData = await sanityFetch<{
+    sameTheme: RelatedArticle[]
+    recent: RelatedArticle[]
+  }>({
+    query: RELATED_ARTICLES_QUERY,
+    params: { id: article._id, tagIds: article.tags?.map((t) => t._id) ?? [] },
+  })
+  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent)
+  const primaryTag = article.tags?.[0]
+  const shareUrl = absoluteUrl(`/artikler/${article.slug.current}`)
 
   const shareSource = article.seo?.shareImage || article.heroImage
   const structuredData = [
@@ -135,9 +139,19 @@ export default async function ArticlePage({ params }: PageProps) {
     <>
       <JsonLd data={structuredData} />
       {article.type === 'scrollytelling' ? (
-        <ScrollytellingRenderer article={article} relatedArticles={relatedArticles || []} />
+        <ScrollytellingRenderer
+          article={article}
+          related={related}
+          primaryTag={primaryTag}
+          shareUrl={shareUrl}
+        />
       ) : (
-        <StandardArticle article={article} />
+        <StandardArticle
+          article={article}
+          related={related}
+          primaryTag={primaryTag}
+          shareUrl={shareUrl}
+        />
       )}
     </>
   )

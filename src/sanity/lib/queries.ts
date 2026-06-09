@@ -78,15 +78,20 @@ export const EDITION_QUERY = defineQuery(
   }`
 )
 
+// «Les også» tema-først: ekte tema-søsken (deler minst én tag) hentes adskilt
+// fra et nyeste-fallback, slik at vi alltid kan fylle opp til 3 selv om temaet
+// er tynt. Gjelder ALLE artikkeltyper (ikke lenger bare scrollytelling).
+// Fletting + klipp skjer i mergeRelated (src/lib/related.ts).
 export const RELATED_ARTICLES_QUERY = defineQuery(
-  `*[${PUBLISHABLE_ARTICLE} && _id != $id && type == "scrollytelling"] | order(publishedAt desc) [0...3] {
-    _id,
-    title,
-    slug,
-    type,
-    teaser,
-    heroImage,
-    tags[]->{ _id, title, slug }
+  `{
+    "sameTheme": *[${PUBLISHABLE_ARTICLE} && _id != $id && references($tagIds)] | order(publishedAt desc) [0...6] {
+      _id, title, slug, type, teaser, heroImage,
+      tags[]->{ _id, title, slug }
+    },
+    "recent": *[${PUBLISHABLE_ARTICLE} && _id != $id] | order(publishedAt desc) [0...6] {
+      _id, title, slug, type, teaser, heroImage,
+      tags[]->{ _id, title, slug }
+    }
   }`
 )
 
