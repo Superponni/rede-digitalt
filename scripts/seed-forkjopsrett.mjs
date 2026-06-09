@@ -1,7 +1,7 @@
 /**
  * Seeder forkjøpsrett-scrollytellingen som UTKAST (drafts.article-forkjopsrett).
  * Flytende, midtstilt narrativ (illustratedScene), lys blå bakgrunn (canvas).
- * Idempotent: createOrReplace på draft-id. STOPP å kjøre dette så snart Asbjørn
+ * Idempotent: createOrReplace på draft-id. STOPP å kjøre dette så snart redaktøren
  * redigerer i Studio.
  *
  *   node scripts/seed-forkjopsrett.mjs

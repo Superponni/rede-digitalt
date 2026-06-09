@@ -3,7 +3,7 @@
  * (drafts.article-forkjopsrett). Erstatter den gamle fade-strukturen helt.
  * Idempotent: createOrReplace på draft-id.
  *
- * STOPP å kjøre dette så snart Asbjørn redigerer teksten i Studio (overskriver).
+ * STOPP å kjøre dette så snart redaktøren redigerer teksten i Studio (overskriver).
  *
  *   node scripts/seed-forkjopsrett-v2.mjs
  */

@@ -1,7 +1,7 @@
 import { absoluteUrl, siteName, sitePublisher, siteDescription, siteUrl } from './site'
 
 // Rede-logoen (statisk fil i public/rede-logo.png). 512×512, hvit Gastromond
-// på navy. Levert av Asbjørn — riktig merkevarefont.
+// på navy. Levert av kunden — riktig merkevarefont.
 const LOGO_URL = absoluteUrl('/rede-logo.png')
 
 // Byggere for schema.org / JSON-LD. Strukturerte data er grunnmuren for BÅDE

@@ -1,4 +1,4 @@
-// MIDLERTIDIG QA-RUTE — slettes før deploy. Lar Asbjørn se utkastet lokalt.
+// MIDLERTIDIG QA-RUTE — slettes før deploy. Lar redaktøren se utkastet lokalt.
 // Henter utkastet direkte med lese-token (drafts-perspektiv) og rendrer det,
 // slik at vi kan QA-e uten signert Presentation-URL.
 import { client } from '@/sanity/lib/client'

@@ -2,7 +2,7 @@ import { defineType, defineField } from 'sanity'
 import { ICON_OPTIONS } from '@/lib/forkjopsrett-icons'
 
 /**
- * Illustrert scene — flytende narrativ-byggekloss (NRK-stil langlesing).
+ * Illustrert scene — flytende narrativ-byggekloss (immersiv langlesing).
  *
  * Én scene = (valgfri) illustrasjon + fortellende tekst, alltid MIDTSTILT.
  * Illustrasjonen flyter fritt og dukker opp (fade + svak parallaks) når den
