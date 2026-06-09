@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { gsap } from '@/lib/gsap-config'
 import { useScrollyColors } from '../ScrollyColorContext'
 import { iconSrc } from '@/lib/forkjopsrett-icons'
@@ -38,6 +38,7 @@ export function KoeLapp({ data }: KoeLappProps) {
   const [posIdx, setPosIdx] = useState(0) // 0 = bakerst
   const number = total - posIdx // posIdx 0 → 30, posIdx total-1 → 1
   const atFront = number === 1
+  const fillPct = (posIdx / (total - 1)) * 100 // hvor langt den røde lappen er trukket fram
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -157,8 +158,8 @@ export function KoeLapp({ data }: KoeLappProps) {
             value={posIdx}
             onChange={(e) => setPosIdx(Number(e.target.value))}
             aria-label="Snik deg fremover i køen"
-            className="h-2 w-full max-w-[420px] cursor-pointer appearance-none rounded-full"
-            style={{ accentColor: YOU, backgroundColor: `rgba(${c.accentRgb}, 0.18)` }}
+            className="koelapp-slider mx-auto block w-full max-w-[420px]"
+            style={{ '--koe-fill': `${fillPct}%` } as CSSProperties}
           />
           <div
             data-item

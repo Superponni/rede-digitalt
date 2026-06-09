@@ -59,3 +59,82 @@ body {
     animation: none;
   }
 }
+
+/* ── Kølapp-slider ──────────────────────────────────────────────────────
+   Skranke-skinne i navy + rød fyll som viser hvor langt du har trukket deg
+   fram, og en rød «pull-tab» med kremkant + grep. Rød-fyllen styres av
+   CSS-variabelen --koe-fill (0–100 %) satt fra KoeLapp-komponenten.       */
+.koelapp-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 34px;
+  background: transparent;
+  cursor: grab;
+}
+.koelapp-slider:active {
+  cursor: grabbing;
+}
+
+/* Skinne (track) — WebKit */
+.koelapp-slider::-webkit-slider-runnable-track {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    #a4133c 0 var(--koe-fill, 0%),
+    rgba(0, 56, 101, 0.85) var(--koe-fill, 0%) 100%
+  );
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.28);
+}
+/* Skinne (track) — Firefox */
+.koelapp-slider::-moz-range-track {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(0, 56, 101, 0.85);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.28);
+}
+.koelapp-slider::-moz-range-progress {
+  height: 12px;
+  border-radius: 999px;
+  background: #a4133c;
+}
+
+/* Pull-tab (thumb) — rød lapp med kremkant + to grep-streker */
+.koelapp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 32px;
+  margin-top: -10px; /* sentrer på 12px-skinnen: (32-12)/2 */
+  border-radius: 7px;
+  border: 2px solid #fbf7ec;
+  background-color: #a4133c;
+  background-image: linear-gradient(#fbf7ec, #fbf7ec), linear-gradient(#fbf7ec, #fbf7ec);
+  background-size: 2px 12px, 2px 12px;
+  background-position: 10px center, 14px center;
+  background-repeat: no-repeat;
+  box-shadow: 0 6px 14px rgba(0, 32, 64, 0.35);
+}
+.koelapp-slider::-moz-range-thumb {
+  width: 26px;
+  height: 32px;
+  border-radius: 7px;
+  border: 2px solid #fbf7ec;
+  background-color: #a4133c;
+  background-image: linear-gradient(#fbf7ec, #fbf7ec), linear-gradient(#fbf7ec, #fbf7ec);
+  background-size: 2px 12px, 2px 12px;
+  background-position: 10px center, 14px center;
+  background-repeat: no-repeat;
+  box-shadow: 0 6px 14px rgba(0, 32, 64, 0.35);
+}
+
+.koelapp-slider:focus-visible {
+  outline: none;
+}
+.koelapp-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 6px 14px rgba(0, 32, 64, 0.35), 0 0 0 4px rgba(246, 190, 0, 0.5);
+}
+.koelapp-slider:focus-visible::-moz-range-thumb {
+  box-shadow: 0 6px 14px rgba(0, 32, 64, 0.35), 0 0 0 4px rgba(246, 190, 0, 0.5);
+}
