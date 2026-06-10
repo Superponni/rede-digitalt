@@ -9,7 +9,9 @@ import {
   UsersIcon,
   TagsIcon,
   TagIcon,
+  RocketIcon,
 } from '@sanity/icons'
+import { WelcomeGuide } from '@/sanity/components/WelcomeGuide'
 
 // Egendefinert venstremeny. Default-lista blander daglig arbeid med ting man
 // setter opp én gang. Her ligger det redaktøren jobber i daglig øverst, og
@@ -18,6 +20,15 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Innhold')
     .items([
+      // Velkomsthilsen øverst, så den tomme flaten i Struktur møter deg med en
+      // veiviser i stedet for hvitt. Samme innhold som «Velkommen»-fanen.
+      S.listItem()
+        .title('Velkommen')
+        .icon(RocketIcon)
+        .child(S.component(WelcomeGuide).title('Velkommen').id('velkommen')),
+
+      S.divider(),
+
       S.listItem()
         .title('Artikler')
         .icon(DocumentTextIcon)
