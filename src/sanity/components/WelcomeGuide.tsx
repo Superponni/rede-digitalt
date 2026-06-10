@@ -14,10 +14,12 @@ import { useState } from 'react'
  */
 
 const MARINE = '#003865'
-const MINT = '#F1F8F0'
+const BAKGRUNN = '#E5EEF7' // lys blå studio-bakgrunn
 const GULL = '#F6BE00'
-const TEAL = '#487A7B'
-const BLEK = '#cdd9cf' // hårfin skillelinje på mint-bakgrunn
+// Litt mørkere enn brand-teal (#487A7B) for å klare WCAG AA-kontrast som
+// tekst på den lyse blå bakgrunnen (≈5.1:1 mot ≈4.1:1 for brand-teal).
+const TEAL = '#3D6B6C'
+const BLEK = '#cdd9e6' // hårfin skillelinje på blå bakgrunn
 
 type Steg = {
   tittel: string
@@ -85,7 +87,7 @@ export function WelcomeGuide() {
       style={{
         height: '100%',
         overflowY: 'auto',
-        background: MINT,
+        background: BAKGRUNN,
         WebkitFontSmoothing: 'antialiased',
       }}
     >
@@ -308,7 +310,7 @@ export function WelcomeGuide() {
           style={{
             marginTop: 56,
             fontSize: 12.5,
-            color: '#789',
+            color: '#556677',
             borderTop: `1px solid ${BLEK}`,
             paddingTop: 18,
           }}
