@@ -159,6 +159,7 @@ export const ABOUT_PAGE_QUERY = defineQuery(
     "page": *[_type == "aboutPage"][0] {
       label, title, intro,
       featureLabel, featureHeading, featureBody,
+      paperOfferText, paperOfferLinkLabel, paperOfferUrl,
       topicsLabel, publisherLine, editionsHeading
     },
     "editions": *[_type == "edition"] | order(year desc, number desc) {

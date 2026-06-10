@@ -64,6 +64,33 @@ export const aboutPage = defineType({
         'Her kan du scrolle deg gjennom reportasjer som beveger seg, høre stemmene bak historiene og se video — ikke bare lese. Rede er bygget for skjermen, fra første bokstav til siste bilde.',
     }),
     defineField({
+      name: 'paperOfferText',
+      title: 'Papirtilbud — tekst',
+      type: 'text',
+      group: 'feature',
+      rows: 2,
+      initialValue:
+        'Ønsker du å motta papirutgaven av Rede? Dette kan du enkelt ordne på',
+      description:
+        'Vises under brødteksten. Selve «Min side»-lenken settes i de to feltene under.',
+    }),
+    defineField({
+      name: 'paperOfferLinkLabel',
+      title: 'Papirtilbud — lenketekst',
+      type: 'string',
+      group: 'feature',
+      initialValue: 'Min side',
+    }),
+    defineField({
+      name: 'paperOfferUrl',
+      title: 'Papirtilbud — lenkeadresse (Min side)',
+      type: 'url',
+      group: 'feature',
+      description:
+        'La stå tom for å bruke standardlenken. NB: innloggingslenker kan inneholde engangskoder som etter hvert slutter å virke — bytt lenken her hvis den slutter å fungere.',
+      validation: (rule) => rule.uri({ scheme: ['http', 'https'] }),
+    }),
+    defineField({
       name: 'topicsLabel',
       title: 'Overskrift over temaene',
       type: 'string',

@@ -45,10 +45,17 @@ interface AboutContent {
   featureLabel?: string
   featureHeading?: string
   featureBody?: string
+  paperOfferText?: string
+  paperOfferLinkLabel?: string
+  paperOfferUrl?: string
   topicsLabel?: string
   publisherLine?: string
   editionsHeading?: string
 }
+
+// Standard «Min side»-lenke (lander på TOBBs innlogging). Kan overstyres i Sanity.
+const DEFAULT_MIN_SIDE_URL =
+  'https://bblid.bbl.no/loginWithCode?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dbf620c34-db17-46f2-881a-bcf48674bb73%26redirect_uri%3Dhttps%253A%252F%252Fidgateway.bbl.no%252Fhost%252Fcore%252Fsignin-oidc%26response_type%3Dcode%26scope%3Dopenid%2520profile%2520bbl%2520email%2520api%26code_challenge%3DEQ1aa2M3r1Vx-6aSypb5AY7DXbB4tbOkqcu34s0Zzu4%26code_challenge_method%3DS256%26response_mode%3Dform_post%26nonce%3D639166850055384086.NTQ4NThjYmUtNmNkMi00Nzg2LThjZjMtYjBlOTBhMjhiYTYzODc3MzZjMTEtYjdlZS00MGJmLTg0NmQtNTBmM2U5NGE5N2Ew%26acr_values%3Dbblcode%253ATOBB,gatewayclient%253A7888CBB4-C687-42C3-B817-6E1A96393E8A%26state%3DCfDJ8MnHiQRj7TBEmSyVMpZ56Qq_KmjvtktO8ls-32uCveMgPl0jliXkuHlqtPNZq2dGM0OgfPeTD08mblWBJ0MXlc8DX1hDTKmC4XcX3K_h6j9sVT9qX18fkvwPxVhX2yebH9h_gi7SQ5Qpq6x0DDtyVkB8wZ8DghEEjHFsbAKBFpefYHP3dm58HK1nVcRrEXGZ3Z4dqhIR0NGfTZqdbHZtNDUrlZWSxnLxbLeBECZ48wLcMgXE9bgenkNUDeu2SrcVIxsAAEaJx27e30B1KuIkI3BHu1tvkmcoBBQkJ4fxh_2VWDQtHThcko45sa_JRTz-kY3xjAglF1Tp1OG5hq2wpzooUTZcB254Gam5dna7E_IrqwIX1WDYh8gdqpMA66iyMKZzWlvrTH8z1SxPUh8jCk2g0nh05SRD9qtR9wDnuZPtbHI46KO3pwrzAbWrGb3Lny1urFTRRUajBog1pCe6i5o0uORcEWnCWzwMPuGqbv3WyK0VZ64SLVCl3fh7o1FgkGc8BTMUAJh6haZAM3vI7sLLzGY-VYV0np0LhV59hcE8cb4o4ew_aelXJqxdsuxmDLzdZfYFP8MEeEN6QTYIzDhaRZRAQuJijbsgo7ysEXhbm3rWibjN9msxz2_GNgqEIDb1HRcrvr_iC3JCduCfphyAOYboJEvB29DBOUoEIwXn6vD6GfdvLZxs46qqrcnpgGWRwz1VUQ66Lc6AJL5w0WndeHgaCHqyIVSriLSy-2m681aWZQyGWH8vQ0WVNplmf0CTulKlHoIFqy8h0h0NAHlAwbi2BMBNWlRTE-iq75QOeIWuGxyidHYf1q-_aTQjDR7z5i0j_FiH-h4ez75jzOUZEfl6vWD5vKQbETIiYIUt6Hjb9NMqclSTz_hayJzBrkswZwxpRnws1wKOWj_g-7fviUGS7YPByVTXkkHNVb3zryEGW_r23KZ18HYxqOrgDQ%26x-client-SKU%3DID_NET9_0%26x-client-ver%3D8.0.1.0&bbl=TOBB'
 
 // Standardtekster brukes hvis Om-dokumentet ikke finnes ennå i Sanity.
 const FALLBACK: Required<AboutContent> = {
@@ -60,6 +67,9 @@ const FALLBACK: Required<AboutContent> = {
   featureHeading: 'Ikke en PDF — en opplevelse.',
   featureBody:
     'Her kan du scrolle deg gjennom reportasjer som beveger seg, høre stemmene bak historiene og se video — ikke bare lese. Rede er bygget for skjermen, fra første bokstav til siste bilde.',
+  paperOfferText: 'Ønsker du å motta papirutgaven av Rede? Dette kan du enkelt ordne på',
+  paperOfferLinkLabel: 'Min side',
+  paperOfferUrl: DEFAULT_MIN_SIDE_URL,
   topicsLabel: 'Hva du finner',
   publisherLine: 'Rede gis ut av TOBB',
   editionsHeading: 'Utgaver',
@@ -153,6 +163,24 @@ export default async function AboutPage() {
             <p className="max-w-md text-lg leading-relaxed text-mint/70 lg:text-xl">
               {c.featureBody}
             </p>
+            {c.paperOfferText && (
+              <p className="mt-8 max-w-md text-base leading-relaxed text-mint/70 lg:text-lg">
+                {c.paperOfferText}{' '}
+                {c.paperOfferUrl ? (
+                  <a
+                    href={c.paperOfferUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-gold underline decoration-gold/50 underline-offset-4 transition-colors hover:decoration-gold"
+                  >
+                    {c.paperOfferLinkLabel}
+                  </a>
+                ) : (
+                  c.paperOfferLinkLabel
+                )}
+                .
+              </p>
+            )}
           </div>
         </div>
       </section>
