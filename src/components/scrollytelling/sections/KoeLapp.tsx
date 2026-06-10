@@ -195,13 +195,27 @@ export function KoeLapp({ data }: KoeLappProps) {
           }}
         >
           <div style={{ overflow: 'hidden', minHeight: 0 }}>
-            <div style={{ padding: '24px 34px 30px' }}>
+            {/* Rikelig bunn-padding så den myke skyggen toner helt ut FØR den
+                ytre overflow:hidden (grid-kollaps) klipper — ellers kuttes
+                skyggen rett av og lager en synlig hard kant mot neste seksjon. */}
+            <div style={{ padding: '24px 34px 64px' }}>
               <div
                 className="mx-auto rounded-2xl bg-white p-3"
                 style={{ maxWidth: 300, boxShadow: '0 20px 50px rgba(0,32,64,0.16)' }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/forkjopsrett/winning.gif" alt="Winning" className="w-full rounded-xl" />
+                {/* Egen overflow-hidden RUNDT gif-en (innenfor den hvite ramma)
+                    så klippet skjer akkurat ved gif-kanten. Ørliten oppskalering
+                    forankret oppe til venstre dytter den bakte 1px svarte kanten
+                    (bunn/høyre) ut av klippet — topp/venstre står i ro. */}
+                <div className="overflow-hidden rounded-xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/forkjopsrett/winning.gif"
+                    alt="Winning"
+                    className="block w-full"
+                    style={{ transform: 'scale(1.03)', transformOrigin: 'top left' }}
+                  />
+                </div>
               </div>
             </div>
           </div>
