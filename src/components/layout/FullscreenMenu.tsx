@@ -30,7 +30,7 @@ const NAV_LINKS = [
   { label: 'Utgaver', href: '/', key: 'utgaver' },
   { label: 'Medlemstilbud', href: '/medlemstilbud', key: 'medlemstilbud' },
   { label: 'Om', href: '/om', key: 'om' },
-  { label: 'Kontakt', href: '/kontakt', key: 'kontakt' },
+  { label: 'Kontakt', href: 'https://tobb.no/om-tobb/kontakt/', key: 'kontakt', external: true },
 ]
 
 export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMenuProps) {
@@ -55,16 +55,29 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
         {/* Left — Main nav + Temaer-seksjon + sosialt */}
         <div className="flex flex-col justify-center lg:w-[48%] lg:max-w-2xl">
           <nav className="space-y-1">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.key}
-                href={item.href}
-                onClick={onClose}
-                className="block font-display text-4xl text-white/70 transition-colors duration-300 hover:text-mint md:text-5xl lg:text-6xl"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((item) =>
+              item.external ? (
+                <a
+                  key={item.key}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="block font-display text-4xl text-white/70 transition-colors duration-300 hover:text-mint md:text-5xl lg:text-6xl"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  onClick={onClose}
+                  className="block font-display text-4xl text-white/70 transition-colors duration-300 hover:text-mint md:text-5xl lg:text-6xl"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* Temaer — egen seksjon, alltid synlig */}
