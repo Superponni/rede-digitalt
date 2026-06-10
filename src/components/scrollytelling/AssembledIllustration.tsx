@@ -74,6 +74,14 @@ export function AssembledIllustration({
       gsap.to(parts, tween)
     } else {
       gsap.to(parts, { ...tween, scrollTrigger: { trigger: wrapRef.current, start, toggleActions: 'play none none none' } })
+      // SVG-en ble nettopp hentet asynkront og lagt inline i DOM-en. Triggeren
+      // over ble derfor regnet ut mot en flate som nettopp endret høyde — og om
+      // fetchen var treg, rakk renderer-ens globale refresh-er (som bare lytter på
+      // <img>, ikke inline-SVG) å kjøre FØR triggeren fantes. Da blir posisjonen
+      // utdatert og illustrasjonen står usynlig til man refresher siden. Tving en
+      // omberegning når layouten har satt seg, så triggeren fyrer riktig — og fyrer
+      // umiddelbart dersom scenen allerede er i visning.
+      requestAnimationFrame(() => ScrollTrigger.refresh())
     }
   }
 
@@ -83,6 +91,10 @@ export function AssembledIllustration({
       ScrollTrigger.getAll().forEach((t) => {
         if (t.trigger === wrap) t.kill()
       })
+      // Tillat ny oppbygging ved remount (f.eks. Strict Mode i dev eller
+      // klient-navigering): ellers ville build() bli stående med builtRef=true
+      // mens triggeren over nettopp ble drept → delene aldri avslørt igjen.
+      builtRef.current = false
     }
   }, [])
 
