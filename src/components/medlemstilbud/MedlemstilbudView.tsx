@@ -34,13 +34,13 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
       {/* Hero / intro */}
       <header className="px-6 pt-32 pb-12 lg:px-12 lg:pt-40 lg:pb-16">
         <div className="mx-auto max-w-[1400px]">
-          <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.5em] text-navy/40">
+          <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.5em] text-navy/75">
             TOBB · Medlemsfordeler
           </p>
           <h1 className="max-w-4xl font-display text-[2.5rem] leading-[0.95] text-navy sm:text-6xl md:text-7xl lg:text-8xl">
             Medlemstilbud
           </h1>
-          <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-navy/70">
+          <p className="mt-6 max-w-2xl font-body text-lg leading-relaxed text-navy/75">
             Som TOBB-medlem får du rabatter og fordeler hos lokale og nasjonale
             samarbeidspartnere — fra håndverkere og banktjenester til kino, sport
             og kultur. Filtrer på kategori og sted for å finne det som passer deg.
@@ -51,7 +51,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
       {offers.length === 0 ? (
         <div className="px-6 pb-32 lg:px-12">
           <div className="mx-auto max-w-[1400px]">
-            <p className="text-navy/50">Ingen medlemstilbud er publisert ennå.</p>
+            <p className="text-navy/75">Ingen medlemstilbud er publisert ennå.</p>
           </div>
         </div>
       ) : (
@@ -122,7 +122,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
               </div>
 
               {filtered.length === 0 && (
-                <p className="py-20 text-center text-navy/40">
+                <p className="py-20 text-center text-navy/75">
                   Ingen tilbud i dette utvalget.
                 </p>
               )}
@@ -228,7 +228,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
               {initialsFor(offer.businessName)}
             </div>
           )}
-          <span className="mt-1 text-right font-heading text-[10px] uppercase tracking-[0.25em] text-navy/50">
+          <span className="mt-1 text-right font-heading text-[10px] uppercase tracking-[0.25em] text-navy/70">
             {offer.category}
           </span>
         </div>
@@ -238,7 +238,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
           {offer.businessName}
         </h2>
         {offer.shortDescription && (
-          <p className="mt-1.5 font-body text-sm leading-relaxed text-navy/55">
+          <p className="mt-1.5 font-body text-sm leading-relaxed text-navy/70">
             {offer.shortDescription}
           </p>
         )}
@@ -252,7 +252,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
 
         <div className="mt-auto pt-5">
           {regions.length > 0 && (
-            <p className="mb-3 font-heading text-[11px] uppercase tracking-[0.2em] text-navy/35">
+            <p className="mb-3 font-heading text-[11px] uppercase tracking-[0.2em] text-navy/70">
               {regions.join(' · ')}
             </p>
           )}
@@ -263,7 +263,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
             {offer.relatedArticleSlug && (
               <Link
                 href={`/artikler/${offer.relatedArticleSlug}`}
-                className="font-heading text-[12px] font-semibold tracking-wide text-navy transition-colors hover:text-navy/60"
+                className="font-heading text-[12px] font-semibold tracking-wide text-navy transition-colors hover:text-navy/70"
               >
                 Les saken →
               </Link>
@@ -273,14 +273,14 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
                 href={`https://${offer.website.replace(/^https?:\/\//, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-heading text-[12px] text-navy/60 transition-colors hover:text-navy"
+                className="font-heading text-[12px] text-navy/70 transition-colors hover:text-navy"
               >
                 Til nettside ↗
               </a>
             )}
             <button
               onClick={() => setOpen((v) => !v)}
-              className="ml-auto font-heading text-[12px] text-navy/50 transition-colors hover:text-navy"
+              className="ml-auto font-heading text-[12px] text-navy/70 transition-colors hover:text-navy"
             >
               {open ? 'Skjul vilkår' : 'Vis vilkår'}
             </button>
@@ -298,14 +298,14 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
                 {offer.howToRedeem || DEFAULT_REDEEM}
               </p>
               {locations.length > 0 && (
-                <ul className="space-y-0.5 font-body text-[12px] text-navy/55">
+                <ul className="space-y-0.5 font-body text-[12px] text-navy/70">
                   {locations.map((loc, i) => (
                     <li key={i}>{loc}</li>
                   ))}
                 </ul>
               )}
               {offer.phone && (
-                <p className="font-body text-[12px] text-navy/55">Tlf: {offer.phone}</p>
+                <p className="font-body text-[12px] text-navy/70">Tlf: {offer.phone}</p>
               )}
             </div>
           )}
