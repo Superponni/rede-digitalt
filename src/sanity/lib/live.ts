@@ -5,7 +5,8 @@ import { token } from '../env'
 
 // Felter som IKKE skal stega-kodes: verdiene brukes i logikk (oppslagsnøkler,
 // hex-farger, URL-er) der usynlige stega-tegn bryter f.eks. farge-/modus-oppslag,
-// fargematch eller embed-URL-er. Matches på feltnavn (siste sti-segment).
+// fargematch eller embed-URL-er. Matches på feltnavn (siste tekst-segment i
+// stien, så array-elementer som regions[0] matcher på 'regions').
 // NB: matcher på basenavn, så et felt med samme navn i en annen type mister
 // også klikk-til-redigering — bevisst avveining (disse navnene er logikk-felter).
 const STEGA_SKIP_FIELDS = [
@@ -14,6 +15,11 @@ const STEGA_SKIP_FIELDS = [
   'heroLayout',
   'spotifyUrl',
   'url',
+  // medlemstilbud: category er oppslagsnøkkel (fargevalg) + dedup/filter-nøkkel,
+  // regions er filter-nøkkel. Usynlige stega-tegn gjør hver verdi unik per
+  // dokument, så Set-dedup/filtrering i Presentation lagde én fane per tilbud.
+  'category',
+  'regions',
 ]
 
 // Live Content API: gir sanntidsoppdatering i forhåndsvisning (og på publisert
@@ -30,8 +36,13 @@ const { sanityFetch: liveFetch, SanityLive } = defineLive({
       // Ikke kod inn verdier som brukes i logikk (oppslagsnøkler, hex-farger,
       // URL-er) — usynlige stega-tegn der bryter f.eks. farge-/modus-oppslag.
       filter: (props) => {
-        const key = props.sourcePath[props.sourcePath.length - 1]
-        if (typeof key === 'string' && STEGA_SKIP_FIELDS.includes(key)) return false
+        // Siste tekst-segment i stien — hopper over tall-indekser, så
+        // array-felter (f.eks. regions[0]) matcher på feltnavnet 'regions'.
+        const segments = props.sourcePath.filter(
+          (s): s is string => typeof s === 'string',
+        )
+        const key = segments[segments.length - 1]
+        if (key && STEGA_SKIP_FIELDS.includes(key)) return false
         return props.filterDefault(props)
       },
     },
