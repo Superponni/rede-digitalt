@@ -86,7 +86,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
 
               {/* Regioner */}
               <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-navy/5 pt-3">
-                <span className="mr-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
+                <span className="mr-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/75">
                   Sted
                 </span>
                 <RegionChip
@@ -109,7 +109,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
           {/* Tilbudsgrid */}
           <main className="px-6 py-12 lg:px-12 lg:py-16">
             <div className="mx-auto max-w-[1400px]">
-              <p className="mb-6 font-heading text-[11px] uppercase tracking-[0.3em] text-navy/40">
+              <p className="mb-6 font-heading text-[11px] uppercase tracking-[0.3em] text-navy/75">
                 {filtered.length} tilbud
                 {activeCategory ? ` · ${activeCategory}` : ''}
                 {activeRegion ? ` · ${activeRegion}` : ''}
@@ -154,18 +154,20 @@ function FilterTab({
     >
       {/* Teksten holdes alltid i marineblått for lesbarhet — kategorifargen
           (kan være gull/grønn) brukes kun som understrek-aksent, der lav
-          kontrast er greit. */}
+          kontrast er greit. Inaktiv tekst på navy/80 gir 5,6:1 mot den lyse
+          bakgrunnen (WCAG AA krever 4,5:1); aktiv/inaktiv skilles av fet skrift
+          + understrek, ikke av fargen alene. */}
       <span
         className={`border-b-2 pb-0.5 transition-colors ${
           active
             ? 'font-semibold text-navy'
-            : 'border-transparent text-navy/60 group-hover:text-navy'
+            : 'border-transparent text-navy/80 group-hover:text-navy'
         }`}
         style={active ? { borderColor: color ?? '#003865' } : undefined}
       >
         {label}
       </span>
-      <span className="text-[11px] text-navy/30">{count}</span>
+      <span className="text-[11px] text-navy/75">{count}</span>
     </button>
   )
 }
@@ -185,7 +187,7 @@ function RegionChip({
       className={`rounded-full border px-3 py-1 font-heading text-[12px] transition-colors ${
         active
           ? 'border-navy bg-navy text-white'
-          : 'border-navy/15 text-navy/60 hover:border-navy/40 hover:text-navy'
+          : 'border-navy/30 text-navy/80 hover:border-navy/50 hover:text-navy'
       }`}
     >
       {label}
