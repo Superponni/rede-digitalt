@@ -14,6 +14,19 @@ import { InlineSvg } from './InlineSvg'
  * getBBox), så ingenting «flyr» fra feil punkt. Respekterer reduced-motion:
  * da vises illustrasjonen ferdig, statisk.
  */
+// Flere illustrasjoner blir gjerne klare i samme åndedrag (cache-treff). Én
+// felles, utsatt refresh i stedet for én per illustrasjon — gjentatte fulle
+// ScrollTrigger-omberegninger midt i scrollingen ga synlige hakk på mobil.
+let refreshQueued = false
+function queueScrollTriggerRefresh() {
+  if (refreshQueued) return
+  refreshQueued = true
+  requestAnimationFrame(() => {
+    refreshQueued = false
+    ScrollTrigger.refresh()
+  })
+}
+
 function collectParts(svg: SVGSVGElement): Element[] {
   const parts: Element[] = []
   Array.from(svg.children).forEach((ch) => {
@@ -81,7 +94,7 @@ export function AssembledIllustration({
       // utdatert og illustrasjonen står usynlig til man refresher siden. Tving en
       // omberegning når layouten har satt seg, så triggeren fyrer riktig — og fyrer
       // umiddelbart dersom scenen allerede er i visning.
-      requestAnimationFrame(() => ScrollTrigger.refresh())
+      queueScrollTriggerRefresh()
     }
   }
 

@@ -143,9 +143,11 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
           <div ref={figureRef} className="mb-12 flex items-center justify-center">
             <div ref={imgWrapRef} className="relative w-full max-w-[400px]">
               {data.animateIllustration ? (
+                // Fast høyde med letterboxing — høye/smale ikoner skal aldri
+                // vokse forbi skjermhøyden og skape store tomrom på mobil.
                 <AssembledIllustration
                   slug={data.icon!}
-                  className="h-auto w-full"
+                  className="h-[32vh] w-full lg:h-[38vh]"
                   style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
                 />
               ) : (
@@ -153,7 +155,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
                 <img
                   src={iconSrc(data.icon)}
                   alt=""
-                  className="h-auto w-full object-contain"
+                  className="mx-auto h-auto max-h-[40vh] w-full object-contain"
                   style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
                 />
               )}

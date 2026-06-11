@@ -103,17 +103,19 @@ export function Veideling({ data }: VeidelingProps) {
           </svg>
 
           {/* etiketter under hver gren */}
-          <div className="mt-3 flex items-start justify-between">
-            <div className="max-w-[46%] text-left">
-              <span className="block font-display text-lg leading-tight" style={{ color: c.heading }}>
+          {/* gap + orddeling: «Forhåndsavklaring»/«Fastprisavklaring» er lange
+              enkeltord som ellers kolliderer i midten på smale skjermer. */}
+          <div className="mt-3 flex items-start justify-between gap-4">
+            <div className="max-w-[46%] break-words text-left" style={{ hyphens: 'auto' }}>
+              <span className="block font-display text-base leading-tight sm:text-lg" style={{ color: c.heading }}>
                 {main.label}
               </span>
               <span className="mt-0.5 block font-heading text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.accent }}>
                 {main.badge}
               </span>
             </div>
-            <div className="max-w-[46%] text-right">
-              <span className="block font-display text-base leading-tight" style={{ color: c.muted }}>
+            <div className="max-w-[46%] break-words text-right" style={{ hyphens: 'auto' }}>
+              <span className="block font-display text-sm leading-tight sm:text-base" style={{ color: c.muted }}>
                 {side.label}
               </span>
               <span className="mt-0.5 block font-heading text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.muted }}>

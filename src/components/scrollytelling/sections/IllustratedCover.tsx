@@ -98,7 +98,7 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
             <img
               src={iconSrc(data.icon)}
               alt=""
-              className="h-auto w-full object-contain"
+              className="mx-auto h-auto max-h-[36vh] w-full object-contain"
               style={{ filter: 'drop-shadow(0 26px 44px rgba(0,32,64,0.16))' }}
             />
             {data.secondaryIcon && (

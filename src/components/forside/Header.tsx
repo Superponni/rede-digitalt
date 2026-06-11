@@ -106,15 +106,24 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
               Et medlemsmagasin fra TOBB
             </span>
           </div>
+          {/* Bred hamburger (to streker) som morpher til X — renere enn tekst-
+              knappen «Meny +», og selvforklarende på alle flater. */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
-            className={`flex cursor-pointer items-center gap-2 font-heading text-base tracking-[0.1em] transition-colors ${textColor} ${hoverColor}`}
+            aria-label={menuOpen ? 'Lukk menyen' : 'Åpne menyen'}
+            className={`relative -mr-2 flex h-11 w-11 cursor-pointer items-center justify-center transition-colors ${textColor} ${hoverColor}`}
           >
-            {menuOpen ? 'Lukk' : 'Meny'}
-            <span className="transition-transform duration-300" style={{ display: 'inline-block', transform: menuOpen ? 'rotate(45deg)' : 'none' }}>
-              +
-            </span>
+            <span
+              aria-hidden
+              className="absolute h-[2px] w-8 rounded-full bg-current transition-transform duration-300 ease-out"
+              style={{ transform: menuOpen ? 'rotate(45deg)' : 'translateY(-5px)' }}
+            />
+            <span
+              aria-hidden
+              className="absolute h-[2px] w-8 rounded-full bg-current transition-transform duration-300 ease-out"
+              style={{ transform: menuOpen ? 'rotate(-45deg)' : 'translateY(5px)' }}
+            />
           </button>
         </div>
       </header>

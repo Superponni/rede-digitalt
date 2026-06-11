@@ -72,20 +72,34 @@ export function StickyVei({ data }: StickyVeiProps) {
         ease: 'power3.out',
         scrollTrigger: { trigger: root, start: 'top 74%', toggleActions: 'play none none none' },
       })
+    })
 
-      // Hvilket steg er «aktivt» → det hvis MIDT er ved skjermmidten (dvs. det du
-      // faktisk leser). 'top center'→'bottom center' gjør at nøyaktig ett steg er
-      // aktivt om gangen, og illustrasjonen byttes i takt med lesingen.
-      const triggers = stepRefs.current.filter(Boolean).map((el, i) =>
+    // Hvilket steg er «aktivt» → det du faktisk leser. Nøyaktig ett steg er
+    // aktivt om gangen (stegene ligger kant i kant), og illustrasjonen byttes i
+    // takt med lesingen. Leselinja er IKKE den samme på mobil og desktop: på
+    // desktop står teksten midt på skjermen (50 %), men på mobil ligger hele
+    // lesesonen UNDER den sticky illustrasjonen (øverste ~40vh), med midtpunkt
+    // rundt 70 % nede. Med linja på 50 % også på mobil sto teksten man leste
+    // som «falmet» helt til den var halvveis scrollet bak illustrasjonen.
+    // Deteksjonen gjelder også ved redusert bevegelse — det er lesetilstand,
+    // ikke pynt (før ble alle steg unntatt det første stående nedtonet).
+    const makeTriggers = (line: number) =>
+      stepRefs.current.filter(Boolean).map((el, i) =>
         ScrollTrigger.create({
           trigger: el as HTMLElement,
-          start: 'top center',
-          end: 'bottom center',
+          start: `top ${line}%`,
+          end: `bottom ${line}%`,
           onToggle: (self) => {
             if (self.isActive) setActive(i)
           },
         }),
       )
+    mm.add('(min-width: 1024px)', () => {
+      const triggers = makeTriggers(50)
+      return () => triggers.forEach((t) => t.kill())
+    })
+    mm.add('(max-width: 1023.98px)', () => {
+      const triggers = makeTriggers(70)
       return () => triggers.forEach((t) => t.kill())
     })
     return () => mm.revert()
@@ -132,10 +146,17 @@ export function StickyVei({ data }: StickyVeiProps) {
                 slug={activeStep.icon}
                 mode="mount"
                 stagger={0.4}
-                className="flex h-[34vh] w-auto items-center justify-center lg:h-[44vh]"
+                className="h-[30vh] w-full max-w-[460px] lg:h-[44vh]"
                 style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
               />
             )}
+            {/* Myk underkant (kun mobil): teksten glir inn i en fade i stedet
+                for å bli kuttet knivskarpt midt i en linje av illustrasjonsboksen. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-full h-14 lg:hidden"
+              style={{ background: `linear-gradient(to bottom, ${bgColor}, transparent)` }}
+            />
           </div>
 
           {/* steg-tekstene */}
@@ -146,7 +167,7 @@ export function StickyVei({ data }: StickyVeiProps) {
                 ref={(el) => {
                   stepRefs.current[i] = el
                 }}
-                className="flex min-h-[78vh] flex-col justify-center text-center lg:text-left"
+                className="flex min-h-[62vh] flex-col justify-center text-center lg:min-h-[78vh] lg:text-left"
                 style={{ opacity: active === i ? 1 : 0.32, transition: 'opacity 0.4s ease' }}
               >
                 <span className="mb-3 font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>

@@ -100,7 +100,12 @@ function DiscoverCard({
                   {tag}
                 </span>
               )}
-              <h3 className="max-w-[90%] font-display text-lg leading-[1.1] text-white sm:text-2xl md:text-3xl lg:text-4xl">
+              {/* hyphens + break-words: lange enkeltord («Forsvarsrunden») skal
+                  orddeles innenfor kortet, ikke renne ut over kanten på mobil. */}
+              <h3
+                className="w-full max-w-full break-words font-display text-lg leading-[1.1] text-white sm:text-2xl md:text-3xl lg:text-4xl"
+                style={{ hyphens: 'auto' }}
+              >
                 {title}
               </h3>
             </div>
@@ -282,13 +287,14 @@ export function DiscoverView({
           </div>
         )}
 
-        {/* Row 4+ — Remaining articles (2-col landscape grid) */}
+        {/* Row 4+ — Remaining articles. Samme stående format og grid som
+            «I denne utgaven», så forsiden holder ett kortspråk hele veien ned. */}
         {remaining.length > 0 && (
           <div>
             <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
               Flere saker
             </p>
-            <div className="grid grid-cols-2 gap-2 lg:gap-3">
+            <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
               {remaining.map((article) => (
                 <DiscoverCard
                   key={article._id}
@@ -298,10 +304,10 @@ export function DiscoverView({
                   videoUrl={article.heroVideoUrl}
                   title={article.title}
                   tag={article.tags?.[0]?.title}
-                  aspect="4/3"
-                  imageWidth={600}
-                  imageHeight={450}
-                  sizes="50vw"
+                  aspect="3/4"
+                  imageWidth={400}
+                  imageHeight={533}
+                  sizes="(max-width: 1024px) 50vw, 25vw"
                 />
               ))}
             </div>

@@ -64,16 +64,28 @@ export function InlineSvg({
         alive = false
       }
     }
-    fetch(url)
-      .then((r) => r.text())
-      .then((t) => {
-        if (!alive) return
-        cache.set(slug, t)
-        setMarkup(t)
-      })
-      .catch(() => {})
+    // Ett nytt forsøk ved feil — på mobilnett er ett mislykket kall nok til at
+    // illustrasjonen ellers ville stått usynlig til man laster siden på nytt.
+    let retryTimer: ReturnType<typeof setTimeout>
+    const load = (attempt: number) => {
+      fetch(url)
+        .then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`)
+          return r.text()
+        })
+        .then((t) => {
+          if (!alive) return
+          cache.set(slug, t)
+          setMarkup(t)
+        })
+        .catch(() => {
+          if (alive && attempt < 2) retryTimer = setTimeout(() => load(attempt + 1), 900)
+        })
+    }
+    load(0)
     return () => {
       alive = false
+      clearTimeout(retryTimer)
     }
   }, [slug])
 
@@ -81,11 +93,22 @@ export function InlineSvg({
     if (!markup || !ref.current) return
     const svg = ref.current.querySelector('svg') as SVGSVGElement | null
     if (!svg) return
-    // Fyll containeren responsivt (ikonene har egne viewBox-er).
+    // Fyll containeren responsivt (ikonene har egne viewBox-er). SVG-en får
+    // 100 % × 100 % og letterbokses av preserveAspectRatio — men da MÅ wrapperen
+    // ha en definert boks. Derfor henter vi sideforholdet fra viewBox og setter
+    // det på wrapperen: i en container med fast høyde fyller den boksen (uten å
+    // flyte utenfor), i en container med auto-høyde gir aspect-ratio riktig
+    // høyde fra bredden. Før dette fikk høye/smale ikoner (f.eks. «Til salgs»-
+    // skiltet) en ubestemt boks som rant langt utenfor og la seg over teksten.
+    const vb = svg.viewBox?.baseVal
+    if (vb && vb.width > 0 && vb.height > 0 && ref.current) {
+      ref.current.style.aspectRatio = `${vb.width} / ${vb.height}`
+    }
     svg.removeAttribute('width')
     svg.removeAttribute('height')
     svg.setAttribute('width', '100%')
     svg.setAttribute('height', '100%')
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet')
     svg.style.display = 'block'
     if (title) svg.setAttribute('aria-label', title)
     svg.setAttribute('role', title ? 'img' : 'presentation')
@@ -96,7 +119,7 @@ export function InlineSvg({
     <span
       ref={ref}
       className={className}
-      style={{ display: 'inline-block', lineHeight: 0, ...style }}
+      style={{ display: 'block', width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', lineHeight: 0, ...style }}
       dangerouslySetInnerHTML={{ __html: markup }}
     />
   )
