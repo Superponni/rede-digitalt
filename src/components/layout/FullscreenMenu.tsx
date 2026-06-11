@@ -51,7 +51,9 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
       <div className="absolute inset-0 bg-navy" />
 
       {/* 2-column layout: nav + temaer-seksjon | featured */}
-      <div className="relative z-10 flex h-full flex-col justify-center gap-12 px-8 lg:flex-row lg:items-center lg:gap-20 lg:px-16">
+      {/* pt-16 på mobil: innholdet sentreres i flaten UNDER headeren, så
+          øverste menypunkt ikke kolliderer med Rede-logoen på små skjermer. */}
+      <div className="relative z-10 flex h-full flex-col justify-center gap-12 px-8 pt-16 lg:flex-row lg:items-center lg:gap-20 lg:px-16 lg:pt-0">
         {/* Left — Main nav + Temaer-seksjon + sosialt */}
         <div className="flex flex-col justify-center lg:w-[48%] lg:max-w-2xl">
           <nav className="space-y-1">
@@ -101,6 +103,42 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
               ))}
             </div>
           </div>
+
+          {/* Utvalgt sak — kompakt rad, KUN mobil (desktop har det store kortet
+              til høyre). Holder seg under ~90px så menyen aldri trenger scroll. */}
+          {featured?.slug?.current && (
+            <Link
+              href={`/artikler/${featured.slug.current}`}
+              onClick={onClose}
+              className="group mt-10 flex items-center gap-4 lg:hidden"
+            >
+              {featured.heroImage?.asset && (
+                <div className="relative aspect-[3/4] w-16 shrink-0 overflow-hidden rounded-md">
+                  <Image
+                    src={urlFor(featured.heroImage).width(128).height(171).fit('crop').url()}
+                    alt={featured.heroImage.alt || featured.title}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                </div>
+              )}
+              <div className="min-w-0">
+                <span className="font-heading text-[10px] uppercase tracking-[0.3em] text-gold">
+                  Utvalgt
+                </span>
+                <span className="mt-1 block font-display text-xl leading-snug text-white/85 transition-colors duration-300 group-hover:text-mint">
+                  {featured.title}
+                  <span
+                    aria-hidden
+                    className="ml-2 inline-block transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </span>
+              </div>
+            </Link>
+          )}
 
           {/* Social links */}
           <div className="mt-12 flex gap-6">
