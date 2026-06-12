@@ -145,7 +145,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
           <div className="mt-10">
             <div className="mb-4 flex items-center gap-3">
               <span className="h-px w-8 bg-white/30" />
-              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-white/45">
+              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-white/70">
                 Temaer
               </span>
             </div>
@@ -199,15 +199,15 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
             </Link>
           )}
 
-          {/* Social links */}
+          {/* Social links — minst white/60 på navy for å bestå kontrastkravet */}
           <div className="mt-12 flex gap-6">
-            <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60">
+            <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               TOBB.no
             </a>
-            <a href="https://www.facebook.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60">
+            <a href="https://www.facebook.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Facebook
             </a>
-            <a href="https://www.instagram.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white/60">
+            <a href="https://www.instagram.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Instagram
             </a>
           </div>
@@ -240,7 +240,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
               )}
               <div className="mt-6 flex flex-col items-center">
                 {featured.tags?.[0] && (
-                  <span className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em] text-white/50">
+                  <span className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em] text-white/70">
                     {featured.tags[0].title}
                   </span>
                 )}
