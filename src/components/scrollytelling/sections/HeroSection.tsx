@@ -46,7 +46,7 @@ function HeroAudioButton({ src }: { src: string }) {
   return (
     <button
       onClick={toggle}
-      className="mt-6 flex cursor-pointer items-center gap-2.5 rounded-full bg-white/[0.1] px-4 py-2 backdrop-blur-sm transition-colors hover:bg-white/[0.18]"
+      className="mt-6 flex cursor-pointer items-center gap-2.5 rounded-sm bg-white/[0.14] px-4 py-2 transition-colors hover:bg-white/[0.22]"
     >
       <audio ref={audioRef} src={src} preload="none" />
       <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">

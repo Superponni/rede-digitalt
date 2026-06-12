@@ -87,7 +87,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       {eyebrow && (
         <div className={`mb-4 ${centered ? 'flex justify-center' : ''}`}>
           <span
-            className="inline-block rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+            className="inline-block rounded-sm px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
             style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
           >
             {eyebrow}
@@ -100,7 +100,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
           {article.tags.map((tag) => (
             <span
               key={tag._id}
-              className="rounded-full px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+              className="rounded-sm px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
               style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
             >
               {tag.title}

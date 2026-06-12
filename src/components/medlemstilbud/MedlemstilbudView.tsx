@@ -188,7 +188,7 @@ function RegionChip({
   return (
     <button
       onClick={onClick}
-      className={`rounded-full border px-3 py-1 font-heading text-[12px] transition-colors ${
+      className={`rounded-sm border px-3 py-1 font-heading text-[12px] transition-colors ${
         active
           ? 'border-navy bg-navy text-white'
           : 'border-navy/30 text-navy/80 hover:border-navy/50 hover:text-navy'

@@ -138,7 +138,7 @@ export function AnsiennitetSjekk({ data }: AnsiennitetSjekkProps) {
                 href={data.ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full px-7 py-3.5 font-heading text-[14px] font-bold uppercase tracking-[0.15em] shadow-md transition-transform hover:scale-[1.03]"
+                className="inline-flex items-center gap-2 rounded-sm px-7 py-3.5 font-heading text-[14px] font-bold uppercase tracking-[0.15em] shadow-md transition-opacity hover:opacity-90"
                 style={{ backgroundColor: c.accent, color: '#ffffff' }}
               >
                 {data.ctaLabel}

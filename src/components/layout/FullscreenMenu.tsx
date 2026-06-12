@@ -247,7 +247,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
                 <h3 className="max-w-md font-display text-3xl leading-[1.1] text-white/80 transition-colors duration-300 group-hover:text-mint lg:text-4xl">
                   {featured.title}
                 </h3>
-                <span className="mt-5 inline-block rounded-full border border-white/20 px-5 py-2 font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors group-hover:border-white/40 group-hover:text-white">
+                <span className="mt-5 inline-block rounded-sm border border-white/20 px-5 py-2 font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors group-hover:border-white/40 group-hover:text-white">
                   Les nå
                 </span>
               </div>
