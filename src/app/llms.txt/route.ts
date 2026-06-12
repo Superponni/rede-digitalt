@@ -30,7 +30,12 @@ export async function GET() {
     })
   }
 
-  const articles = await client.fetch<ArticleListItem[]>(ARTICLES_QUERY)
+  const [articles, tags] = await Promise.all([
+    client.fetch<ArticleListItem[]>(ARTICLES_QUERY),
+    client.fetch<{ title: string; slug: { current: string } }[]>(
+      `*[_type == "tag" && defined(slug.current)] | order(title asc) { title, slug }`,
+    ),
+  ])
 
   const lines: string[] = [
     `# ${siteName}`,
@@ -49,9 +54,21 @@ export async function GET() {
     '## Sider',
     '',
     `- [Leder](${absoluteUrl('/leder')}): Redaktørens leder for utgaven.`,
+    `- [Medlemstilbud](${absoluteUrl('/medlemstilbud')}): Rabatter og fordeler for ${sitePublisher}-medlemmer hos lokale og nasjonale samarbeidspartnere.`,
     `- [Om Rede](${absoluteUrl('/om')}): Om magasinet og ${sitePublisher}.`,
     '',
   ]
+
+  if (tags.length > 0) {
+    lines.push(
+      '## Temaer',
+      '',
+      ...tags.map(
+        (t) => `- [${t.title}](${absoluteUrl(`/tema/${t.slug.current}`)})`,
+      ),
+      '',
+    )
+  }
 
   return new Response(lines.join('\n'), {
     headers: { 'Content-Type': 'text/plain; charset=utf-8' },

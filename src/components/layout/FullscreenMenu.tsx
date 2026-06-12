@@ -28,7 +28,7 @@ interface FullscreenMenuProps {
 
 const NAV_LINKS = [
   { label: 'Utgaver', href: '/', key: 'utgaver' },
-  { label: 'Medlemstilbud', href: 'https://tobb.no/fordeler/', key: 'medlemstilbud', external: true },
+  { label: 'Medlemstilbud', href: '/medlemstilbud', key: 'medlemstilbud' },
   { label: 'Om', href: '/om', key: 'om' },
   { label: 'Kontakt', href: 'https://tobb.no/om-tobb/kontakt/', key: 'kontakt', external: true },
 ]

@@ -5,12 +5,23 @@ import { MEMBER_OFFERS_QUERY } from '@/sanity/lib/queries'
 import { metaRobots } from '@/lib/seo'
 import type { MemberOffer } from '@/lib/medlemstilbud'
 
+const description =
+  'Rabatter og fordeler for TOBB-medlemmer hos lokale og nasjonale samarbeidspartnere.'
+
 export const metadata: Metadata = {
   title: 'Medlemstilbud',
-  description:
-    'Rabatter og fordeler for TOBB-medlemmer hos lokale og nasjonale samarbeidspartnere.',
+  description,
   robots: metaRobots(),
   alternates: { canonical: '/medlemstilbud' },
+  openGraph: {
+    title: 'Medlemstilbud | Rede',
+    description,
+    url: '/medlemstilbud',
+  },
+  twitter: {
+    title: 'Medlemstilbud | Rede',
+    description,
+  },
 }
 
 export default async function MedlemstilbudPage() {

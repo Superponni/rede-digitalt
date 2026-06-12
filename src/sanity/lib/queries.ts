@@ -198,6 +198,7 @@ export const SITEMAP_QUERY = defineQuery(
     },
     "editorial": *[_type == "editorial" && seo.noIndex != true] | order(publishedAt desc) [0] {
       _updatedAt
-    }
+    },
+    "memberOffersUpdated": *[_type == "memberOffer"] | order(_updatedAt desc) [0]._updatedAt
   }`
 )
