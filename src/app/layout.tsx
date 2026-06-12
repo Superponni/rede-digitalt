@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="no"
+      lang="nb"
       className={`${bodyFont.variable} ${headingFont.variable} h-full antialiased`}
     >
       <head>

@@ -24,6 +24,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
   // Initialise Lenis once and wire it to GSAP's ticker
   useEffect(() => {
+    // Respekter «redusert bevegelse»: smooth-scroll er bevegelse brukeren
+    // eksplisitt har bedt om å slippe. Da lar vi nettleserens native scroll stå
+    // (GSAP-laget er allerede vaktet hver for seg).
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

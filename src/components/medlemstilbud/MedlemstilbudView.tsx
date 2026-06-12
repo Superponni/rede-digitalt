@@ -106,10 +106,14 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
             </div>
           </div>
 
-          {/* Tilbudsgrid */}
-          <main className="px-6 py-12 lg:px-12 lg:py-16">
+          {/* Tilbudsgrid — section, ikke main: siden ligger allerede inni
+              layoutens <main>, og dobbel main er ugyldig. */}
+          <section aria-label="Tilbud" className="px-6 py-12 lg:px-12 lg:py-16">
             <div className="mx-auto max-w-[1400px]">
-              <p className="mb-6 font-heading text-[11px] uppercase tracking-[0.3em] text-navy/75">
+              <p
+                className="mb-6 font-heading text-[11px] uppercase tracking-[0.3em] text-navy/75"
+                aria-live="polite"
+              >
                 {filtered.length} tilbud
                 {activeCategory ? ` · ${activeCategory}` : ''}
                 {activeRegion ? ` · ${activeRegion}` : ''}
@@ -127,7 +131,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
                 </p>
               )}
             </div>
-          </main>
+          </section>
         </>
       )}
     </div>

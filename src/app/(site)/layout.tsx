@@ -29,8 +29,16 @@ export default async function SiteLayout({
     <SmoothScroll>
       <HeaderSurfaceProvider>
         <div className="flex min-h-screen flex-col bg-canvas">
+          {/* Skip-lenke: synlig kun ved tastaturfokus, hopper forbi header/meny
+              rett til hovedinnholdet. */}
+          <a
+            href="#main"
+            className="sr-only z-[60] rounded-br-lg bg-navy px-5 py-3 font-heading text-[11px] uppercase tracking-[0.2em] text-mint focus:not-sr-only focus:absolute focus:left-0 focus:top-0"
+          >
+            Hopp til innhold
+          </a>
           <Header tags={menuData.tags} featured={menuData.featured} />
-          <main className="flex-1">{children}</main>
+          <main id="main" className="flex-1">{children}</main>
           <Footer />
         </div>
       </HeaderSurfaceProvider>
