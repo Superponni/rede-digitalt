@@ -60,6 +60,7 @@ export function AudioSection({ data }: AudioSectionProps) {
         {embedUrl && (
           <iframe
             src={embedUrl}
+            title={data.title || 'Lydspiller'}
             width="100%"
             height="152"
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
