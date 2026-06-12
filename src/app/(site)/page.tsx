@@ -1,6 +1,6 @@
 import { sanityFetch } from '@/sanity/lib/live'
 import { FRONTPAGE_QUERY } from '@/sanity/lib/queries'
-import { ForsideController } from '@/components/forside/ForsideController'
+import { DiscoverView } from '@/components/forside/DiscoverView'
 
 export default async function Home() {
   const data = await sanityFetch<{
@@ -36,7 +36,7 @@ export default async function Home() {
   }))
 
   return (
-    <ForsideController
+    <DiscoverView
       articles={articles}
       editorial={data.editorial}
       podcast={data.podcast}

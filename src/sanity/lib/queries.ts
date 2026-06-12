@@ -58,26 +58,6 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
   }`
 )
 
-export const EDITION_QUERY = defineQuery(
-  `*[_type == "edition"] | order(year desc, number desc) [0] {
-    _id,
-    title,
-    number,
-    year,
-    coverImage,
-    publishedAt,
-    "articles": *[${PUBLISHABLE_ARTICLE} && references(^._id)] | order(publishedAt desc) {
-      _id,
-      title,
-      slug,
-      type,
-      teaser,
-      heroImage,
-      tags[]->{ _id, title, slug }
-    }
-  }`
-)
-
 // «Les også» tema-først: ekte tema-søsken (deler minst én tag) hentes adskilt
 // fra et nyeste-fallback, slik at vi alltid kan fylle opp til 3 selv om temaet
 // er tynt. Gjelder ALLE artikkeltyper (ikke lenger bare scrollytelling).
