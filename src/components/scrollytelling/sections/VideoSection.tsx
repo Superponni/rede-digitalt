@@ -35,27 +35,34 @@ export function VideoSection({ data }: VideoSectionProps) {
       })
     })
 
-    // IntersectionObserver for play/pause
-    if (videoRef.current) {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            videoRef.current?.play()
-          } else {
-            videoRef.current?.pause()
-          }
-        },
-        { threshold: 0.5 }
-      )
-      observer.observe(videoRef.current)
-      return () => {
-        observer.disconnect()
-        mm.revert()
+    // Autostart kun når redaktøren har bedt om det (data.autoplay). Før ble
+    // play() kalt på ALLE videoer ved 50 % synlighet — også de med lyd og
+    // kontroller — som nettleseren blokkerer (uhåndtert promise-rejection) og i
+    // verste fall startet uventet avspilling med lyd.
+    const video = videoRef.current
+    if (video && data.autoplay) {
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (reduced) {
+        // Redusert bevegelse: ikke autostart — gi brukeren kontroller i stedet.
+        video.controls = true
+      } else {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) video.play().catch(() => {})
+            else video.pause()
+          },
+          { threshold: 0.5 },
+        )
+        observer.observe(video)
+        return () => {
+          observer.disconnect()
+          mm.revert()
+        }
       }
     }
 
     return () => mm.revert()
-  }, [])
+  }, [data.autoplay])
 
   const isFullWidth = stegaClean(data.layout) === 'fullWidth'
   const isYouTube = data.url?.includes('youtube') || data.url?.includes('youtu.be')
@@ -82,6 +89,7 @@ export function VideoSection({ data }: VideoSectionProps) {
           <div className="relative aspect-video overflow-hidden rounded-lg">
             <iframe
               src={embedUrl}
+              title={data.caption || 'Video'}
               className="absolute inset-0 h-full w-full"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
@@ -94,8 +102,9 @@ export function VideoSection({ data }: VideoSectionProps) {
               className="h-full w-full object-cover"
               muted={data.autoplay}
               playsInline
-              loop
+              loop={data.autoplay}
               controls={!data.autoplay}
+              preload="metadata"
             >
               {data.url && <source src={data.url} />}
             </video>

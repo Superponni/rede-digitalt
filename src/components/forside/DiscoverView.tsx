@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { coverSrc } from '@/sanity/lib/imageHelpers'
 import { getArticleTheme, type AccentColor, type ColorMode } from '@/components/article/theme'
+import { AutoplayVideo } from './AutoplayVideo'
 
 interface Article {
   _id: string
@@ -72,16 +73,11 @@ function DiscoverCard({
         style={{ aspectRatio: aspect }}
       >
         {videoUrl ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
+          <AutoplayVideo
+            src={videoUrl}
             poster={imageRef?.asset ? coverSrc(imageRef, imageWidth, imageHeight, 1400) : undefined}
             className="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-110"
-          >
-            <source src={videoUrl} type="video/mp4" />
-          </video>
+          />
         ) : imageRef?.asset ? (
           <Image
             src={coverSrc(imageRef, imageWidth, imageHeight, 1400)}
