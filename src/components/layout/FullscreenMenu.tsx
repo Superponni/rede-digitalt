@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
@@ -34,6 +34,14 @@ const NAV_LINKS = [
 ]
 
 export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMenuProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  // onClose lages på nytt for hver render i Header — holdes i en ref så
+  // fokus-/tastatur-effekten under kun kjører ved faktisk åpning/lukking.
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
   useEffect(() => {
     // Lås scroll når menyen er åpen. Scrollbar-gutteren er permanent reservert
     // i globals.css (scrollbar-gutter: stable), så headeren hopper ikke sidelengs
@@ -42,8 +50,59 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
+  // Tastatur og fokus: Escape lukker, fokus flyttes til første menypunkt ved
+  // åpning og tilbake til hamburgeren ved lukking. Tab sirkulerer mellom
+  // hamburgerknappen (ligger over overlayen) og menyens lenker, så fokus aldri
+  // havner i innholdet bak menyen.
+  useEffect(() => {
+    if (!isOpen) return
+    const container = containerRef.current
+    if (!container) return
+
+    const toggle = document.getElementById('menu-toggle')
+    container.querySelector<HTMLElement>('a[href]')?.focus()
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCloseRef.current()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const focusables = [
+        ...(toggle ? [toggle] : []),
+        ...Array.from(
+          container.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'),
+        ),
+      ]
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      const active = document.activeElement
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      toggle?.focus()
+    }
+  }, [isOpen])
+
   return (
     <div
+      ref={containerRef}
+      id="fullscreen-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Meny"
+      // inert: lukket meny er helt utilgjengelig (tastatur + skjermleser) selv
+      // om den blir liggende i DOM for at ut-toningen skal spilles av.
+      inert={!isOpen}
       className={`fixed inset-0 z-40 transition-all duration-700 ease-out ${
         isOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
       }`}

@@ -109,8 +109,10 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
           {/* Bred hamburger (to streker) som morpher til X — renere enn tekst-
               knappen «Meny +», og selvforklarende på alle flater. */}
           <button
+            id="menu-toggle"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-expanded={menuOpen}
+            aria-controls="fullscreen-menu"
             aria-label={menuOpen ? 'Lukk menyen' : 'Åpne menyen'}
             className={`relative -mr-2 flex h-11 w-11 cursor-pointer items-center justify-center transition-colors ${textColor} ${hoverColor}`}
           >
