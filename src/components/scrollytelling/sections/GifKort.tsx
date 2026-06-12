@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from '@/lib/gsap-config'
 import { useScrollyColors } from '../ScrollyColorContext'
+import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
 interface GifKortProps {
   data: {
@@ -21,7 +22,15 @@ interface GifKortProps {
 export function GifKort({ data }: GifKortProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const c = useScrollyColors()
+  const reduced = usePrefersReducedMotion()
   const bgColor = data.backgroundColor || '#003865'
+
+  // Gamle .gif-er er konvertert til langt lettere .mp4 (samme filnavn). Peker
+  // src på en gif, spiller vi mp4-en i stedet — 90 %+ mindre data. Andre stier
+  // (ekte bilde) faller tilbake til <img>.
+  const videoSrc = /\.gif$/i.test(data.src || '')
+    ? data.src.replace(/\.gif$/i, '.mp4')
+    : null
 
   useEffect(() => {
     const mm = gsap.matchMedia()
@@ -47,8 +56,22 @@ export function GifKort({ data }: GifKortProps) {
         className="mx-auto rounded-2xl bg-white p-3"
         style={{ maxWidth: data.maxWidth || 320, boxShadow: '0 20px 50px rgba(0,32,64,0.16)' }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={data.src} alt={data.alt || ''} className="w-full rounded-xl" />
+        {videoSrc ? (
+          <video
+            src={videoSrc}
+            autoPlay={!reduced}
+            muted
+            loop={!reduced}
+            playsInline
+            controls={reduced}
+            preload="metadata"
+            aria-label={data.alt || undefined}
+            className="w-full rounded-xl"
+          />
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={data.src} alt={data.alt || ''} className="w-full rounded-xl" />
+        )}
         {data.caption && (
           <p className="px-2 pb-1 pt-3 text-center font-heading text-[12px] uppercase tracking-[0.18em]" style={{ color: c.muted }}>
             {data.caption}

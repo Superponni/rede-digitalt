@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { gsap } from '@/lib/gsap-config'
 import { useScrollyColors } from '../ScrollyColorContext'
 import { iconSrc } from '@/lib/forkjopsrett-icons'
+import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
 interface KoeLappProps {
   data: {
@@ -34,6 +35,7 @@ export function KoeLapp({ data }: KoeLappProps) {
   const total = count + 1 // 30 lapper: 30 (bakerst) … 01 (din tur)
   const bgColor = data.backgroundColor || NAVY
   const c = useScrollyColors()
+  const reduced = usePrefersReducedMotion()
 
   const [posIdx, setPosIdx] = useState(0) // 0 = bakerst
   const number = total - posIdx // posIdx 0 → 30, posIdx total-1 → 1
@@ -208,10 +210,19 @@ export function KoeLapp({ data }: KoeLappProps) {
                     forankret oppe til venstre dytter den bakte 1px svarte kanten
                     (bunn/høyre) ut av klippet — topp/venstre står i ro. */}
                 <div className="overflow-hidden rounded-xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/forkjopsrett/winning.gif"
-                    alt="Winning"
+                  {/* Konvertert fra winning.gif (361 kB) → winning.mp4 (69 kB).
+                      Dekorativ feiring (aria-hidden); width/height = 480×288 for
+                      å reservere plass (ingen layout-hopp). */}
+                  <video
+                    src="/forkjopsrett/winning.mp4"
+                    autoPlay={!reduced}
+                    muted
+                    loop={!reduced}
+                    playsInline
+                    preload="metadata"
+                    width={480}
+                    height={288}
+                    aria-hidden="true"
                     className="block w-full"
                     style={{ transform: 'scale(1.03)', transformOrigin: 'top left' }}
                   />
