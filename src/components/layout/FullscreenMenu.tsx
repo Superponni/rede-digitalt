@@ -155,7 +155,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
                   key={tag._id}
                   href={`/tema/${tag.slug.current}`}
                   onClick={onClose}
-                  className="font-display text-2xl capitalize text-white/55 transition-colors duration-300 hover:text-mint"
+                  className="font-display text-2xl text-white/55 transition-colors duration-300 hover:text-mint"
                 >
                   {tag.title}
                 </Link>

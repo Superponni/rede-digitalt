@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { coverSrc } from '@/sanity/lib/imageHelpers'
 import { getArticleTheme, type AccentColor, type ColorMode } from '@/components/article/theme'
 import { AutoplayVideo } from './AutoplayVideo'
+import { spotifyEmbedUrl } from '@/lib/spotify'
 
 interface Article {
   _id: string
@@ -245,20 +246,24 @@ export function DiscoverView({
             })()}
 
             {/* Podcast — full Spotify embed, stretched to match leder height */}
-            {podcast?.spotifyUrl && (
-              <div className="h-full overflow-hidden rounded-lg">
-                <iframe
-                  src={podcast.spotifyUrl.replace('open.spotify.com/', 'open.spotify.com/embed/')}
-                  width="100%"
-                  height="100%"
-                  style={{ minHeight: 352 }}
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  loading="lazy"
-                  className="block border-0"
-                  title={podcast.title}
-                />
-              </div>
-            )}
+            {(() => {
+              const embed = spotifyEmbedUrl(podcast?.spotifyUrl)
+              if (!embed || !podcast) return null
+              return (
+                <div className="h-full overflow-hidden rounded-lg">
+                  <iframe
+                    src={embed}
+                    width="100%"
+                    height="100%"
+                    style={{ minHeight: 352 }}
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    loading="lazy"
+                    className="block border-0"
+                    title={podcast.title}
+                  />
+                </div>
+              )
+            })()}
           </div>
         )}
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { gsap } from '@/lib/gsap-config'
+import { spotifyEmbedUrl } from '@/lib/spotify'
 
 interface AudioSectionProps {
   data: {
@@ -36,13 +37,7 @@ export function AudioSection({ data }: AudioSectionProps) {
     return () => mm.revert()
   }, [])
 
-  // Convert Spotify URL to embed URL
-  let embedUrl: string | null = null
-  if (data.spotifyUrl) {
-    embedUrl = data.spotifyUrl
-      .replace('open.spotify.com/', 'open.spotify.com/embed/')
-      .split('?')[0]
-  }
+  const embedUrl = spotifyEmbedUrl(data.spotifyUrl)
 
   return (
     <section

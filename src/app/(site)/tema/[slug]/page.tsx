@@ -92,7 +92,7 @@ export default async function TemaPage({
           <p className="mb-3 font-heading text-[11px] uppercase tracking-[0.5em] text-white/50">
             Tema
           </p>
-          <h1 className="font-display text-5xl capitalize text-white md:text-6xl lg:text-7xl">
+          <h1 className="font-display text-5xl text-white md:text-6xl lg:text-7xl">
             {data.tag.title}
           </h1>
         </div>

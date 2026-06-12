@@ -26,9 +26,12 @@ interface ArticleData {
   accentColor?: 'navy' | 'teal' | 'purple' | 'magenta' | 'blue' | 'green' | 'gold'
   colorMode?: 'light' | 'tinted' | 'filled' | 'dark'
   heroLayout?: 'image-first' | 'heading-first' | 'side' | 'none' | 'portrait'
-  portraitName?: string
-  portraitRole?: string
-  expertPortrait?: { asset: { _ref: string }; alt?: string }
+  // Speiler ARTICLE_BY_SLUG_QUERY: experts[]{ name, role, portrait }.
+  experts?: {
+    portrait: { asset: { _ref: string }; alt?: string }
+    name?: string
+    role?: string
+  }[]
   teaser?: string
   heroImage?: { asset: { _ref: string }; alt?: string; credit?: string }
   body?: unknown[]
