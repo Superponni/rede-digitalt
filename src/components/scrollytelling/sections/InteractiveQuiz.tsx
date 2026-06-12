@@ -167,11 +167,13 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
 
             if (showResult && style === 'quiz') {
               if (isCorrect) {
-                borderColor = '#22c55e'
-                bg = 'rgba(34, 197, 94, 0.12)'
+                // TOBB-grønn (ikke generisk Tailwind-grønn) — innenfor paletten.
+                borderColor = '#74AA50'
+                bg = 'rgba(116, 170, 80, 0.14)'
               } else if (isSelected && !isCorrect) {
-                borderColor = '#ef4444'
-                bg = 'rgba(239, 68, 68, 0.12)'
+                // TOBB-magenta som «feil»-markør, fra paletten.
+                borderColor = '#AA0061'
+                bg = 'rgba(170, 0, 97, 0.10)'
               }
             } else if (isSelected) {
               borderColor = ACCENT
