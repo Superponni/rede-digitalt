@@ -136,7 +136,10 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
           scrollTrigger: {
             trigger: imageRef.current,
             start: 'top 85%',
-            toggleActions: 'play none none reverse',
+            // Spill én gang og bli stående — IKKE reverse. Å reversere en
+            // scale-from fikk bildet til å vokse tilbake til 106 % når man
+            // scrollet opp igjen (opplevd som at illustrasjonen «endrer størrelse»).
+            toggleActions: 'play none none none',
           },
         })
       }

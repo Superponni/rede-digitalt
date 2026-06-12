@@ -46,7 +46,9 @@ export function StatementPanel({ data }: StatementPanelProps) {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
-            toggleActions: 'play none none reverse',
+            // Spill én gang — reversering av scale-from fikk panelet til å
+            // krympe igjen ved scroll opp (synlig størrelsesendring).
+            toggleActions: 'play none none none',
           },
         })
       }
