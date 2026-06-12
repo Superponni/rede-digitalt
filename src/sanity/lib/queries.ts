@@ -18,16 +18,19 @@ const SEO_FRAGMENT = `
   "legacyOgDescription": ogDescription
 `
 
+// Felles kort-projeksjon (forside, tema, «Les også», artikkelliste). Når et kort
+// trenger et nytt felt, legges det HER — ett sted i stedet for fem. Spørringer
+// som trenger ekstra (heroVideoUrl, edition, expertPortrait) legger det til
+// etter ${CARD_CORE}.
+const CARD_CORE = `
+  _id, title, slug, type, teaser, heroImage,
+  tags[]->{ _id, title, slug }
+`
+
 export const ARTICLES_QUERY = defineQuery(
   `*[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
-    _id,
-    title,
-    slug,
-    type,
-    teaser,
-    heroImage,
+    ${CARD_CORE},
     "heroVideoUrl": heroVideo.asset->url,
-    tags[]->{ _id, title, slug },
     edition->{ _id, title, number, year }
   }`
 )
@@ -65,12 +68,10 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(
 export const RELATED_ARTICLES_QUERY = defineQuery(
   `{
     "sameTheme": *[${PUBLISHABLE_ARTICLE} && _id != $id && references($tagIds)] | order(publishedAt desc) [0...6] {
-      _id, title, slug, type, teaser, heroImage,
-      tags[]->{ _id, title, slug }
+      ${CARD_CORE}
     },
     "recent": *[${PUBLISHABLE_ARTICLE} && _id != $id] | order(publishedAt desc) [0...6] {
-      _id, title, slug, type, teaser, heroImage,
-      tags[]->{ _id, title, slug }
+      ${CARD_CORE}
     }
   }`
 )
@@ -88,8 +89,7 @@ export const TAG_PAGE_QUERY = defineQuery(
   `{
     "tag": *[_type == "tag" && slug.current == $slug][0] { _id, title, slug },
     "articles": *[${PUBLISHABLE_ARTICLE} && references(*[_type == "tag" && slug.current == $slug][0]._id)] | order(publishedAt desc) {
-      _id, title, slug, type, teaser, heroImage,
-      tags[]->{ _id, title, slug }
+      ${CARD_CORE}
     }
   }`
 )
@@ -100,10 +100,9 @@ export const FRONTPAGE_QUERY = defineQuery(
       _id, title, number, year, coverImage
     },
     "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
-      _id, title, slug, type, teaser, heroImage,
+      ${CARD_CORE},
       "expertPortrait": experts[0].portrait,
-      "heroVideoUrl": heroVideo.asset->url,
-      tags[]->{ _id, title, slug }
+      "heroVideoUrl": heroVideo.asset->url
     },
     "editorial": *[_type == "editorial"] | order(publishedAt desc) [0] {
       _id, title, slug, teaserText, heroImage, accentColor, colorMode
