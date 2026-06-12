@@ -21,6 +21,12 @@ interface ExpertPortraitProps {
 
 export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortraitProps) {
   const src = urlFor(image).width(440).height(440).url()
+  // Unik id-suffiks per portrett (fra bilde-referansen) — uten den ville flere
+  // portretter på samme side delt SVG-id (ugyldig HTML). Server-komponent, så vi
+  // utleder deterministisk i stedet for useId.
+  const uid = (image.asset._ref || name || 'x').replace(/[^a-zA-Z0-9]/g, '')
+  const roleArcId = `expert-arc-role-${uid}`
+  const nameArcId = `expert-arc-name-${uid}`
 
   return (
     <div className="relative aspect-square w-full max-w-[230px]">
@@ -40,20 +46,20 @@ export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortrait
       <svg viewBox="0 0 300 300" className="absolute inset-0 h-full w-full" aria-hidden="true">
         <defs>
           {/* Øvre bue (rolle): venstre → topp → høyre, lesbar */}
-          <path id="expert-arc-role" d="M 32.5,150 A 117.5,117.5 0 0,1 267.5,150" fill="none" />
+          <path id={roleArcId} d="M 32.5,150 A 117.5,117.5 0 0,1 267.5,150" fill="none" />
           {/* Nedre bue (navn): venstre → bunn → høyre, lesbar */}
-          <path id="expert-arc-name" d="M 22,150 A 128,128 0 0,0 278,150" fill="none" />
+          <path id={nameArcId} d="M 22,150 A 128,128 0 0,0 278,150" fill="none" />
         </defs>
         {name && (
           <text fill={color} className="font-heading" fontSize="15" letterSpacing="2.5">
-            <textPath href="#expert-arc-name" startOffset="50%" textAnchor="middle">
+            <textPath href={`#${nameArcId}`} startOffset="50%" textAnchor="middle">
               {name.toUpperCase()}
             </textPath>
           </text>
         )}
         {role && (
           <text fill={color} className="font-heading" fontSize="10.5" letterSpacing="1.5">
-            <textPath href="#expert-arc-role" startOffset="50%" textAnchor="middle">
+            <textPath href={`#${roleArcId}`} startOffset="50%" textAnchor="middle">
               {role.toUpperCase()}
             </textPath>
           </text>

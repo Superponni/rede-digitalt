@@ -1,16 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
+
+// Frittstående = åpnet direkte i nettleseren (ikke i Presentation-iframen).
+// Verdien endrer seg aldri etter montering, så subscribe er en no-op.
+const noopSubscribe = () => () => {}
 
 // Knapp for å avslutte forhåndsvisning. Vises kun når siden står frittstående
 // (åpnet direkte i nettleseren) — inne i Presentation-iframen håndterer Studio
 // dette selv, så der skjuler vi den for å unngå dobbel knapp.
 export function DisableDraftMode() {
-  const [isStandalone, setIsStandalone] = useState(false)
-
-  useEffect(() => {
-    setIsStandalone(window === window.parent && !window.opener)
-  }, [])
+  // useSyncExternalStore i stedet for setState-i-effekt: server-snapshot false
+  // (ingen hydration-mismatch), klient-snapshot leser vindusforholdet én gang.
+  const isStandalone = useSyncExternalStore(
+    noopSubscribe,
+    () => window === window.parent && !window.opener,
+    () => false,
+  )
 
   if (!isStandalone) return null
 

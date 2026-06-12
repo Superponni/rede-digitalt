@@ -30,28 +30,36 @@ export function AudioPlayer({ src, theme = 'dark' }: AudioPlayerProps) {
     const onTime = () => setCurrentTime(audio.currentTime)
     const onMeta = () => setDuration(audio.duration)
     const onEnded = () => { setPlaying(false); setCurrentTime(0) }
+    // playing-tilstanden følger de FAKTISKE play/pause-eventene, ikke et
+    // optimistisk gjett — slik viser ikke knappen «Spiller av» hvis nettleseren
+    // blokkerte avspillingen.
+    const onPlay = () => setPlaying(true)
+    const onPause = () => setPlaying(false)
 
     audio.addEventListener('timeupdate', onTime)
     audio.addEventListener('loadedmetadata', onMeta)
     audio.addEventListener('ended', onEnded)
+    audio.addEventListener('play', onPlay)
+    audio.addEventListener('pause', onPause)
     return () => {
       audio.removeEventListener('timeupdate', onTime)
       audio.removeEventListener('loadedmetadata', onMeta)
       audio.removeEventListener('ended', onEnded)
+      audio.removeEventListener('play', onPlay)
+      audio.removeEventListener('pause', onPause)
     }
   }, [])
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current
     if (!audio) return
-    if (playing) {
-      audio.pause()
+    if (audio.paused) {
+      // playing-state settes av 'play'-eventet; .catch sluker blokkert avspilling.
+      audio.play().then(() => setExpanded(true)).catch(() => {})
     } else {
-      audio.play()
-      setExpanded(true)
+      audio.pause()
     }
-    setPlaying(!playing)
-  }, [playing])
+  }, [])
 
   const seek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current
