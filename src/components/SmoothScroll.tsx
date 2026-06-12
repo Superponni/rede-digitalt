@@ -8,6 +8,19 @@ import { gsap, ScrollTrigger } from '@/lib/gsap-config'
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null)
   const pathname = usePathname()
+  // Tilbake/frem-navigering skal IKKE hoppe til toppen — nettleseren gjenoppretter
+  // posisjonen brukeren forlot. Flagget settes av popstate og leses (og nullstilles)
+  // av rute-effekten under.
+  const isBackForwardRef = useRef(false)
+  const isFirstRenderRef = useRef(true)
+
+  useEffect(() => {
+    const onPopState = () => {
+      isBackForwardRef.current = true
+    }
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
 
   // Initialise Lenis once and wire it to GSAP's ticker
   useEffect(() => {
@@ -37,12 +50,17 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  // On route change: reset scroll and refresh all ScrollTrigger calculations
+  // On route change: reset scroll and refresh all ScrollTrigger calculations.
+  // Unntak: ved tilbake/frem (popstate) og ved første innlasting (reload) lar vi
+  // nettleserens egen scroll-gjenoppretting stå — da bare refresher vi triggerne.
   useEffect(() => {
     const lenis = lenisRef.current
     if (!lenis) return
 
-    lenis.scrollTo(0, { immediate: true })
+    const skipReset = isBackForwardRef.current || isFirstRenderRef.current
+    isBackForwardRef.current = false
+    isFirstRenderRef.current = false
+    if (!skipReset) lenis.scrollTo(0, { immediate: true })
 
     // Double refresh: once after first paint, once after images load
     const raf = requestAnimationFrame(() => {
