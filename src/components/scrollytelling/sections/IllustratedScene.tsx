@@ -142,13 +142,14 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
         {hasImage && (
           <div ref={figureRef} className="mb-12 flex items-center justify-center">
             <div ref={imgWrapRef} className="relative w-full max-w-[400px]">
+              {/* Ingen drop-shadow på noen av variantene: iOS Safari
+                  rasteriserer filteret som en synlig firkant rundt boksen. */}
               {data.animateIllustration ? (
                 // Fast høyde med letterboxing — høye/smale ikoner skal aldri
                 // vokse forbi skjermhøyden og skape store tomrom på mobil.
                 <AssembledIllustration
                   slug={data.icon!}
                   className="h-[32vh] w-full lg:h-[38vh]"
-                  style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
                 />
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -156,7 +157,6 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
                   src={iconSrc(data.icon)}
                   alt=""
                   className="mx-auto h-auto max-h-[40vh] w-full object-contain"
-                  style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
                 />
               )}
               {data.secondaryIcon && (
@@ -165,7 +165,6 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
                   src={iconSrc(data.secondaryIcon)}
                   alt=""
                   className="absolute -bottom-2 right-0 w-[34%] object-contain"
-                  style={{ filter: 'drop-shadow(0 12px 20px rgba(0,32,64,0.16))' }}
                 />
               )}
             </div>

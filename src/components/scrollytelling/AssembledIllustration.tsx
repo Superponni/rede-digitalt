@@ -59,6 +59,8 @@ export function AssembledIllustration({
 }) {
   const wrapRef = useRef<HTMLDivElement>(null)
   const builtRef = useRef(false)
+  const ioRef = useRef<IntersectionObserver | null>(null)
+  void start // beholdt i API-et for kompatibilitet; avsløringen styres nå av IO
 
   const build = (svg: SVGSVGElement) => {
     if (builtRef.current || !wrapRef.current) return
@@ -86,27 +88,37 @@ export function AssembledIllustration({
     if (mode === 'mount') {
       gsap.to(parts, tween)
     } else {
-      gsap.to(parts, { ...tween, scrollTrigger: { trigger: wrapRef.current, start, toggleActions: 'play none none none' } })
-      // SVG-en ble nettopp hentet asynkront og lagt inline i DOM-en. Triggeren
-      // over ble derfor regnet ut mot en flate som nettopp endret høyde — og om
-      // fetchen var treg, rakk renderer-ens globale refresh-er (som bare lytter på
-      // <img>, ikke inline-SVG) å kjøre FØR triggeren fantes. Da blir posisjonen
-      // utdatert og illustrasjonen står usynlig til man refresher siden. Tving en
-      // omberegning når layouten har satt seg, så triggeren fyrer riktig — og fyrer
-      // umiddelbart dersom scenen allerede er i visning.
+      // IntersectionObserver i stedet for ScrollTrigger: avsløringen skal skje
+      // NÅR illustrasjonen faktisk er synlig — uansett scrollretning (også når
+      // man scroller forbi og kommer tilbake nedenfra), og uansett om siden
+      // endret høyde etter at triggere ble regnet ut. ScrollTrigger-varianten
+      // hadde begge hullene, og var grunnen til at illustrasjoner kunne stå
+      // usynlige etter rask scrolling.
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            io.disconnect()
+            ioRef.current = null
+            gsap.to(parts, tween)
+          }
+        },
+        { rootMargin: '0px 0px -12% 0px' },
+      )
+      io.observe(wrapRef.current)
+      ioRef.current = io
+      // SVG-en ble nettopp lagt inline og siden endret høyde — gi resten av
+      // sidens scroll-animasjoner en samlet omberegning.
       queueScrollTriggerRefresh()
     }
   }
 
   useEffect(() => {
-    const wrap = wrapRef.current
     return () => {
-      ScrollTrigger.getAll().forEach((t) => {
-        if (t.trigger === wrap) t.kill()
-      })
+      ioRef.current?.disconnect()
+      ioRef.current = null
       // Tillat ny oppbygging ved remount (f.eks. Strict Mode i dev eller
       // klient-navigering): ellers ville build() bli stående med builtRef=true
-      // mens triggeren over nettopp ble drept → delene aldri avslørt igjen.
+      // mens observeren nettopp ble koblet fra → delene aldri avslørt igjen.
       builtRef.current = false
     }
   }, [])

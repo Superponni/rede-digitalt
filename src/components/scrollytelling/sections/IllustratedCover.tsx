@@ -95,11 +95,12 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
         {data.icon && (
           <div data-cover-item className="relative mt-14 w-full max-w-[340px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
+            {/* Ingen drop-shadow: iOS Safari rasteriserer filteret som en
+                synlig firkant rundt illustrasjonsboksen. */}
             <img
               src={iconSrc(data.icon)}
               alt=""
               className="mx-auto h-auto max-h-[36vh] w-full object-contain"
-              style={{ filter: 'drop-shadow(0 26px 44px rgba(0,32,64,0.16))' }}
             />
             {data.secondaryIcon && (
               // eslint-disable-next-line @next/next/no-img-element
@@ -107,7 +108,6 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
                 src={iconSrc(data.secondaryIcon)}
                 alt=""
                 className="absolute -bottom-2 right-0 w-[32%] object-contain"
-                style={{ filter: 'drop-shadow(0 14px 22px rgba(0,32,64,0.18))' }}
               />
             )}
           </div>

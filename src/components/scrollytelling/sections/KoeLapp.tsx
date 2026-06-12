@@ -139,7 +139,7 @@ export function KoeLapp({ data }: KoeLappProps) {
             alt=""
             className="absolute -right-4 -top-6 h-14 w-14 object-contain"
             style={{
-              filter: 'drop-shadow(0 8px 16px rgba(0,32,64,0.24))',
+              // (ingen drop-shadow — iOS rasteriserer filteret som synlig firkant)
               transform: atFront ? 'rotate(8deg) scale(1)' : 'rotate(-24deg) scale(0.5)',
               opacity: atFront ? 1 : 0,
               transition: 'transform 0.55s cubic-bezier(.34,1.56,.64,1), opacity 0.4s ease',

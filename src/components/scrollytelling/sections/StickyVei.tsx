@@ -137,17 +137,18 @@ export function StickyVei({ data }: StickyVeiProps) {
         <div className="lg:grid lg:grid-cols-2 lg:gap-12">
           {/* illustrasjon */}
           <div
-            className="sticky top-0 z-10 mx-auto flex h-[40vh] items-center justify-center lg:h-screen"
+            className="sticky top-0 z-10 mx-auto flex h-[36vh] items-center justify-center lg:h-screen"
             style={{ backgroundColor: bgColor }}
           >
+            {/* Ingen drop-shadow på illustrasjonen: iOS Safari rasteriserer
+                filteret som en synlig firkant rundt boksen. Flat = artefaktfritt. */}
             {entered && activeStep?.icon && (
               <AssembledIllustration
                 key={`${active}-${activeStep.icon}`}
                 slug={activeStep.icon}
                 mode="mount"
                 stagger={0.4}
-                className="h-[30vh] w-full max-w-[460px] lg:h-[44vh]"
-                style={{ filter: 'drop-shadow(0 22px 38px rgba(0,32,64,0.14))' }}
+                className="h-[28vh] w-full max-w-[460px] lg:h-[44vh]"
               />
             )}
             {/* Myk underkant (kun mobil): teksten glir inn i en fade i stedet
@@ -162,13 +163,17 @@ export function StickyVei({ data }: StickyVeiProps) {
           {/* steg-tekstene */}
           <div>
             {steps.map((s, i) => (
+              // Nedtoningen av inaktive steg gjelder KUN desktop (der tekst og
+              // illustrasjon står side om side og nedtoningen viser hvilket steg
+              // illustrasjonen tilhører). På mobil leses alt rett nedover — der
+              // så halvgjennomsiktig tekst midt på skjermen ut som en lastefeil.
               <div
                 key={i}
                 ref={(el) => {
                   stepRefs.current[i] = el
                 }}
-                className="flex min-h-[62vh] flex-col justify-center text-center lg:min-h-[78vh] lg:text-left"
-                style={{ opacity: active === i ? 1 : 0.32, transition: 'opacity 0.4s ease' }}
+                className="flex min-h-[52vh] flex-col justify-center text-center opacity-100 lg:min-h-[78vh] lg:text-left lg:opacity-(--steg-o) lg:transition-opacity lg:duration-[400ms]"
+                style={{ '--steg-o': active === i ? '1' : '0.32' } as React.CSSProperties}
               >
                 <span className="mb-3 font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
                   Steg {i + 1} av {steps.length}
