@@ -50,6 +50,7 @@ function DiscoverCard({
   imageWidth = 600,
   imageHeight = 800,
   sizes = '33vw',
+  priority = false,
 }: {
   href: string
   imageRef?: { asset: { _ref: string }; alt?: string }
@@ -62,6 +63,7 @@ function DiscoverCard({
   imageWidth?: number
   imageHeight?: number
   sizes?: string
+  priority?: boolean
 }) {
   return (
     <Link href={href} className="group block">
@@ -87,6 +89,7 @@ function DiscoverCard({
             fill
             className="object-cover transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-110"
             sizes={sizes}
+            priority={priority}
           />
         ) : (
           <div className="h-full w-full bg-navy-light" />
@@ -170,6 +173,8 @@ export function DiscoverView({
                     imageWidth={isLastOdd ? 800 : 500}
                     imageHeight={isLastOdd ? 1067 : 667}
                     sizes={isLastOdd ? '(max-width: 1024px) 100vw, 33vw' : '(max-width: 1024px) 50vw, 33vw'}
+                    // Toppraden er LCP — last den ivrig i stedet for lazy.
+                    priority={i < 3}
                   />
                 </div>
               )

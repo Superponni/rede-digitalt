@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { sanityFetch } from '@/sanity/lib/live'
+import { client } from '@/sanity/lib/client'
 import { ARTICLE_BY_SLUG_QUERY, RELATED_ARTICLES_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
 import { ScrollytellingRenderer } from '@/components/scrollytelling/ScrollytellingRenderer'
@@ -50,6 +51,13 @@ interface ArticleData {
 
 async function getArticle(slug: string): Promise<ArticleData | null> {
   return sanityFetch<ArticleData>({ query: ARTICLE_BY_SLUG_QUERY, params: { slug } })
+}
+
+export async function generateStaticParams() {
+  const slugs = await client.fetch<string[]>(
+    `*[_type == "article" && defined(slug.current)].slug.current`,
+  )
+  return slugs.map((slug) => ({ slug }))
 }
 
 // Fallback-kjede for søkebeskrivelsen: redaktørens søkebeskrivelse → gammel

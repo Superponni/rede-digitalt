@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { sanityFetch } from '@/sanity/lib/live'
+import { client } from '@/sanity/lib/client'
 import { TAG_PAGE_QUERY } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
 import { metaRobots } from '@/lib/seo'
@@ -24,6 +25,13 @@ interface TagData {
 
 async function getTagData(slug: string): Promise<TagData> {
   return sanityFetch<TagData>({ query: TAG_PAGE_QUERY, params: { slug } })
+}
+
+export async function generateStaticParams() {
+  const slugs = await client.fetch<string[]>(
+    `*[_type == "tag" && defined(slug.current)].slug.current`,
+  )
+  return slugs.map((slug) => ({ slug }))
 }
 
 export async function generateMetadata({
