@@ -93,15 +93,26 @@ export function Collage({ data }: CollageProps) {
   const c = useScrollyColors()
   const [focused, setFocused] = useState<number | null>(null)
   const close = useCallback(() => setFocused(null), [])
+  const closeBtnRef = useRef<HTMLButtonElement>(null)
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
 
-  // Esc lukker lightbox
+  // Når lightboxen er åpen: Esc lukker, fokus flyttes til lukkeknappen (og
+  // tilbake ved lukking), og body-scroll låses så siden bak ikke beveger seg.
   useEffect(() => {
     if (focused === null) return
+    lastFocusedRef.current = document.activeElement as HTMLElement | null
+    closeBtnRef.current?.focus()
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close()
     }
     window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      document.body.style.overflow = prevOverflow
+      lastFocusedRef.current?.focus()
+    }
   }, [focused, close])
 
   if (images.length === 0) return null
@@ -162,8 +173,11 @@ export function Collage({ data }: CollageProps) {
           onClick={close}
           role="dialog"
           aria-modal="true"
+          aria-label="Forstørret bilde"
+          data-lenis-prevent
         >
           <button
+            ref={closeBtnRef}
             onClick={close}
             className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
             aria-label="Lukk"
@@ -175,7 +189,7 @@ export function Collage({ data }: CollageProps) {
           <figure className="relative max-h-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={urlFor(images[focused]).width(1800).fit('max').url()}
+              src={urlFor(images[focused]).width(1800).fit('max').auto('format').quality(80).url()}
               alt={images[focused].alt || ''}
               className="max-h-[82vh] w-auto rounded-sm object-contain"
             />

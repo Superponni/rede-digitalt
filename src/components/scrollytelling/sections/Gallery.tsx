@@ -188,7 +188,13 @@ export function Gallery({ data }: GalleryProps) {
       {layout === 'montage' ? (
         <Montage images={images} c={c} />
       ) : (
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 scrollbar-hide lg:gap-6 lg:px-16">
+        <div
+          tabIndex={0}
+          role="region"
+          aria-label="Bildegalleri — bla vannrett"
+          data-lenis-prevent
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 scrollbar-hide focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 lg:gap-6 lg:px-16"
+        >
           {images.map((img, i) => (
             <div
               key={img._key || i}

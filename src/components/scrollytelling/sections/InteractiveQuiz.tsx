@@ -229,12 +229,13 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
                     </span>
                   )}
 
-                  {/* Quiz correct/wrong indicator */}
+                  {/* Quiz correct/wrong indicator — med tekstlig motstykke for
+                      skjermleser (ikke bare farge/symbol). */}
                   {showResult && style === 'quiz' && isCorrect && (
-                    <span className="shrink-0 text-lg text-green-400">&#10003;</span>
+                    <span className="shrink-0 text-lg text-green-400" role="img" aria-label="Riktig svar">&#10003;</span>
                   )}
                   {showResult && style === 'quiz' && isSelected && !isCorrect && (
-                    <span className="shrink-0 text-lg text-red-400">&#10007;</span>
+                    <span className="shrink-0 text-lg text-red-400" role="img" aria-label="Feil svar">&#10007;</span>
                   )}
                 </div>
               </button>
@@ -242,9 +243,10 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
           })}
         </div>
 
-        {/* Answer explanation */}
+        {/* Answer explanation — aria-live så skjermleser leser fasiten når den
+            avsløres. */}
         {revealed && data.answer && (
-          <div className="mt-8 rounded-lg border p-6" style={{ backgroundColor: `rgba(${ACCENT_RGB}, 0.06)`, borderColor: `rgba(${ACCENT_RGB}, 0.15)` }}>
+          <div className="mt-8 rounded-lg border p-6" aria-live="polite" style={{ backgroundColor: `rgba(${ACCENT_RGB}, 0.06)`, borderColor: `rgba(${ACCENT_RGB}, 0.15)` }}>
             <p className="text-[16px] leading-[1.75]" style={{ color: c.body }}>{data.answer}</p>
           </div>
         )}
