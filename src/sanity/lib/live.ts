@@ -20,6 +20,17 @@ const STEGA_SKIP_FIELDS = [
   // dokument, så Set-dedup/filtrering i Presentation lagde én fane per tilbud.
   'category',
   'regions',
+  // scrolly-logikkfelter: 'style' sammenlignes rått i InteractiveQuiz
+  // (style === 'poll') — med stega-tegn ble alle sammenligninger usanne og
+  // quiz/poll svarte ikke i forhåndsvisning. 'icon'/'secondaryIcon' er
+  // ikon-slugs som bygges til en fil-URL (forkjopsrett-icons) — stega-tegn ga
+  // 404 og usynlig illustrasjon. 'src' er gif-stien i GifKort, 'ctaHref' er en
+  // lenke-URL — begge brytes av usynlige tegn i forhåndsvisning.
+  'style',
+  'icon',
+  'secondaryIcon',
+  'src',
+  'ctaHref',
 ]
 
 // Live Content API: gir sanntidsoppdatering i forhåndsvisning (og på publisert
