@@ -12,11 +12,6 @@ export interface ThemeAnimation {
   duration: number
   ease: string
   stagger: number
-  heroTitleEase: string
-  heroTitleY: number
-  parallaxScrubEase: string
-  /** Gallery item entrance */
-  galleryEntrance: 'fade' | 'bounce'
 }
 
 export interface ThemeConfig {
@@ -30,10 +25,6 @@ const calm: ThemeConfig = {
     duration: 1.3,
     ease: 'power3.out',
     stagger: 0.07,
-    heroTitleEase: 'power3.out',
-    heroTitleY: 45,
-    parallaxScrubEase: 'none',
-    galleryEntrance: 'fade',
   },
 }
 

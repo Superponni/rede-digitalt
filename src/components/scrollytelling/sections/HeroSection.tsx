@@ -11,7 +11,6 @@ interface HeroSectionProps {
     image?: { asset: { _ref: string }; alt?: string; hotspot?: { x: number; y: number } }
     title?: string
     subtitle?: string
-    titlePosition?: 'center' | 'bottom-left' | 'bottom-right'
     backgroundColor?: string
     author?: string
     photographer?: string

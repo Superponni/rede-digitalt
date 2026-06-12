@@ -16,19 +16,6 @@ export const factBox = defineType({
       type: 'blockContent',
     }),
     defineField({
-      name: 'style',
-      title: 'Stil',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Fremhevet', value: 'highlight' },
-          { title: 'Sidebar', value: 'sidebar' },
-          { title: 'Full bredde', value: 'fullWidth' },
-        ],
-      },
-      initialValue: 'highlight',
-    }),
-    defineField({
       name: 'icon',
       title: 'Ikon',
       type: 'string',

@@ -32,19 +32,6 @@ export const heroSection = defineType({
       title: 'Undertittel',
       type: 'string',
     }),
-    defineField({
-      name: 'titlePosition',
-      title: 'Tittelplassering',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Sentrert', value: 'center' },
-          { title: 'Nederst til venstre', value: 'bottomLeft' },
-          { title: 'Nederst til høyre', value: 'bottomRight' },
-        ],
-      },
-      initialValue: 'center',
-    }),
   ],
   preview: {
     select: {

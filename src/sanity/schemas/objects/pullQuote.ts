@@ -18,19 +18,6 @@ export const pullQuote = defineType({
       type: 'string',
       description: 'Hvem sa dette',
     }),
-    defineField({
-      name: 'style',
-      title: 'Stil',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Stort', value: 'large' },
-          { title: 'Dekorert', value: 'decorated' },
-          { title: 'Minimalt', value: 'minimal' },
-        ],
-      },
-      initialValue: 'large',
-    }),
   ],
   preview: {
     select: {
