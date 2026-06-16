@@ -23,7 +23,7 @@ export const PRIVACY_SECTIONS: PrivacySection[] = [
       'Vi bruker Google Analytics for å forstå hvordan magasinet leses — for eksempel hvilke artikler som er populære og hvor langt folk leser.',
       'Vi samler aldri inn navn, e-post eller annet som identifiserer deg personlig.',
       'Måling skjer kun hvis du sier ja til det. Sier du nei, blir du ikke sporet.',
-      'Du kan ombestemme deg når som helst via «Endre samtykke» nederst på siden.',
+      'Du kan ombestemme deg når som helst og trekke tilbake samtykket.',
     ],
   },
   {
@@ -54,7 +54,7 @@ export const PRIVACY_SECTIONS: PrivacySection[] = [
     heading: 'Informasjonskapsler (cookies)',
     paragraphs: ['Vi bruker disse informasjonskapslene:'],
     bullets: [
-      'rede-consent — husker om du har sagt ja eller nei til måling. Denne er nødvendig for at valget ditt skal bli husket, og settes uansett. Varighet: 12 måneder.',
+      'En samtykke-cookie — husker om du har sagt ja eller nei til måling, slik at du ikke må ta stilling på nytt ved hvert besøk. Denne er nødvendig for at valget ditt skal bli husket.',
       '_ga og _ga_* — settes av Google Analytics for å skille mellom besøkende og økter. Disse settes kun hvis du samtykker til måling. Varighet: inntil 24 måneder.',
     ],
   },
@@ -68,7 +68,7 @@ export const PRIVACY_SECTIONS: PrivacySection[] = [
   {
     heading: 'Dine rettigheter',
     paragraphs: [
-      'Du har rett til innsyn i, og sletting av, opplysninger om deg. Fordi statistikken er anonym, kan vi som regel ikke knytte den til deg som enkeltperson. Den enkleste måten å stoppe måling på er å trekke samtykket via «Endre samtykke».',
+      'Du har rett til innsyn i, og sletting av, opplysninger om deg. Fordi statistikken er anonym, kan vi som regel ikke knytte den til deg som enkeltperson. Den enkleste måten å stoppe måling på er å trekke tilbake samtykket — det kan du gjøre når som helst via samtykkeinnstillingene på siden.',
       'Har du spørsmål om personvern, kan du kontakte TOBB via tobb.no. Mener du at vi behandler personopplysninger i strid med regelverket, kan du klage til Datatilsynet (datatilsynet.no).',
     ],
   },
