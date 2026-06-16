@@ -6,6 +6,7 @@ import { HeaderSurfaceProvider } from '@/components/layout/HeaderTheme'
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { SanityLive } from '@/sanity/lib/live'
 import { DisableDraftMode } from '@/components/DisableDraftMode'
+import { Analytics } from '@/components/consent/Analytics'
 import { sanityFetch } from '@/sanity/lib/live'
 import { MENU_QUERY } from '@/sanity/lib/queries'
 
@@ -42,6 +43,7 @@ export default async function SiteLayout({
           <Footer />
         </div>
       </HeaderSurfaceProvider>
+      <Analytics />
       <SanityLive />
       {isDraftMode && (
         <>

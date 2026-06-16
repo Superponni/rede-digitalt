@@ -150,6 +150,12 @@ export const ABOUT_PAGE_QUERY = defineQuery(
   }`
 )
 
+export const PRIVACY_PAGE_QUERY = defineQuery(
+  `*[_type == "privacyPage"][0] {
+    title, intro, body, _updatedAt
+  }`
+)
+
 export const EDITORIAL_PAGE_QUERY = defineQuery(
   `*[_type == "editorial"] | order(publishedAt desc) [0] {
     _id, title, subtitle, slug, teaserText, heroImage, fullText,

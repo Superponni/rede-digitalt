@@ -3,6 +3,7 @@ import { type SchemaTypeDefinition } from 'sanity'
 // Dokumenttyper
 import { article } from './documents/article'
 import { aboutPage } from './documents/aboutPage'
+import { privacyPage } from './documents/privacyPage'
 import { edition } from './documents/edition'
 import { editorial } from './documents/editorial'
 import { videoPost } from './documents/videoPost'
@@ -45,6 +46,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   // Dokumenter
   article,
   aboutPage,
+  privacyPage,
   edition,
   editorial,
   videoPost,

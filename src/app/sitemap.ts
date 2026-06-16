@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: absoluteUrl('/'), lastModified: frontpageModified, changeFrequency: 'daily', priority: 1 },
     { url: absoluteUrl('/om'), lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: absoluteUrl('/personvern'), lastModified: now, changeFrequency: 'yearly', priority: 0.2 },
   ]
 
   if (data.memberOffersUpdated) {

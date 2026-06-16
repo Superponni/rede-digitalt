@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export function Footer() {
   return (
     <footer className="border-t border-white/10 bg-navy px-6 py-16">
@@ -14,8 +16,11 @@ export function Footer() {
             <br />
             Nettredaktør: Christoffer Isdahl
           </p>
-          <div className="mt-4 font-heading text-[11px] uppercase tracking-widest text-white/60">
-            &copy; {new Date().getFullYear()} TOBB
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-heading text-[11px] uppercase tracking-widest text-white/60">
+            <Link href="/personvern" className="transition-colors hover:text-white/90">
+              Personvern
+            </Link>
+            <span>&copy; {new Date().getFullYear()} TOBB</span>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import {
   UsersIcon,
   TagsIcon,
   TagIcon,
+  LockIcon,
 } from '@sanity/icons'
 
 // Egendefinert venstremeny. Default-lista blander daglig arbeid med ting man
@@ -50,6 +51,13 @@ export const structure: StructureResolver = (S) =>
         .title('Om-siden')
         .icon(HomeIcon)
         .child(S.documentTypeList('aboutPage').title('Om-siden')),
+      // Singleton: fast dokument-id, redigeres direkte (ingen liste å lage nye i)
+      S.listItem()
+        .title('Personvern')
+        .icon(LockIcon)
+        .child(
+          S.document().schemaType('privacyPage').documentId('privacyPage').title('Personvern'),
+        ),
       S.listItem()
         .title('Utgaver')
         .icon(BookIcon)

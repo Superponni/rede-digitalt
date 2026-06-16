@@ -204,12 +204,15 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
             <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               TOBB.no
             </a>
-            <a href="https://www.facebook.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <a href="https://www.facebook.com/tobbinfo" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Facebook
             </a>
-            <a href="https://www.instagram.com/tobbbolig" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <a href="https://www.instagram.com/boligbyggelaget_tobb/" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Instagram
             </a>
+            <Link href="/personvern" onClick={onClose} className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+              Personvern
+            </Link>
           </div>
         </div>
 
