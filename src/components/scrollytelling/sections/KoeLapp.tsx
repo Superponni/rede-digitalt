@@ -177,7 +177,7 @@ export function KoeLapp({ data }: KoeLappProps) {
         <p data-item className="mx-auto mt-9 max-w-[480px] text-[18px] leading-[1.6] lg:text-[20px]" style={{ color: c.body }}>
           {atFront ? (
             <>
-              Lapp nummer 01 — <strong style={{ color: c.heading }}>din tur, forbi alle {count}.</strong>
+              Bra sniking! <strong style={{ color: c.heading }}>Du er nummer {pad(number)}</strong>
             </>
           ) : (
             <>
