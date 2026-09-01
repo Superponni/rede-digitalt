@@ -37,6 +37,14 @@ const STEGA_SKIP_FIELDS = [
 // innhold). `sanityFetch` bytter automatisk til `drafts`-perspektiv når Next.js
 // `draftMode()` er på — da brukes `serverToken` til å lese utkast.
 const { sanityFetch: liveFetch, SanityLive } = defineLive({
+  // Uten dette settes HVER Sanity-spørring til `next: { revalidate: false }` i
+  // produksjon (next-sanity sin standard), altså evig i Vercels Data Cache.
+  // `export const revalidate` på sidene bygger da siden på nytt, men med de
+  // samme bufrede dataene — så publiserte rettelser ble usynlige til neste
+  // deploy. Med dette hentes innholdet på nytt hvert minutt.
+  // Flagget er merket deprecated i next-sanity (fjernes i neste major); ved
+  // oppgradering må dette erstattes av webhook → revalidateTag.
+  fetchOptions: { revalidate: 60 },
   // stega gjør tekst klikkbar-til-redigering i Presentation. Kodes kun inn når
   // draftMode er på. Tekst som splittes/animeres klient-side må renses med
   // stegaClean() der det skjer (se PullQuote, FullscreenParallax).
