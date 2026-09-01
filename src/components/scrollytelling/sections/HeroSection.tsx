@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { gsap, ScrollTrigger } from '@/lib/gsap-config'
+import { noBreakNumbers } from '@/lib/typography'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface HeroSectionProps {
@@ -149,7 +150,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             ref={titleRef}
             className="max-w-5xl font-display text-4xl leading-[1.05] text-white md:text-5xl lg:text-[4.5rem] xl:text-[5.5rem]"
           >
-            {data.title}
+            {noBreakNumbers(data.title)}
           </h1>
         )}
 

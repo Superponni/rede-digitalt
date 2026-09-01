@@ -7,6 +7,7 @@ import { ExpertRow, type ExpertItem } from './ExpertRow'
 import { ArticleOutro } from './ArticleOutro'
 import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
 import type { RelatedArticle } from '@/lib/related'
+import { noBreakNumbers } from '@/lib/typography'
 import {
   getArticleTheme,
   type AccentColor,
@@ -113,7 +114,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
         className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl"
         style={{ color: theme.title }}
       >
-        {article.title}
+        {noBreakNumbers(article.title)}
       </h1>
 
       {article.subtitle && (
