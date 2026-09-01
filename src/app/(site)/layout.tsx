@@ -10,6 +10,21 @@ import { Analytics } from '@/components/consent/Analytics'
 import { sanityFetch } from '@/sanity/lib/live'
 import { MENU_QUERY } from '@/sanity/lib/queries'
 
+/**
+ * Hvor lenge en ferdigbygd side kan serveres før den hentes på nytt fra Sanity.
+ *
+ * Uten dette blir alle sider under (site) frosset slik de var ved siste
+ * deploy: `sanityFetch` (next-sanity `defineLive`) setter `revalidate: false`
+ * i produksjon, og friskes bare opp av `<SanityLive/>` — som krever at noen
+ * har siden åpen i nettleseren akkurat idet innholdet endres. Resultatet var
+ * at rettelser publisert i Studio ikke ble synlige på rede.no før neste
+ * deploy. Med dette er de ute av seg selv innen ett minutt.
+ *
+ * Gjelder alle sider under dette layoutet (forside, artikler, tema, leder …).
+ * Studio ligger utenfor og er upåvirket.
+ */
+export const revalidate = 60
+
 export default async function SiteLayout({
   children,
 }: {

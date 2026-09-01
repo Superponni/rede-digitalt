@@ -10,6 +10,11 @@ interface SitemapData {
   memberOffersUpdated: string | null
 }
 
+// Sitemapen bygges av Sanity-data. Uten dette ble den frosset ved deploy, så
+// nye artikler kunne ligge ute i dagevis uten å stå i sitemapen. Én time er
+// rikelig — søkemotorer leser den sjelden. Se også (site)/layout.tsx.
+export const revalidate = 3600
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const data = await client.fetch<SitemapData>(SITEMAP_QUERY)
 
