@@ -20,6 +20,16 @@ export function Footer() {
             <Link href="/personvern" className="transition-colors hover:text-white/90">
               Personvern
             </Link>
+            {/* Toppen har samme lenke, men den er skjult på mobil. Her er
+                avsenderen klikkbar på alle skjermstørrelser. */}
+            <a
+              href="https://www.tobb.no"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors hover:text-white/90"
+            >
+              TOBB.no
+            </a>
             <span>&copy; {new Date().getFullYear()} TOBB</span>
           </div>
         </div>

@@ -149,7 +149,12 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <>
       <JsonLd data={structuredData} />
-      {article.type === 'scrollytelling' ? (
+      {/* Feature-visningen bygger UTELUKKENDE på seksjoner. Gjør en redaktør om
+          en standard-sak til feature, står seksjonslista tom — og uten dette
+          fallbacket ville siden blitt helt blank selv om brødteksten ligger der.
+          Da viser vi den vanlige lesevisningen til de første byggeklossene er
+          lagt inn. */}
+      {article.type === 'scrollytelling' && (article.sections?.length ?? 0) > 0 ? (
         <ScrollytellingRenderer
           article={article}
           related={related}

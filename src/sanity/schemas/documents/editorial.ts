@@ -87,7 +87,7 @@ export const editorial = defineType({
           { title: 'Tittel først, bilde under', value: 'heading-first' },
           { title: 'Tittel og bilde ved siden', value: 'side' },
           { title: 'Ingen bilde (kun farge + tittel)', value: 'none' },
-          { title: 'Rundt ekspertportrett (navn buet rundt)', value: 'portrait' },
+          { title: 'Rundt portrett av kilde (navn buet rundt)', value: 'portrait' },
         ],
         layout: 'radio',
       },
@@ -96,13 +96,13 @@ export const editorial = defineType({
     }),
     defineField({
       name: 'experts',
-      title: 'Eksperter / kilder (med portrett)',
+      title: 'Portretter av kilder / intervjuobjekter',
       type: 'array',
       group: 'innhold',
       of: [{ type: 'expertSource' }],
       validation: (Rule) => Rule.max(3),
       description:
-        'Valgfritt, maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt ekspertportrett» er de toppen.',
+        'Valgfritt — la stå tomt hvis lederen ikke har en kilde å portrettere. Maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt portrett av kilde» er de toppen.',
     }),
     defineField({
       name: 'edition',

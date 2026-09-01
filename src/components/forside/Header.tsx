@@ -98,13 +98,21 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
             >
               <RedeLogo className="h-[22px] w-auto" />
             </Link>
-            <span
-              className={`hidden border-l pl-3 font-heading text-[11px] uppercase leading-tight tracking-[0.12em] transition-colors sm:inline-block ${
-                onLight ? 'border-navy/20 text-navy/70' : 'border-white/30 text-white/80'
+            {/* Avsenderen skal være klikkbar: leseren som lurer på hvem TOBB er,
+                skal komme rett til tobb.no. Understreken vises på hover/fokus
+                slik at det er tydelig at det ER en lenke. */}
+            <a
+              href="https://www.tobb.no"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`hidden border-l pl-3 font-heading text-[11px] uppercase leading-tight tracking-[0.12em] underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-none sm:inline-block ${
+                onLight
+                  ? 'border-navy/20 text-navy/70 hover:text-navy focus-visible:text-navy'
+                  : 'border-white/30 text-white/80 hover:text-white focus-visible:text-white'
               }`}
             >
               Et medlemsmagasin fra TOBB
-            </span>
+            </a>
           </div>
           {/* Bred hamburger (to streker) som morpher til X — renere enn tekst-
               knappen «Meny +», og selvforklarende på alle flater. */}

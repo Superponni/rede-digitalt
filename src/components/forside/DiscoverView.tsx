@@ -142,7 +142,9 @@ export function DiscoverView({
   // Row 1: Top 3 features (scrollytelling)
   const features = scrollytelling.slice(0, 3)
 
-  // Row 3: "I denne utgaven" — first 4 standard articles
+  // Row 3: de fire nyeste standard-sakene (rekkefølgen er publiseringsdato
+  // synkende — se ARTICLES_QUERY). Uten overskrift, siden forsiden blander
+  // magasinsaker og rene nettsaker.
   const curated = standard.slice(0, 4)
 
   // Row 4+: Remaining articles
@@ -267,12 +269,11 @@ export function DiscoverView({
           </div>
         )}
 
-        {/* Row 3 — "I denne utgaven" (4 portrait cards) */}
+        {/* Row 3 — de fire nyeste standard-sakene, uten overskrift. Tidligere sto
+            det «I denne utgaven» her, men forsiden viser nå også nettsaker som
+            ikke stammer fra en trykt utgave — da ble overskriften direkte feil. */}
         {curated.length > 0 && (
           <div>
-            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
-              I denne utgaven
-            </p>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">
               {curated.map((article) => (
                 <DiscoverCard
@@ -293,8 +294,8 @@ export function DiscoverView({
           </div>
         )}
 
-        {/* Row 4+ — Remaining articles. Samme stående format og grid som
-            «I denne utgaven», så forsiden holder ett kortspråk hele veien ned. */}
+        {/* Row 4+ — resten av sakene, nyeste først. Samme stående format og grid
+            som raden over, så forsiden holder ett kortspråk hele veien ned. */}
         {remaining.length > 0 && (
           <div>
             <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">

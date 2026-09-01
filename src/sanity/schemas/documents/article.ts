@@ -27,7 +27,10 @@ export const article = defineType({
       title: 'Undertittel',
       type: 'string',
       group: 'innhold',
-      hidden: ({ parent }) => parent?.type !== 'standard',
+      // Feltene under er «standard-felter», men vi skjuler dem ALDRI når de
+      // faktisk har innhold. Ellers ser en redaktør som bytter artikkeltype at
+      // teksten forsvinner fra Studio, selv om den ligger trygt i dokumentet.
+      hidden: ({ parent, value }) => parent?.type !== 'standard' && !value,
       description: 'Vises i kursiv rett under tittelen (valgfri)',
     }),
     defineField({
@@ -114,7 +117,7 @@ export const article = defineType({
           { title: 'Tittel først, bilde under', value: 'heading-first' },
           { title: 'Tittel og bilde ved siden', value: 'side' },
           { title: 'Ingen bilde (kun farge + tittel)', value: 'none' },
-          { title: 'Rundt ekspertportrett (navn buet rundt)', value: 'portrait' },
+          { title: 'Rundt portrett av kilde (navn buet rundt)', value: 'portrait' },
         ],
         layout: 'radio',
       },
@@ -124,14 +127,15 @@ export const article = defineType({
     }),
     defineField({
       name: 'experts',
-      title: 'Eksperter / kilder (med portrett)',
+      title: 'Portretter av kilder / intervjuobjekter',
       type: 'array',
       group: 'innhold',
       of: [{ type: 'expertSource' }],
       validation: (Rule) => Rule.max(3),
       description:
-        'Legg til ekspert-/kildefoto HER (ikke som hovedbilde), maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under – i samme størrelse uansett om saken også har et hovedbilde/illustrasjon. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt ekspertportrett» er de toppen av saken. Har saken ikke noe hovedbilde, brukes første ekspert også som forsidebilde.',
-      hidden: ({ parent }) => parent?.type !== 'standard',
+        'Valgfritt — la stå tomt hvis saken ikke har en kilde å portrettere. Legg kilde-/intervjufoto HER (ikke som hovedbilde), maks 3. Hver vises som et rundt portrett med navn buet over og rolle buet under – i samme størrelse uansett om saken også har et hovedbilde/illustrasjon. Med flere portretter skaleres de ned til én rad. Ved topp-oppsett «Rundt portrett av kilde» er de toppen av saken. Har saken ikke noe hovedbilde, brukes det første portrettet også som forsidebilde.',
+      hidden: ({ parent, value }) =>
+        parent?.type !== 'standard' && !(Array.isArray(value) && value.length > 0),
     }),
     defineField({
       name: 'edition',
@@ -240,16 +244,20 @@ export const article = defineType({
         { type: 'gifKort' },
         { type: 'interactiveQuiz' },
       ],
-      hidden: ({ parent }) => parent?.type !== 'scrollytelling',
-      description: 'Byggeklosser for feature-artikler',
+      hidden: ({ parent, value }) =>
+        parent?.type !== 'scrollytelling' && !(Array.isArray(value) && value.length > 0),
+      description:
+        'Byggeklosser for feature-artikler. Er lista tom, vises feature-saken som vanlig lesevisning (hovedbilde + brødtekst) — ingenting går tapt om du bytter artikkeltype.',
     }),
     defineField({
       name: 'body',
       title: 'Brødtekst',
       type: 'blockContent',
       group: 'innhold',
-      hidden: ({ parent }) => parent?.type !== 'standard',
-      description: 'Brødtekst for standard-artikler',
+      hidden: ({ parent, value }) =>
+        parent?.type !== 'standard' && !(Array.isArray(value) && value.length > 0),
+      description:
+        'Brødtekst for standard-artikler. På feature-saker brukes brødteksten så lenge du ikke har lagt inn seksjoner; legger du inn seksjoner, er det de som vises.',
     }),
     defineField({
       name: 'seo',
