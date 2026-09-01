@@ -13,7 +13,7 @@ export const interactiveQuiz = defineType({
         list: [
           { title: 'Quiz (flervalg med fasit)', value: 'quiz' },
           { title: 'Poll (vis prosenter)', value: 'poll' },
-          { title: 'Visste du at? (trykk for a avsløre)', value: 'didYouKnow' },
+          { title: 'Spørsmål med skjult svar (trykk for å avsløre)', value: 'didYouKnow' },
         ],
         layout: 'radio',
       },
@@ -53,13 +53,13 @@ export const interactiveQuiz = defineType({
       title: 'Svar / fakta',
       type: 'text',
       rows: 3,
-      description: 'For "Visste du at?": faktaen som avsløres. For quiz: tilleggforklaring etter svar.',
+      description: 'For «Spørsmål med skjult svar»: svaret som avsløres. For quiz: tilleggsforklaring etter svar.',
     }),
   ],
   preview: {
     select: { question: 'question', style: 'style' },
     prepare({ question, style }) {
-      const labels: Record<string, string> = { quiz: 'Quiz', poll: 'Poll', didYouKnow: 'Visste du at?' }
+      const labels: Record<string, string> = { quiz: 'Quiz', poll: 'Poll', didYouKnow: 'Spørsmål med skjult svar' }
       return { title: question || 'Interaktiv', subtitle: labels[style] || style }
     },
   },

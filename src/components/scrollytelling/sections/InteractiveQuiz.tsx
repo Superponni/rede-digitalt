@@ -92,7 +92,8 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
     }
   }
 
-  // "Visste du at?" style
+  // Spørsmål med skjult svar. Merkelappen kan IKKE være «Visste du at?» —
+  // den lover en påstand, mens innholdet er et spørsmål med «Vis svaret».
   if (style === 'didYouKnow') {
     return (
       <section
@@ -102,7 +103,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
       >
         <div ref={cardRef} className="mx-auto w-full max-w-xl text-center">
           <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
-            Visste du at?
+            Vet du svaret?
           </p>
           <p className="mb-8 font-display text-2xl leading-snug lg:text-3xl" style={{ color: c.heading }}>
             {data.question}
