@@ -1,8 +1,4 @@
-'use client'
-
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
-import { gsap } from '@/lib/gsap-config'
 
 interface ArticleHeroImageProps {
   src: string
@@ -34,7 +30,12 @@ interface ArticleHeroImageProps {
 /**
  * Hovedbilde for standard-artikler. Uten `aspect` beholder bildet ORIGINALFORMAT
  * (rendres med egne dimensjoner, ingen object-cover-beskjæring). Med `aspect`
- * fyller det en fast ramme. Får et mykt scroll-reveal. Respekterer redusert bevegelse.
+ * fyller det en fast ramme.
+ *
+ * Ingen inn-animasjon: toppbildet ligger over folden, så et scroll-reveal
+ * spilte av seg selv ved lasting og skjøv bildet 30 px ned mens det zoomet inn.
+ * Forelderen klipper ikke, så bildet stakk ut under ramma og la seg som en
+ * synlig stripe over innholdet under. Toppbildet skal stå ferdig med én gang.
  */
 export function ArticleHeroImage({
   src,
@@ -48,29 +49,9 @@ export function ArticleHeroImage({
   cover,
   focal,
 }: ArticleHeroImageProps) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from(el, {
-        opacity: 0,
-        y: 30,
-        scale: 1.04,
-        duration: 1.1,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true },
-      })
-    })
-    return () => mm.revert()
-  }, [])
-
   if (aspect || cover) {
     return (
       <div
-        ref={ref}
         className={`relative overflow-hidden ${className ?? ''}`}
         style={aspect ? { aspectRatio: aspect } : undefined}
       >
@@ -88,7 +69,7 @@ export function ArticleHeroImage({
   }
 
   return (
-    <div ref={ref} className={`overflow-hidden ${className ?? ''}`}>
+    <div className={`overflow-hidden ${className ?? ''}`}>
       <Image
         src={src}
         alt={alt}
