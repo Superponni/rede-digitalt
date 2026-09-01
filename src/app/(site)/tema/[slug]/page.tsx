@@ -23,6 +23,19 @@ interface TagData {
   articles: Article[]
 }
 
+/**
+ * Slug-en fra URL-en kommer prosentkodet for tema med norske tegn
+ * («/tema/økonomi» → «%C3%B8konomi»). GROQ slår opp mot den lagrede,
+ * ukodede slug-en, så den må dekodes først. Rene ASCII-slugger er upåvirket.
+ */
+function dekod(slug: string): string {
+  try {
+    return decodeURIComponent(slug)
+  } catch {
+    return slug
+  }
+}
+
 async function getTagData(slug: string): Promise<TagData> {
   return sanityFetch<TagData>({ query: TAG_PAGE_QUERY, params: { slug } })
 }
@@ -31,7 +44,8 @@ export async function generateStaticParams() {
   const slugs = await client.fetch<string[]>(
     `*[_type == "tag" && defined(slug.current)].slug.current`,
   )
-  return slugs.map((slug) => ({ slug }))
+  // Kodet, slik at ruten matcher forespørselen for «økonomi» og «bærekraft».
+  return slugs.map((slug) => ({ slug: encodeURIComponent(slug) }))
 }
 
 export async function generateMetadata({
@@ -40,7 +54,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const data = await getTagData(slug)
+  const data = await getTagData(dekod(slug))
   if (!data.tag) return {}
 
   const title = `${data.tag.title} – tema`
@@ -63,7 +77,7 @@ export default async function TemaPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const data = await getTagData(slug)
+  const data = await getTagData(dekod(slug))
 
   if (!data.tag) notFound()
 
