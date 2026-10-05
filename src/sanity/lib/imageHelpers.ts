@@ -19,12 +19,19 @@ export interface SanityImageRef {
 }
 
 /**
- * Bildets egne pikseldimensjoner, lest ut av asset-referansen
- * (`image-<hash>-<bredde>x<høyde>-<ext>`). Brukes for å beholde originalformatet.
+ * Bildets pikseldimensjoner slik det faktisk vises: originalmålene fra
+ * asset-referansen (`image-<hash>-<bredde>x<høyde>-<ext>`) minus en evt.
+ * beskjæring satt i Studio — samme utsnitt som `naturalSrc` leverer. Uten
+ * beskjæringen reserverer siden plass til feil format, og høyden hopper når
+ * bildet lastes (som igjen forskyver alle scroll-animasjoner under).
  */
 export function imageDims(image?: SanityImageRef): { width: number; height: number } {
   const m = image?.asset?._ref?.match(/-(\d+)x(\d+)-[a-z]+$/i)
-  return m ? { width: Number(m[1]), height: Number(m[2]) } : { width: 1600, height: 1000 }
+  if (!m) return { width: 1600, height: 1000 }
+  const c = image?.crop
+  const width = Number(m[1]) * (1 - (c?.left ?? 0) - (c?.right ?? 0))
+  const height = Number(m[2]) * (1 - (c?.top ?? 0) - (c?.bottom ?? 0))
+  return { width: Math.round(width), height: Math.round(height) }
 }
 
 /**

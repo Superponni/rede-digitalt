@@ -55,6 +55,27 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  // Sidehøyden kan endre seg lenge etter innlasting (lazy-bilder, fonter,
+  // innbygginger). Da står ScrollTrigger igjen med gamle startposisjoner, og
+  // innhold lenger ned «henger» usynlig til man scroller forbi. Regn om når
+  // innholdet faktisk endrer høyde (debouncet, så en bildebølge = én refresh).
+  useEffect(() => {
+    let lastHeight = document.body.scrollHeight
+    let timer: ReturnType<typeof setTimeout> | undefined
+    const ro = new ResizeObserver(() => {
+      const height = document.body.scrollHeight
+      if (height === lastHeight) return
+      lastHeight = height
+      clearTimeout(timer)
+      timer = setTimeout(() => ScrollTrigger.refresh(), 150)
+    })
+    ro.observe(document.body)
+    return () => {
+      ro.disconnect()
+      clearTimeout(timer)
+    }
+  }, [])
+
   // On route change: reset scroll and refresh all ScrollTrigger calculations.
   // Unntak: ved tilbake/frem (popstate) og ved første innlasting (reload) lar vi
   // nettleserens egen scroll-gjenoppretting stå — da bare refresher vi triggerne.
