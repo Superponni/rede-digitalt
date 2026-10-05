@@ -122,6 +122,13 @@ export default async function ArticlePage({ params }: PageProps) {
     params: { id: article._id, tagIds: article.tags?.map((t) => t._id) ?? [] },
   })
   const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent)
+
+  // Typen bestemmer visningen, men innholdet vinner alltid: siden skal aldri bli
+  // blank fordi typen peker på et tomt felt. Feature uten seksjoner ⇒ lesevisning
+  // av brødteksten; standard uten brødtekst men med seksjoner ⇒ seksjonene.
+  const hasSections = (article.sections?.length ?? 0) > 0
+  const hasBody = (article.body?.length ?? 0) > 0
+  const showSections = hasSections && (article.type === 'scrollytelling' || !hasBody)
   const primaryTag = article.tags?.[0]
   const shareUrl = absoluteUrl(`/artikler/${article.slug.current}`)
 
@@ -149,12 +156,7 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <>
       <JsonLd data={structuredData} />
-      {/* Feature-visningen bygger UTELUKKENDE på seksjoner. Gjør en redaktør om
-          en standard-sak til feature, står seksjonslista tom — og uten dette
-          fallbacket ville siden blitt helt blank selv om brødteksten ligger der.
-          Da viser vi den vanlige lesevisningen til de første byggeklossene er
-          lagt inn. */}
-      {article.type === 'scrollytelling' && (article.sections?.length ?? 0) > 0 ? (
+      {showSections ? (
         <ScrollytellingRenderer
           article={article}
           related={related}

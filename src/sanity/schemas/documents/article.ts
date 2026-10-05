@@ -55,8 +55,37 @@ export const article = defineType({
       },
       initialValue: 'standard',
       description:
-        'Feature: ligger øverst på forsiden og har mer animasjon. Standard: pen lesevisning. Begge styrer farge likt (signaturfarge + fargemodus under).',
-      validation: (rule) => rule.required(),
+        'Feature: bygd av seksjoner, med mer animasjon. Standard: pen lesevisning av brødteksten. Begge styrer farge likt (signaturfarge + fargemodus under). Typen bestemmer IKKE plassering på forsiden — det gjør feltet under.',
+      validation: (rule) =>
+        rule.required().custom((type, context) => {
+          const doc = context.document as { sections?: unknown[]; body?: unknown[] } | undefined
+          const hasSections = (doc?.sections?.length ?? 0) > 0
+          const hasBody = (doc?.body?.length ?? 0) > 0
+          if (type === 'standard' && hasSections && !hasBody) {
+            return {
+              message:
+                'Denne saken har bare feature-seksjoner og ingen brødtekst. Den vises derfor fortsatt som feature-sak på nettsiden.',
+              level: 'warning',
+            }
+          }
+          return true
+        }),
+    }),
+    defineField({
+      name: 'frontpagePlacement',
+      title: 'Plassering på forsiden',
+      type: 'string',
+      group: 'innhold',
+      options: {
+        list: [
+          { title: 'Toppraden (store stående kort øverst)', value: 'top' },
+          { title: 'Vanlig rad', value: 'regular' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'regular',
+      description:
+        'Toppraden viser de tre nyeste sakene som er satt hit. Velges flere, flyttes de eldste ned i vanlige rader — ingen saker forsvinner fra forsiden.',
     }),
     defineField({
       name: 'menuFeatured',
@@ -247,7 +276,7 @@ export const article = defineType({
       hidden: ({ parent, value }) =>
         parent?.type !== 'scrollytelling' && !(Array.isArray(value) && value.length > 0),
       description:
-        'Byggeklosser for feature-artikler. Er lista tom, vises feature-saken som vanlig lesevisning (hovedbilde + brødtekst) — ingenting går tapt om du bytter artikkeltype.',
+        'Byggeklosser for feature-artikler. Er lista tom, vises feature-saken som vanlig lesevisning (hovedbilde + brødtekst). Har en standard-sak bare seksjoner og ingen brødtekst, vises seksjonene — ingenting går tapt om du bytter artikkeltype.',
     }),
     defineField({
       name: 'body',
@@ -257,7 +286,7 @@ export const article = defineType({
       hidden: ({ parent, value }) =>
         parent?.type !== 'standard' && !(Array.isArray(value) && value.length > 0),
       description:
-        'Brødtekst for standard-artikler. På feature-saker brukes brødteksten så lenge du ikke har lagt inn seksjoner; legger du inn seksjoner, er det de som vises.',
+        'Brødtekst for standard-artikler. På feature-saker brukes brødteksten så lenge du ikke har lagt inn seksjoner; legger du inn seksjoner, er det de som vises. Står brødteksten tom på en standard-sak med seksjoner, vises seksjonene.',
     }),
     defineField({
       name: 'seo',
@@ -271,12 +300,14 @@ export const article = defineType({
     select: {
       title: 'title',
       type: 'type',
+      placement: 'frontpagePlacement',
       media: 'heroImage',
     },
-    prepare({ title, type, media }) {
+    prepare({ title, type, placement, media }) {
+      const kind = type === 'scrollytelling' ? '📜 Feature' : '📄 Standard'
       return {
         title,
-        subtitle: type === 'scrollytelling' ? '📜 Feature' : '📄 Standard',
+        subtitle: placement === 'top' ? `${kind} · toppraden` : kind,
         media,
       }
     },

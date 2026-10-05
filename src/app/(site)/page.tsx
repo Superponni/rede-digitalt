@@ -10,6 +10,7 @@ export default async function Home() {
       title: string
       slug: { current: string }
       type: string
+      frontpagePlacement?: 'top' | 'regular'
       teaser?: string
       heroImage?: { asset: { _ref: string }; alt?: string }
       expertPortrait?: { asset: { _ref: string }; alt?: string }

@@ -10,6 +10,7 @@ interface Article {
   title: string
   slug: { current: string }
   type: string
+  frontpagePlacement?: 'top' | 'regular'
   teaser?: string
   heroImage?: { asset: { _ref: string }; alt?: string }
   heroVideoUrl?: string
@@ -136,24 +137,25 @@ export function DiscoverView({
   podcast,
   edition,
 }: DiscoverViewProps) {
-  const scrollytelling = articles.filter((a) => a.type === 'scrollytelling')
-  const standard = articles.filter((a) => a.type === 'standard')
+  // Plassering styres av redaktørens eget forsidevalg, ikke av artikkeltypen.
+  // Row 1: de tre nyeste sakene satt til toppraden. Er flere satt dit, går de
+  // eldste ned i de vanlige radene under — ingen sak faller ut av forsiden.
+  const features = articles.filter((a) => a.frontpagePlacement === 'top').slice(0, 3)
+  const featureIds = new Set(features.map((a) => a._id))
+  const rest = articles.filter((a) => !featureIds.has(a._id))
 
-  // Row 1: Top 3 features (scrollytelling)
-  const features = scrollytelling.slice(0, 3)
-
-  // Row 3: de fire nyeste standard-sakene (rekkefølgen er publiseringsdato
-  // synkende — se ARTICLES_QUERY). Uten overskrift, siden forsiden blander
-  // magasinsaker og rene nettsaker.
-  const curated = standard.slice(0, 4)
+  // Row 3: de fire nyeste av resten (rekkefølgen er publiseringsdato synkende —
+  // se FRONTPAGE_QUERY). Uten overskrift, siden forsiden blander magasinsaker
+  // og rene nettsaker.
+  const curated = rest.slice(0, 4)
 
   // Row 4+: Remaining articles
-  const remaining = standard.slice(4)
+  const remaining = rest.slice(4)
 
   return (
     <div className="px-4 pb-12 pt-20 sm:px-6 lg:px-12 xl:px-16">
       <div className="mx-auto max-w-[1400px] space-y-3">
-        {/* Row 1 — 3 feature cards (tall, portrait) */}
+        {/* Row 1 — toppraden: 3 store stående kort */}
         {features.length > 0 && (
           <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 lg:gap-3">
             {features.map((article, i) => {

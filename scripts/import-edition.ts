@@ -580,6 +580,9 @@ async function main() {
       title: article.title,
       slug: { _type: 'slug', current: article.slug },
       type: article.type,
+      // Plassering på forsiden er et eget redaksjonelt valg (ikke avledet av
+      // typen) — nye saker havner i vanlig rad til redaktøren flytter dem.
+      frontpagePlacement: 'regular',
       edition: { _type: 'reference', _ref: edition._id },
       publishedAt: EDITION.publishedAt,
       tags: article.tags.map((t) => ({

@@ -79,7 +79,7 @@ export const RELATED_ARTICLES_QUERY = defineQuery(
 export const MENU_QUERY = defineQuery(
   `{
     "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug },
-    "featured": *[${PUBLISHABLE_ARTICLE} && type == "scrollytelling"] | order(select(menuFeatured == true => 1, 0) desc, publishedAt desc) [0] {
+    "featured": *[${PUBLISHABLE_ARTICLE} && frontpagePlacement == "top"] | order(select(menuFeatured == true => 1, 0) desc, publishedAt desc) [0] {
       _id, title, slug, heroImage, "heroVideoUrl": heroVideo.asset->url, tags[]->{ _id, title }
     }
   }`
@@ -101,6 +101,7 @@ export const FRONTPAGE_QUERY = defineQuery(
     },
     "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
       ${CARD_CORE},
+      frontpagePlacement,
       "expertPortrait": experts[0].portrait,
       "heroVideoUrl": heroVideo.asset->url
     },
