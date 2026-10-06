@@ -31,3 +31,6 @@ Thumbs.db
 # Vercel
 .vercel
 tsconfig.tsbuildinfo
+
+# Claude Code — personlige innstillinger (launch.json deles)
+.claude/settings.local.json

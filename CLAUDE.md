@@ -2,27 +2,39 @@
 
 Digital magasinplattform for TOBBs medlemsmagasin **Rede**. Bygges av Superponni for å transformere print-innhold til moderne, engasjerende digital innholdsopplevelse med scrollytelling, video og podcast.
 
-**URL:** Demo på Vercel (rede-demo.vercel.app eller lignende)
+**URL:** https://rede.no (produksjon, `main`-grenen). Studio: https://rede.no/studio
 **Målgruppe:** Unge voksne (18-30), åpen for alle uten innlogging
 **Språk:** Norsk bokmål
+
+## Start her
+
+**Les `docs/README.md` før du gjør endringer.** Der ligger arbeidsprosessene og lærdommene fra prosjektet:
+
+- `docs/kom-i-gang.md` — oppsett, tilganger, miljøer, grener og hvordan vi jobber sammen
+- `docs/prosess/` — ny utgave, avstemming mot trykk, standardsaker, feature-saker
+- `docs/teknisk/` — Sanity/innhold/publisering, frontend-lærdommer
+- `docs/design/designsystem.md` — farger, fonter, verktøykasse, låste designprinsipper
+
+Flere personer jobber i prosjektet (Asbjørn + designer). Oppdater dokumentene i `docs/` når noe nytt læres eller besluttes — det er slik kunnskapen deles mellom oss.
 
 ## Tech stack
 
 | Komponent | Valg |
 |-----------|------|
-| Frontend | Next.js 14+ (App Router, TypeScript, Tailwind CSS) |
-| CMS | Sanity v3 (headless) |
-| Hosting | Vercel |
-| Animasjoner | GSAP + ScrollTrigger (kjerne), Framer Motion (mikrointeraksjoner) |
-| Bilder | Sanity CDN + next/image (AVIF, blur placeholder) |
-| Video | Placeholder/Mux, Sanity assets |
-| Podcast | Spotify oEmbed |
+| Frontend | Next.js 16 (App Router, TypeScript, Tailwind CSS 4), React 19 |
+| CMS | Sanity (Studio innebygd på `/studio`), prosjekt `tqfezovu`, datasett `production` |
+| Hosting | Vercel (team Superponni, prosjekt `rede-digitalt`). Push til `main` = produksjon |
+| Animasjoner | GSAP + ScrollTrigger, Lenis (smooth scroll) |
+| Bilder | Sanity CDN + next/image |
+| Podcast | Spotify-embed |
+
+Dev-server: `npm run dev` → http://localhost:3100 (port 3100, ikke 3000).
 
 ## TOBB Brand
 
 **Farger:**
 - Primær: `#003865` (mørk marineblå)
-- Bakgrunn: `#F1F8F0` (lys mint)
+- Bakgrunn: `#F1F8F0` (lys mint), forside `#D3E4F5` (canvas)
 - Gull: `#F6BE00`
 - Grønn: `#74AA50`
 - Teal: `#487A7B`
@@ -30,11 +42,12 @@ Digital magasinplattform for TOBBs medlemsmagasin **Rede**. Bygges av Superponni
 - Lilla: `#6B3077`
 - Blå: `#0047BB`
 
-**Fonter:**
-- Display: Gastromond Regular (logo, store titler)
-- Hovedfont: Depot New Light/Bold (brødtekst)
+**Fonter (merkevare):**
+- Display: Gastromond Regular (logo, store titler) — Adobe Fonts
+- Hovedfont: Depot New Light/Bold (brødtekst) — på nett i dag brukes Roboto som reserve
 - Sekundær: Varela Round Regular (headings)
-- Web fallback: Roboto / system fonts
+
+Profil/fonter er under redesign høsten 2026 — se `docs/design/designsystem.md` for gjeldende tilstand.
 
 ## Agent-team
 
@@ -55,29 +68,21 @@ Prosjektet har 7 spesialiserte agenter. Les rollekortene i `.agents/`:
 | Skill | Brukes av | Hva den gjør |
 |-------|-----------|--------------|
 | `/design-to-code` | Art Director, Frontend | Tar mockup/screenshot → genererer pixel-presis kode |
-| `/supabase-cli` | - | Ikke relevant (vi bruker Sanity, ikke Supabase) |
-| Claude API | Innholdsstrateg, Sanity-arkitekt | AI-pipeline for innholdstransformasjon |
+| Claude API | Innholdsstrateg, Sanity-arkitekt | AI-pipeline i importskriptet |
 
 ## Anti-AI-design (KRITISK)
 
-Løsningen MÅ IKKE se AI-generert ut. Les seksjon 8 i `docs/brief.md` og frontend-ux-lead agenten for detaljer. Kort oppsummert:
+Løsningen MÅ IKKE se AI-generert ut. Les seksjon 8 i `docs/brief.md` og `docs/design/designsystem.md`. Kort oppsummert:
 
 **UNNGÅ:** Gradienter, glassmorphism, symmetriske grids, pill-buttons, generisk SaaS-estetikk.
 **GJØR:** Asymmetri, variasjon, editorial layout, TOBBs faktiske farger, innholdsdrevet design.
 
-## Innholdsstruktur
+## Innhold
 
-Utgave: **Rede 2 2026** (i `content/Rede 2 2026/`)
-
-Artikler (~14 stk):
-- Kjepphest, Hit Padel, Høyt&Lavt, Trondheim Kino, Alma Mater (mat/profil)
-- Promenade (Forsvarsrunden), Støtte til lag og foreninger (curling)
-- Medlem case (Ole Elias), Medlem nr 80000 (forkjøpsrett)
-- Grønn Plattform, Bank og megler, Trygghet rundt boligselskapsmodellen
-- Kåseri (taklekkasje)
-
-Hver mappe inneholder: docx (tekst) + bilder (jpg/jpeg/png/webp)
-Designfil-mappen: InDesign-filer og disposisjonsprint (PDF)
+- **Den trykte utgaven er fasit for tekst og bildevalg** — ikke docx, ikke råmappa. Designet på nett er fritt.
+- **Sanity** er fasit for alt publisert innhold. Det finnes ett datasett: lokalt, forhåndsvisning og rede.no viser samme innhold. Script som endrer innhold påvirker rede.no direkte — jobb på utkast.
+- **Råmateriale** (docx, bilder, trykk-PDF) ligger i Superponnis delte Drive: `02 Prosjekter/TOBB/REDE/Rede <år>/Rede <nr> <år>/`. Vi leser, skriver aldri dit. Lokal `content/` (gitignorert) er et gammelt øyeblikksbilde.
+- Utgaver importeres med manifest i `scripts/editions/` — se `docs/prosess/ny-utgave.md`.
 
 ## Mappestruktur
 
@@ -85,13 +90,16 @@ Designfil-mappen: InDesign-filer og disposisjonsprint (PDF)
 rede-digitalt/
   CLAUDE.md              # Denne filen
   .agents/               # Agent-rollekort
-  docs/
-    brief.md             # Original prosjektbrief
-    brand/               # TOBB profilmanual
-    sketches/            # Forside-skisser (desktop + mobil)
-  content/
-    Rede 2 2026/         # Råmateriale for MVP-utgaven
-  src/                   # Next.js-app (opprettes ved init)
+  docs/                  # Start i docs/README.md
+    prosess/             # Arbeidsprosesser
+    teknisk/             # Sanity, frontend-lærdommer
+    design/              # Designsystem
+    brief.md, brand/, sketches/
+  scripts/               # Import + verktøy (engangsscript i scripts/arkiv/)
+  src/
+    app/                 # Ruter ((site)/ = nettsiden, studio/ = Sanity Studio)
+    components/          # forside/, article/, scrollytelling/, layout/ …
+    sanity/              # Skjemaer, spørringer, Studio-oppsett
 ```
 
 ## Arbeidsregler
@@ -101,25 +109,9 @@ rede-digitalt/
 - **Kartlegg alle states før implementasjon**
 - **Aldri lapp-på-lapp** — redesign hvis noe er fundamentalt feil
 - **Ikke foreslå optimaliseringer uten måledata**
-- **Commits:** Korte, meningsfulle commits. Push til Vercel etter hver meningsfull endring.
-- **Token-strategi:** Aldri les bilder inn i kontekst. Prosesser artikler én om gangen.
+- **Grener:** små rettelser kan gå rett på `main`; større arbeid (redesign, nye fonter, nye byggeklosser) på egen gren med forhåndsvisningslenke. Se `docs/kom-i-gang.md`.
+- **Før push til `main`:** `npm run build` grønt, sett på mobil + desktop.
+- **Commits:** Korte, meningsfulle commits på norsk.
+- **Token-strategi:** Ikke les råbilder inn i kontekst i bulk — lag miniatyrer/kontaktark. Prosesser artikler én om gangen.
 - **Bruker (Asbjørn) tar alle redaksjonelle valg** — agentene foreslår, han godkjenner.
-
-## MVP-scope (deadline: torsdag 16. april 2026)
-
-**Må fungere:**
-- Forside med innholdsmiks (hero, kort, podcast, video, leder)
-- 2-3 scrollytelling-artikler med full behandling
-- 3-5 standard artikler (pen lesevisning)
-- Leder-visning (tekst, evt. uten lyd/video)
-
-**Kan vente:**
-- Arkiv/tema-sider
-- Søk
-- Om Rede-side
-- Analytics
-
-**Kutteprioritering hvis tid er knapp:**
-1. Standard-artikler kuttes først
-2. Enklere forside er OK
-3. Heller 1 perfekt scrollytelling enn 3 halvgode
+- **Ikke kall noe ferdig** før det er verifisert visuelt (innhold: på rede.no, ikke bare lokalt).
