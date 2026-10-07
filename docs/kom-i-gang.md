@@ -6,7 +6,7 @@ For deg som skal jobbe i koden til Rede Digitalt — designer eller utvikler. Du
 
 ## 1. Tilganger du trenger
 
-Be Asbjørn om disse. Kryss av når de er på plass.
+Be Asbjørn om disse (admin-oppskriften står i [gi-tilgang.md](gi-tilgang.md)). Kryss av når de er på plass.
 
 - [ ] **Claude** — konto med Claude Code (desktop-appen, Code-fanen).
 - [ ] **GitHub** — medlem av organisasjonen `Superponni`, med skrivetilgang til `Superponni/rede-digitalt`.

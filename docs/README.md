@@ -4,6 +4,7 @@ Rede Digitalt er nettversjonen av TOBBs medlemsmagasin Rede, live på **rede.no*
 
 ## Ny i prosjektet?
 
+0. **[gi-tilgang.md](gi-tilgang.md)** — for admin: slik gir du en ny person tilgang.
 1. **[kom-i-gang.md](kom-i-gang.md)** — tilganger, oppsett på egen maskin, og hvordan vi jobber sammen (miljøer, grener, publisering).
 2. **[design/designsystem.md](design/designsystem.md)** — dagens farger, fonter, verktøykasse og designprinsipper vi har låst.
 3. **[designkontrakt.md](designkontrakt.md)** — mal som fylles ut av designer + Asbjørn før redesign.
