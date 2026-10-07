@@ -81,6 +81,7 @@ Løsningen MÅ IKKE se AI-generert ut. Les seksjon 8 i `docs/brief.md` og `docs/
 
 - **Den trykte utgaven er fasit for tekst og bildevalg** — ikke docx, ikke råmappa. Designet på nett er fritt.
 - **Sanity** er fasit for alt publisert innhold. Det finnes ett datasett: lokalt, forhåndsvisning og rede.no viser samme innhold. Script som endrer innhold påvirker rede.no direkte — jobb på utkast.
+- **Alle saker importeres til Sanity som utkast (`drafts.<id>`). Ingen sak får status som publisert før redaktør har godkjent den.** Claude publiserer aldri på eget initiativ. Importen skriver bare utkast (også ny utgave og nye tags).
 - **Råmateriale** (docx, bilder, trykk-PDF) ligger i Superponnis delte Drive: `02 Prosjekter/TOBB/REDE/Rede <år>/Rede <nr> <år>/`. Vi leser, skriver aldri dit. Lokal `content/` (gitignorert) er et gammelt øyeblikksbilde.
 - Utgaver importeres med manifest i `scripts/editions/` — se `docs/prosess/ny-utgave.md`.
 

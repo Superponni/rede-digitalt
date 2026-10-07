@@ -2,14 +2,20 @@
  * Import-script for Rede-utgaver (manifest-drevet)
  *
  * Leser docx-filer, analyserer med Claude, laster opp bilder,
- * og oppretter alt innhold i Sanity.
+ * og oppretter alt innhold i Sanity — som UTKAST.
+ *
+ * VIKTIG — ingenting publiseres:
+ *   Saker, ny utgave og nye tags skrives kun som utkast (`drafts.<id>`), så
+ *   ingenting vises på rede.no før redaktør har godkjent og publisert i
+ *   Studio. Publiser utgaven og eventuelle nye tags før sakene — Studio sier
+ *   fra hvis en sak peker på noe som ikke er publisert ennå.
  *
  * VIKTIG — kilde til sannhet:
  *   Dette er et ENGANGS-seedingverktøy, ikke en synk. Sanity er fasit for
  *   alt publisert/levende innhold. Drive-mappa er journalistens råarkiv som
  *   vi kun LESER — vi skriver aldri tilbake til den.
  *   Skriptet bruker deterministiske _id og HOPPER OVER artikler som allerede
- *   finnes i Sanity, slik at en re-kjøring aldri dupliserer eller overskriver
+ *   finnes i Sanity (publisert eller som utkast), slik at en re-kjøring aldri dupliserer eller overskriver
  *   redaktørens arbeid. Se docs/migrasjon-superponni.md.
  *
  * Hvilken utgave? Velges via et manifest i scripts/editions/. Manifestet er
@@ -22,8 +28,8 @@
  * Kjør (trygt, hopper over eksisterende):
  *   npx tsx scripts/import-edition.ts --edition=2-2026
  *
- * Tving overskriving av eksisterende artikler (BRUK MED OMHU — ødelegger
- * redaksjonelle endringer i Sanity):
+ * Tving overskriving av utkastet (BRUK MED OMHU — ødelegger redaksjonelle
+ * endringer i utkastet; en publisert versjon røres aldri):
  *   npx tsx scripts/import-edition.ts --edition=2-2026 --force
  *
  * Målrettet re-import av ÉN artikkel (trygt — rører ikke de andre):
@@ -52,6 +58,8 @@ const sanity = createClient({
   apiVersion: '2024-01-01',
   token: process.env.SANITY_API_WRITE_TOKEN!,
   useCdn: false,
+  // Utkast må være synlige for eksistenssjekkene under.
+  perspective: 'raw',
 })
 
 const anthropic = new Anthropic({
@@ -202,6 +210,41 @@ function textToPortableText(text: string) {
 
 function randomKey(): string {
   return Math.random().toString(36).substring(2, 10)
+}
+
+// --- Utkast ---
+
+const DRAFT_PREFIX = 'drafts.'
+
+function draftId(id: string): string {
+  return id.startsWith(DRAFT_PREFIX) ? id : DRAFT_PREFIX + id
+}
+
+function publishedId(id: string): string {
+  return id.startsWith(DRAFT_PREFIX) ? id.slice(DRAFT_PREFIX.length) : id
+}
+
+// Referanse fra et utkast. Peker den på noe som selv bare er et utkast, må
+// den være svak til målet er publisert — samme mønster som Studio bruker.
+function draftSafeRef(id: string, type: string, isPublished: boolean) {
+  return isPublished
+    ? { _type: 'reference' as const, _ref: id }
+    : {
+        _type: 'reference' as const,
+        _ref: id,
+        _weak: true,
+        _strengthenOnPublish: { type, template: { id: type } },
+      }
+}
+
+function asciiId(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/æ/g, 'ae')
+    .replace(/ø/g, 'o')
+    .replace(/å/g, 'a')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
 // --- AI Analysis ---
@@ -427,43 +470,61 @@ async function main() {
 
   console.log(
     FORCE
-      ? '⚠️  --force aktiv: eksisterende artikler vil OVERSKRIVES\n'
-      : 'ℹ️  Trygg modus: eksisterende artikler hoppes over (bruk --force for å overskrive)\n'
+      ? '⚠️  --force aktiv: eksisterende utkast vil OVERSKRIVES\n'
+      : 'ℹ️  Trygg modus: eksisterende artikler hoppes over (bruk --force for å overskrive utkastet)\n'
   )
+  console.log('📝 Alt skrives som utkast — ingenting publiseres.\n')
   console.log(`📄 Manifest: ${manifestPath}`)
   console.log(`📂 Innholdsmappe: ${CONTENT_DIR}\n`)
 
-  // 1. Create edition (deterministisk _id → gjenbrukes ved re-kjøring)
+  // 1. Create edition (deterministisk _id → gjenbrukes ved re-kjøring).
+  //    Ny utgave opprettes som utkast; en publisert utgave ville blitt
+  //    forsidens «siste utgave» med én gang.
   console.log('📖 Oppretter utgave...')
-  const edition = await sanity.createIfNotExists({
-    _id: EDITION.id,
-    _type: 'edition',
-    title: EDITION.title,
-    number: EDITION.number,
-    year: EDITION.year,
-    publishedAt: EDITION.publishedAt,
-  })
-  console.log(`   ✓ Utgave: ${edition._id}\n`)
+  const editionIsPublished = Boolean(
+    await sanity.fetch(`*[_id == $id][0]._id`, { id: EDITION.id })
+  )
+  if (editionIsPublished) {
+    console.log(`   ✓ Utgave: ${EDITION.id} (publisert fra før)\n`)
+  } else {
+    const edition = await sanity.createIfNotExists({
+      _id: draftId(EDITION.id),
+      _type: 'edition',
+      title: EDITION.title,
+      number: EDITION.number,
+      year: EDITION.year,
+      publishedAt: EDITION.publishedAt,
+    })
+    console.log(`   ✓ Utgave: ${edition._id} (utkast)\n`)
+  }
+  const editionRef = draftSafeRef(EDITION.id, 'edition', editionIsPublished)
 
-  // 2. Create tags
+  // 2. Create tags. Nye tags opprettes som utkast — publiserte tags vises i
+  //    menyen på rede.no.
   console.log('🏷️  Oppretter tags...')
-  const tagMap: Record<string, string> = {}
+  const tagMap: Record<string, { id: string; isPublished: boolean }> = {}
   for (const tagName of TAG_LIST) {
-    const existing = await sanity.fetch(
-      `*[_type == "tag" && title == $title][0]._id`,
+    const ids: string[] = await sanity.fetch(
+      `*[_type == "tag" && title == $title]._id`,
       { title: tagName }
     )
-    if (existing) {
-      tagMap[tagName] = existing
+    const published = ids.find((id) => !id.startsWith(DRAFT_PREFIX))
+    if (published) {
+      tagMap[tagName] = { id: published, isPublished: true }
       console.log(`   ✓ ${tagName} (eksisterer)`)
+    } else if (ids.length) {
+      tagMap[tagName] = { id: publishedId(ids[0]), isPublished: false }
+      console.log(`   ✓ ${tagName} (utkast fra før)`)
     } else {
-      const tag = await sanity.create({
+      const id = `tag-${asciiId(tagName)}`
+      await sanity.createIfNotExists({
+        _id: draftId(id),
         _type: 'tag',
         title: tagName,
         slug: { _type: 'slug', current: tagName },
       })
-      tagMap[tagName] = tag._id
-      console.log(`   ✓ ${tagName}`)
+      tagMap[tagName] = { id, isPublished: false }
+      console.log(`   ✓ ${tagName} (nytt utkast)`)
     }
   }
   console.log('')
@@ -475,17 +536,20 @@ async function main() {
 
     console.log(`📝 ${article.title} (${article.type})`)
 
-    // Deterministisk _id slik at re-kjøring treffer samme dokument.
-    const articleId = `article-${article.slug}`
+    // Deterministisk _id slik at re-kjøring treffer samme dokument. Saken
+    // skrives alltid som utkast; den publiserte ID-en brukes aldri her.
+    const articleId = draftId(`article-${article.slug}`)
 
-    // Sanity er fasit: ikke rør artikler som allerede finnes (med mindre
-    // --force). Sjekkes FØR bildeopplasting for å unngå foreldreløse assets.
+    // Sanity er fasit: ikke rør artikler som allerede finnes — verken som
+    // publisert eller utkast (med mindre --force). Sjekkes FØR
+    // bildeopplasting for å unngå foreldreløse assets.
     if (!FORCE) {
-      const exists = await sanity.fetch(`*[_id == $id][0]._id`, {
-        id: articleId,
-      })
+      const exists: string | null = await sanity.fetch(
+        `*[_id in [$published, $draft]][0]._id`,
+        { published: publishedId(articleId), draft: articleId }
+      )
       if (exists) {
-        console.log(`   ⏭  Finnes i Sanity (${articleId}) — hopper over\n`)
+        console.log(`   ⏭  Finnes i Sanity (${exists}) — hopper over\n`)
         continue
       }
     }
@@ -583,11 +647,10 @@ async function main() {
       // Plassering på forsiden er et eget redaksjonelt valg (ikke avledet av
       // typen) — nye saker havner i vanlig rad til redaktøren flytter dem.
       frontpagePlacement: 'regular',
-      edition: { _type: 'reference', _ref: edition._id },
+      edition: editionRef,
       publishedAt: EDITION.publishedAt,
       tags: article.tags.map((t) => ({
-        _type: 'reference',
-        _ref: tagMap[t],
+        ...draftSafeRef(tagMap[t].id, 'tag', tagMap[t].isPublished),
         _key: randomKey(),
       })),
       teaser: analysis.teaser,
@@ -618,14 +681,18 @@ async function main() {
     }
 
     // Create document. Trygg modus har allerede verifisert at den ikke finnes,
-    // så create() er nok; --force overskriver bevisst med createOrReplace.
+    // så create() er nok; --force overskriver bevisst utkastet med
+    // createOrReplace. En publisert versjon røres ikke.
+    if (!doc._id.startsWith(DRAFT_PREFIX)) {
+      throw new Error(`Nekter å skrive publisert dokument: ${doc._id}`)
+    }
     const created = FORCE
       ? await sanity.createOrReplace(doc)
       : await sanity.create(doc)
-    console.log(`   ✓ ${FORCE ? 'Skrev (force)' : 'Opprettet'}: ${created._id}\n`)
+    console.log(`   ✓ ${FORCE ? 'Skrev utkast (force)' : 'Opprettet utkast'}: ${created._id}\n`)
   }
 
-  console.log('✅ Import ferdig!')
+  console.log('✅ Import ferdig — alt ligger som utkast. Ingenting er publisert.')
 }
 
 main().catch((err) => {

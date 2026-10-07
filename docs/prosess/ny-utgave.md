@@ -37,9 +37,11 @@ Prøvekjøring: validerer manifestet mot mappa uten å røre Sanity. Kjør til d
 REDE_CONTENT_DIR="…/REDE/Rede <år>" npx tsx scripts/import-edition.ts --edition=<nr>-<år>
 ```
 
-> ⚠️ **Kjent svakhet (per oktober 2026):** importen oppretter sakene som **publiserte** dokumenter (`article-<slug>`), ikke utkast. De ligger dermed på rede.no innen ~1 minutt — før de er sjekket. Den leser også tekst fra docx (ikke trykket), tar inntil 8 vilkårlige bilder fra mappa, og får **aldri** med bildetekster eller fotokreditt. Importen bør tilpasses før neste utgave (utkast i stedet for publisert, tekst og bildevalg fra trykket). Sjekk om det er gjort før du kjører.
+Importen skriver **bare utkast** (`drafts.article-<slug>`): ingenting vises på rede.no før redaktør har godkjent og publisert. Også ny utgave og nye tags opprettes som utkast — publiser dem i Studio **før** sakene (Studio sier fra hvis en sak peker på noe upublisert).
 
-Importen er trygg å kjøre flere ganger: den hopper over saker som finnes. `--force --only=<slug>` overskriver én sak — og ødelegger redaksjonelle endringer i den. Se [../teknisk/sanity-og-innhold.md](../teknisk/sanity-og-innhold.md).
+> ⚠️ **Kjent svakhet (per oktober 2026):** importen leser tekst fra docx (ikke trykket), tar inntil 8 vilkårlige bilder fra mappa, og får **aldri** med bildetekster eller fotokreditt. Alt dette må rettes i avstemmingen (steg 4).
+
+Importen er trygg å kjøre flere ganger: den hopper over saker som finnes (publisert eller utkast). `--force --only=<slug>` overskriver utkastet til én sak — og ødelegger redaksjonelle endringer i det. Publiserte versjoner røres aldri. Se [../teknisk/sanity-og-innhold.md](../teknisk/sanity-og-innhold.md).
 
 ## 4. Avstem hver sak mot trykket
 
@@ -56,7 +58,7 @@ Importen er trygg å kjøre flere ganger: den hopper over saker som finnes. `--f
 
 ## 6. Forside og utgave
 
-- Utgaven (`edition-<nr>-<år>`) opprettes av importen. Sjekk tittel, nummer, dato og forsidebilde i Studio.
+- Utgaven (`edition-<nr>-<år>`) opprettes av importen som utkast. Sjekk tittel, nummer, dato og forsidebilde i Studio.
 - **«Plassering på forsiden»** på hver sak: `top` = toppraden (de 3 nyeste med `top` vises), `regular` = vanlig rad. Typen (feature/standard) styrer **ikke** plasseringen.
 - `menuFeatured` = saken som vises som stort kort i menyen.
 - `publishedAt` styrer rekkefølgen.

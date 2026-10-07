@@ -14,8 +14,9 @@ Den lokale `content/`-mappa (gitignorert) er et gammelt øyeblikksbilde. Drive e
 
 `scripts/import-edition.ts` er en **engangs-seeding per utgave**, ikke en synk. Detaljer i [../prosess/ny-utgave.md](../prosess/ny-utgave.md).
 
-- Deterministiske ID-er: `article-<slug>`, `edition-<nr>-<år>`. Kjøres den igjen, hoppes eksisterende saker over.
-- `--force --only=<slug>` overskriver én sak — og sletter redaksjonelle endringer.
+- **Skriver bare utkast.** Saker, ny utgave og nye tags opprettes som `drafts.<id>`; ingenting publiseres. Utkastene peker på hverandre med svake referanser som Studio gjør sterke ved publisering — publiser derfor utgave og nye tags før sakene.
+- Deterministiske ID-er: `article-<slug>`, `edition-<nr>-<år>`, `tag-<navn>` (med `drafts.` foran). Kjøres den igjen, hoppes eksisterende saker over — enten de er publisert eller utkast.
+- `--force --only=<slug>` overskriver utkastet til én sak — og sletter redaksjonelle endringer i det. Den publiserte versjonen røres ikke.
 - **Felle:** saker opprettet før importen fikk faste ID-er (våren 2026) har tilfeldige ID-er. `--force` på dem lager et **duplikat** ved siden av. Sjekk for dupliserte slugs før og etter.
 - AI-delen (Claude via `ANTHROPIC_API_KEY`) er Superponnis verktøy — skal ikke overleveres kunden eller ligge i Vercel.
 
