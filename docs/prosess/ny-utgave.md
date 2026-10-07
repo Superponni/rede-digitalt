@@ -39,7 +39,7 @@ REDE_CONTENT_DIR="…/REDE/Rede <år>" npx tsx scripts/import-edition.ts --editi
 
 Importen skriver **bare utkast** (`drafts.article-<slug>`): ingenting vises på rede.no før redaktør har godkjent og publisert. Også ny utgave og nye tags opprettes som utkast — publiser dem i Studio **før** sakene (Studio sier fra hvis en sak peker på noe upublisert).
 
-> ⚠️ **Kjent svakhet (per oktober 2026):** importen leser tekst fra docx (ikke trykket), tar inntil 8 vilkårlige bilder fra mappa, og får **aldri** med bildetekster eller fotokreditt. Alt dette må rettes i avstemmingen (steg 4).
+> ⚠️ **Kjent svakhet (per oktober 2026):** importen leser tekst fra docx (ikke trykket), tar inntil 8 vilkårlige bilder fra mappa, og får **aldri** med bildetekster eller fotokreditt. Alt dette må rettes i avstemmingen (steg 4). Ombygging til å lese fra trykksaken (IDML + pakke fra InDesign) er planlagt: se [../teknisk/import-fra-trykk-plan.md](../teknisk/import-fra-trykk-plan.md).
 
 Importen er trygg å kjøre flere ganger: den hopper over saker som finnes (publisert eller utkast). `--force --only=<slug>` overskriver utkastet til én sak — og ødelegger redaksjonelle endringer i det. Publiserte versjoner røres aldri. Se [../teknisk/sanity-og-innhold.md](../teknisk/sanity-og-innhold.md).
 

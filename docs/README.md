@@ -24,6 +24,7 @@ Rede Digitalt er nettversjonen av TOBBs medlemsmagasin Rede, live på **rede.no*
 |---|---|
 | [teknisk/sanity-og-innhold.md](teknisk/sanity-og-innhold.md) | Hvor innholdet bor, import, publisering, forhåndsvisning, skjemaendringer, scripts |
 | [teknisk/frontend-laerdommer.md](teknisk/frontend-laerdommer.md) | Bilder, animasjon, mobil/iOS-feller, ytelse — ting som har gått galt før |
+| [teknisk/import-fra-trykk-plan.md](teknisk/import-fra-trykk-plan.md) | Plan for import som henter tekst og bilder fra trykksaken (IDML + InDesign-pakke) |
 
 ## Bakgrunn og historikk
 
