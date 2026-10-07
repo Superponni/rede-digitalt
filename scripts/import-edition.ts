@@ -281,7 +281,7 @@ Lag 5-8 seksjoner med god variasjon. Varier overganger.`
       : ''
 
   const response = await anthropic.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-5-5',
     max_tokens: 2000,
     messages: [
       {
