@@ -119,12 +119,12 @@ export function AudioPlayer({ src, theme = 'dark' }: AudioPlayerProps) {
           )}
         </span>
 
-        <span className="font-heading text-[11px] uppercase tracking-[0.2em]">
+        <span className="font-label text-[11px] uppercase tracking-[0.2em]">
           {playing ? 'Spiller av' : 'Hør artikkelen'}
         </span>
 
         {hasDuration && !expanded && (
-          <span className={`ml-auto font-heading text-[10px] tabular-nums ${
+          <span className={`ml-auto font-label text-[10px] tabular-nums ${
             light ? 'text-navy/30' : 'text-white/30'
           }`}>
             {formatTime(duration)}
@@ -160,7 +160,7 @@ export function AudioPlayer({ src, theme = 'dark' }: AudioPlayerProps) {
           </div>
 
           {/* Time display */}
-          <div className={`mt-1.5 flex justify-between font-heading text-[10px] tabular-nums ${
+          <div className={`mt-1.5 flex justify-between font-label text-[10px] tabular-nums ${
             light ? 'text-navy/30' : 'text-white/30'
           }`}>
             <span>{formatTime(currentTime)}</span>

@@ -113,14 +113,14 @@ export function StickyVei({ data }: StickyVeiProps) {
         {/* Header */}
         <div className="pt-16 text-center lg:pt-24">
           {data.label && (
-            <span data-head className="mb-3 inline-block font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
+            <span data-head className="mb-3 inline-block font-label text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
               {data.label}
             </span>
           )}
           {data.badge && (
             <span
               data-head
-              className="mb-5 ml-2 inline-block rounded-full px-3 py-1 font-heading text-[11px] font-bold uppercase tracking-[0.18em]"
+              className="mb-5 ml-2 inline-block rounded-full px-3 py-1 font-label text-[11px] font-bold uppercase tracking-[0.18em]"
               style={{ backgroundColor: `rgba(${c.accentRgb}, 0.12)`, color: c.accent }}
             >
               {data.badge}
@@ -175,7 +175,7 @@ export function StickyVei({ data }: StickyVeiProps) {
                 className="flex min-h-[52vh] flex-col justify-center text-center opacity-100 lg:min-h-[78vh] lg:text-left lg:opacity-(--steg-o) lg:transition-opacity lg:duration-[400ms]"
                 style={{ '--steg-o': active === i ? '1' : '0.32' } as React.CSSProperties}
               >
-                <span className="mb-3 font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
+                <span className="mb-3 font-label text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
                   Steg {i + 1} av {steps.length}
                 </span>
                 <h3 className="mb-4 font-display text-2xl leading-tight lg:text-4xl" style={{ color: c.heading }}>

@@ -96,7 +96,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       {eyebrow && (
         <div className={`mb-4 ${centered ? 'flex justify-center' : ''}`}>
           <span
-            className="inline-block rounded-sm px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+            className="inline-block rounded-sm px-3 py-1 font-label text-[13px] uppercase tracking-[0.16em] lg:text-sm"
             style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
           >
             {eyebrow}
@@ -109,7 +109,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
           {article.tags.map((tag) => (
             <span
               key={tag._id}
-              className="rounded-sm px-3 py-1 font-heading text-[10px] uppercase tracking-[0.2em]"
+              className="rounded-sm px-3 py-1 font-label text-[13px] uppercase tracking-[0.16em] lg:text-sm"
               style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
             >
               {tag.title}
@@ -127,7 +127,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
 
       {article.subtitle && (
         <p
-          className="mt-3 font-display text-2xl italic leading-tight md:text-3xl"
+          className="mt-6 font-serif text-2xl italic leading-tight md:mt-8 md:text-3xl"
           style={{ color: theme.subtitle, textWrap: 'balance' }}
         >
           {article.subtitle}
@@ -137,7 +137,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       {article.teaser && (
         <p
           data-speakable
-          className={`mt-5 font-heading text-lg font-bold leading-snug lg:text-xl ${
+          className={`mt-6 font-serif text-[21px] font-light leading-snug md:mt-8 lg:text-2xl ${
             centered ? 'mx-auto max-w-xl' : ''
           }`}
           style={{ color: theme.standfirst, textWrap: 'balance' }}

@@ -83,7 +83,7 @@ export function CountUpFact({ data }: CountUpFactProps) {
           {data.suffix && <span className="ml-2 text-[0.5em]" style={{ color: c.muted }}>{data.suffix}</span>}
         </p>
         {data.label && (
-          <p className="mt-6 font-heading text-[11px] uppercase tracking-[0.4em] lg:text-xs" style={{ color: c.muted }}>
+          <p className="mt-6 font-label text-[11px] uppercase tracking-[0.4em] lg:text-xs" style={{ color: c.muted }}>
             {data.label}
           </p>
         )}

@@ -103,7 +103,7 @@ export default async function TemaPage({
         <div className="absolute inset-0 bg-black/50" />
 
         <div className="relative z-10 text-center">
-          <p className="mb-3 font-heading text-[11px] uppercase tracking-[0.5em] text-white/50">
+          <p className="mb-3 font-label text-[11px] uppercase tracking-[0.5em] text-white/50">
             Tema
           </p>
           <h1 className="font-display text-5xl text-white md:text-6xl lg:text-7xl">
@@ -137,7 +137,7 @@ export default async function TemaPage({
                 </div>
                 <div className="p-5 lg:p-6">
                   {article.tags?.[0] && (
-                    <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.3em] text-gold">
+                    <span className="mb-2 inline-block font-label text-[10px] uppercase tracking-[0.3em] text-gold">
                       {article.tags[0].title}
                     </span>
                   )}

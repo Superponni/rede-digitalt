@@ -102,7 +102,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
         style={{ backgroundColor: bgColor }}
       >
         <div ref={cardRef} className="mx-auto w-full max-w-xl text-center">
-          <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
+          <p className="mb-4 font-label text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
             Vet du svaret?
           </p>
           <p className="mb-8 font-display text-2xl leading-snug lg:text-3xl" style={{ color: c.heading }}>
@@ -112,7 +112,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
           {!revealed ? (
             <button
               onClick={() => setRevealed(true)}
-              className="cursor-pointer rounded-sm border-2 px-8 py-3 font-heading text-[11px] uppercase tracking-[0.3em] transition-colors"
+              className="cursor-pointer rounded-sm border-2 px-8 py-3 font-label text-[11px] uppercase tracking-[0.3em] transition-colors"
               style={{
                 borderColor: ACCENT,
                 color: ACCENT,
@@ -147,7 +147,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
     >
       <div ref={cardRef} className="mx-auto w-full max-w-xl">
         {/* Label */}
-        <p className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
+        <p className="mb-2 font-label text-[11px] uppercase tracking-[0.4em]" style={{ color: ACCENT }}>
           {style === 'quiz' ? 'Spørsmål' : 'Hva tror du?'}
         </p>
 
@@ -223,7 +223,7 @@ export function InteractiveQuiz({ data }: InteractiveQuizProps) {
                   {/* Poll percentage */}
                   {showResult && style === 'poll' && opt.pollPercent != null && (
                     <span
-                      className="shrink-0 font-heading text-lg font-bold"
+                      className="shrink-0 font-label text-lg font-bold"
                       style={{ color: isSelected ? ACCENT : c.muted }}
                     >
                       {opt.pollPercent}%

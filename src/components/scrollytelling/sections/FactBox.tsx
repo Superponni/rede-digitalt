@@ -76,7 +76,7 @@ export function FactBox({ data }: FactBoxProps) {
                     </p>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="mb-3 mt-8 font-heading text-lg" style={{ color: c.heading }}>
+                    <h3 className="mb-3 mt-8 font-display text-xl font-bold" style={{ color: c.heading }}>
                       {children}
                     </h3>
                   ),

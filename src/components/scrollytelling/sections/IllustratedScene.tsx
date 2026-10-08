@@ -115,13 +115,13 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
         </p>
       ),
       h3: ({ children }: any) => (
-        <h3 className="mb-5 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
+        <h3 className="mb-5 mt-10 font-display font-bold text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
           {children}
         </h3>
       ),
       blockquote: ({ children }: any) => (
         <blockquote
-          className="my-8 font-display text-2xl italic leading-relaxed lg:text-3xl"
+          className="my-8 font-quote text-2xl leading-relaxed lg:text-3xl"
           style={{ color: c.heading }}
         >
           {children}
@@ -174,7 +174,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
         <div data-scene-text>
           {data.eyebrow && (
             <span
-              className="mb-4 inline-block font-heading text-[12px] uppercase tracking-[0.3em]"
+              className="mb-4 inline-block font-label text-[12px] uppercase tracking-[0.3em]"
               style={{ color: c.accent }}
             >
               {data.eyebrow}
@@ -195,7 +195,7 @@ export function IllustratedScene({ data }: IllustratedSceneProps) {
               href={data.ctaHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 border-b-2 pb-1 font-heading text-[14px] font-bold uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
+              className="mt-8 inline-flex items-center gap-2 border-b-2 pb-1 font-label text-[14px] font-bold uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
               style={{ color: c.accent, borderColor: `rgba(${c.accentRgb}, 0.4)` }}
             >
               {data.ctaLabel}

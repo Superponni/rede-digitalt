@@ -78,7 +78,7 @@ export function AnsiennitetSjekk({ data }: AnsiennitetSjekkProps) {
   return (
     <section ref={sectionRef} className="relative px-6 py-16 lg:px-16 lg:py-24" style={{ backgroundColor: bgColor }}>
       <div className="mx-auto w-full max-w-[600px] text-center">
-        <span data-item className="mb-4 inline-block font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
+        <span data-item className="mb-4 inline-block font-label text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
           Enn du da?
         </span>
         <h3 data-item className="mb-8 font-display text-2xl leading-tight lg:text-4xl" style={{ color: c.title }}>
@@ -96,11 +96,11 @@ export function AnsiennitetSjekk({ data }: AnsiennitetSjekkProps) {
             <span className="font-display text-6xl leading-none lg:text-7xl" style={{ color: c.accent }}>
               {ans}
             </span>
-            <span className="ml-3 font-heading text-[14px] uppercase tracking-[0.2em]" style={{ color: c.body }}>
+            <span className="ml-3 font-label text-[14px] uppercase tracking-[0.2em]" style={{ color: c.body }}>
               års ansiennitet
             </span>
           </div>
-          <div className="mb-8 font-heading text-[12px] uppercase tracking-[0.22em]" style={{ color: c.muted }}>
+          <div className="mb-8 font-label text-[12px] uppercase tracking-[0.22em]" style={{ color: c.muted }}>
             {ans === 0 ? 'Ennå ikke i køen' : `Medlem siden ${joinYear}`}
           </div>
 
@@ -115,7 +115,7 @@ export function AnsiennitetSjekk({ data }: AnsiennitetSjekkProps) {
             className="h-2 w-full cursor-pointer appearance-none rounded-full"
             style={{ accentColor: c.accent, backgroundColor: `rgba(${c.accentRgb}, 0.18)` }}
           />
-          <div className="mt-2 flex justify-between font-heading text-[10px] uppercase tracking-[0.25em]" style={{ color: c.muted }}>
+          <div className="mt-2 flex justify-between font-label text-[10px] uppercase tracking-[0.25em]" style={{ color: c.muted }}>
             <span>{min}</span>
             <span>I år</span>
           </div>
@@ -138,14 +138,14 @@ export function AnsiennitetSjekk({ data }: AnsiennitetSjekkProps) {
                 href={data.ctaHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-sm px-7 py-3.5 font-heading text-[14px] font-bold uppercase tracking-[0.15em] shadow-md transition-opacity hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-sm px-7 py-3.5 font-label text-[14px] font-bold uppercase tracking-[0.15em] shadow-md transition-opacity hover:opacity-90"
                 style={{ backgroundColor: c.accent, color: '#ffffff' }}
               >
                 {data.ctaLabel}
                 <span aria-hidden="true">→</span>
               </a>
             ) : (
-              <span className="font-heading text-[12px] uppercase tracking-[0.22em]" style={{ color: c.muted }}>
+              <span className="font-label text-[12px] uppercase tracking-[0.22em]" style={{ color: c.muted }}>
                 Du er allerede i køen
               </span>
             )}

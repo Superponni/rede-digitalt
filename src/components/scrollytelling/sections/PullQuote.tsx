@@ -57,7 +57,7 @@ export function PullQuote({ data }: PullQuoteProps) {
     >
       {/* Large decorative quote mark — background element */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-display text-[30vw] leading-none"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none font-quote text-[30vw] leading-none"
         style={{ color: `rgba(${c.accentRgb}, ${c.isDark ? 0.05 : 0.08})` }}
       >
         &ldquo;
@@ -65,7 +65,7 @@ export function PullQuote({ data }: PullQuoteProps) {
 
       <blockquote ref={quoteRef} className="relative z-10 max-w-5xl text-center">
         {/* Quote text — word-by-word animation */}
-        <p className="font-display text-3xl leading-[1.2] md:text-4xl lg:text-5xl xl:text-[3.5rem] xl:leading-[1.2]" style={{ color: c.heading }}>
+        <p className="font-quote text-3xl leading-[1.2] md:text-4xl lg:text-5xl xl:text-[3.5rem] xl:leading-[1.2]" style={{ color: c.heading }}>
           &ldquo;
           {words.map((word, i) => (
             <span key={i} data-word className="inline-block">
@@ -77,7 +77,7 @@ export function PullQuote({ data }: PullQuoteProps) {
         </p>
 
         {data.attribution && (
-          <footer className="mt-10 font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
+          <footer className="mt-10 font-label text-[11px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
             — {data.attribution}
           </footer>
         )}

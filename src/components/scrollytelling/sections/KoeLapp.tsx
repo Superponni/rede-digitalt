@@ -64,7 +64,7 @@ export function KoeLapp({ data }: KoeLappProps) {
       <div className="mx-auto w-full max-w-[640px] text-center">
         {/* «NÅ BETJENES»-skilt: gull-tall på navy, det faste målet (01) */}
         <div data-item className="mx-auto mb-10 inline-flex flex-col items-center rounded-xl px-7 py-3" style={{ backgroundColor: NAVY, boxShadow: '0 14px 30px rgba(0,32,64,0.28)' }}>
-          <span className="mb-1 flex items-center gap-2 font-heading text-[10px] uppercase tracking-[0.34em]" style={{ color: 'rgba(255,255,255,0.66)' }}>
+          <span className="mb-1 flex items-center gap-2 font-label text-[10px] uppercase tracking-[0.34em]" style={{ color: 'rgba(255,255,255,0.66)' }}>
             <span className="inline-block h-[6px] w-[6px] rounded-full" style={{ backgroundColor: GOLD, boxShadow: `0 0 8px ${GOLD}` }} />
             Nå betjenes
           </span>
@@ -97,13 +97,13 @@ export function KoeLapp({ data }: KoeLappProps) {
 
             <div className="mb-3 flex items-center justify-center gap-3">
               <span className="h-px w-6" style={{ backgroundColor: 'rgba(0,32,64,0.25)' }} />
-              <span className="font-heading text-[11px] uppercase tracking-[0.4em]" style={{ color: NAVY }}>
+              <span className="font-label text-[11px] uppercase tracking-[0.4em]" style={{ color: NAVY }}>
                 Kølapp
               </span>
               <span className="h-px w-6" style={{ backgroundColor: 'rgba(0,32,64,0.25)' }} />
             </div>
 
-            <span className="mb-1 block font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: 'rgba(0,32,64,0.5)' }}>
+            <span className="mb-1 block font-label text-[10px] uppercase tracking-[0.3em]" style={{ color: 'rgba(0,32,64,0.5)' }}>
               Ditt nummer
             </span>
 
@@ -129,7 +129,7 @@ export function KoeLapp({ data }: KoeLappProps) {
               </span>
             </div>
 
-            <span className="mt-4 block font-heading text-[10px] uppercase tracking-[0.28em]" style={{ color: 'rgba(0,32,64,0.4)' }}>
+            <span className="mt-4 block font-label text-[10px] uppercase tracking-[0.28em]" style={{ color: 'rgba(0,32,64,0.4)' }}>
               TOBB · Forkjøpsrett
             </span>
           </div>
@@ -165,7 +165,7 @@ export function KoeLapp({ data }: KoeLappProps) {
           />
           <div
             data-item
-            className="mx-auto mt-2 flex max-w-[420px] justify-between font-heading text-[10px] uppercase tracking-[0.25em]"
+            className="mx-auto mt-2 flex max-w-[420px] justify-between font-label text-[10px] uppercase tracking-[0.25em]"
             style={{ color: c.muted }}
           >
             <span>Bakerst</span>

@@ -139,7 +139,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
                 sizes="(max-width: 1024px) 100vw, 768px"
               />
               {data.image.photographer && (
-                <p className="absolute bottom-2 right-3 font-heading text-[9px] uppercase tracking-[0.2em] text-white/30">
+                <p className="absolute bottom-2 right-3 font-label text-[9px] uppercase tracking-[0.2em] text-white/30">
                   Foto: {data.image.photographer}
                 </p>
               )}
@@ -147,7 +147,7 @@ export function NumberedStop({ data }: NumberedStopProps) {
           )}
 
           {data.image?.asset && data.image.caption && (
-            <p className="mx-auto -mt-4 mb-8 max-w-3xl text-center font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
+            <p className="mx-auto -mt-4 mb-8 max-w-3xl text-center font-label text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
               {data.image.caption}
             </p>
           )}
@@ -164,13 +164,13 @@ export function NumberedStop({ data }: NumberedStopProps) {
                       </p>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
+                      <h3 className="mb-6 mt-10 font-display font-bold text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
-                        className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                        className="my-8 border-l-2 pl-6 font-quote text-xl leading-relaxed lg:text-2xl"
                         style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}

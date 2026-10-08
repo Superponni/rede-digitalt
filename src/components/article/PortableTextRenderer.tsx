@@ -17,7 +17,7 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
           as="h2"
           y={18}
           duration={0.7}
-          className="mb-4 mt-12 font-display text-3xl leading-tight lg:text-4xl"
+          className="mb-4 mt-12 font-display text-[26px] font-bold leading-tight lg:text-[32px]"
           style={{ color: theme.heading }}
         >
           {children}
@@ -28,7 +28,7 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
           as="h3"
           y={16}
           duration={0.65}
-          className="mb-3 mt-10 font-heading text-xl font-bold lg:text-2xl"
+          className="mb-3 mt-10 font-display text-[22px] font-bold leading-tight lg:text-[26px]"
           style={{ color: theme.subhead }}
         >
           {children}
@@ -39,7 +39,7 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
           as="h4"
           y={12}
           duration={0.6}
-          className="mb-2 mt-8 font-heading text-lg font-bold"
+          className="mb-2 mt-8 font-display text-xl font-bold"
           style={{ color: theme.subhead }}
         >
           {children}
@@ -50,7 +50,7 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
           as="blockquote"
           y={20}
           duration={0.8}
-          className="my-8 border-l-4 pl-6 font-display text-xl italic lg:text-2xl"
+          className="my-10 border-l-4 pl-6 font-quote text-[30px] leading-[1.15] lg:text-[42px]"
           style={{ borderColor: theme.subhead, color: theme.heading }}
         >
           {children}
@@ -61,7 +61,7 @@ function buildComponents(theme: ArticleTheme): PortableTextComponents {
           as="p"
           y={10}
           duration={0.55}
-          className="mb-6 text-lg leading-relaxed lg:text-[19px]"
+          className="mb-6 text-lg leading-relaxed lg:text-xl"
           style={{ color: theme.bodyText }}
         >
           {children}

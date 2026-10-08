@@ -105,7 +105,7 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
               href="https://www.tobb.no"
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden border-l pl-3 font-heading text-[11px] uppercase leading-tight tracking-[0.12em] underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-none sm:inline-block ${
+              className={`hidden border-l pl-3 font-label text-[11px] uppercase leading-tight tracking-[0.12em] underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-none sm:inline-block ${
                 onLight
                   ? 'border-navy/20 text-navy/70 hover:text-navy focus-visible:text-navy'
                   : 'border-white/30 text-white/80 hover:text-white focus-visible:text-white'

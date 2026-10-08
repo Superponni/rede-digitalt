@@ -60,7 +60,7 @@ function TextBlocks({ blocks, styledQuoteIndices, allBlocks, c }: { blocks: any[
                 if (isInlineQuote(value) && styledQuoteIndices.has(blockIndex)) {
                   return (
                     <blockquote
-                      className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                      className="my-8 border-l-2 pl-6 font-quote text-xl leading-relaxed lg:text-2xl"
                       style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                     >
                       {children}
@@ -81,18 +81,18 @@ function TextBlocks({ blocks, styledQuoteIndices, allBlocks, c }: { blocks: any[
                 )
               },
               h2: ({ children }) => (
-                <h2 className="mb-6 mt-14 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
+                <h2 className="mb-6 mt-14 font-display font-bold text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                   {children}
                 </h2>
               ),
               h3: ({ children }) => (
-                <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
+                <h3 className="mb-6 mt-10 font-display font-bold text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                   {children}
                 </h3>
               ),
               blockquote: ({ children }) => (
                 <blockquote
-                  className="my-10 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                  className="my-10 border-l-2 pl-6 font-quote text-xl leading-relaxed lg:text-2xl"
                   style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                 >
                   {children}
@@ -264,7 +264,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
           />
         </div>
         {(data.image!.caption || data.image!.photographer) && (
-          <p className="mt-3 text-center font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
+          <p className="mt-3 text-center font-label text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
             {data.image!.caption}
             {data.image!.photographer && (
               <>{data.image!.caption ? ' — ' : ''}Foto: {data.image!.photographer}</>
@@ -302,7 +302,7 @@ export function TextWithImage({ data, index }: TextWithImageProps) {
               components={{
                 block: {
                   normal: ({ children }) => (
-                    <p className="font-display text-2xl leading-[1.3] md:text-3xl lg:text-[2.75rem] lg:leading-[1.25] xl:text-[3.25rem]" style={{ color: c.title }}>
+                    <p className="font-serif font-light text-2xl leading-[1.3] md:text-3xl lg:text-[2.75rem] lg:leading-[1.25] xl:text-[3.25rem]" style={{ color: c.title }}>
                       {children}
                     </p>
                   ),

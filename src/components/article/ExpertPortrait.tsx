@@ -51,14 +51,14 @@ export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortrait
           <path id={nameArcId} d="M 22,150 A 128,128 0 0,0 278,150" fill="none" />
         </defs>
         {name && (
-          <text fill={color} className="font-heading" fontSize="15" letterSpacing="2.5">
+          <text fill={color} className="font-label" fontSize="15" letterSpacing="2.5">
             <textPath href={`#${nameArcId}`} startOffset="50%" textAnchor="middle">
               {name.toUpperCase()}
             </textPath>
           </text>
         )}
         {role && (
-          <text fill={color} className="font-heading" fontSize="10.5" letterSpacing="1.5">
+          <text fill={color} className="font-label" fontSize="10.5" letterSpacing="1.5">
             <textPath href={`#${roleArcId}`} startOffset="50%" textAnchor="middle">
               {role.toUpperCase()}
             </textPath>

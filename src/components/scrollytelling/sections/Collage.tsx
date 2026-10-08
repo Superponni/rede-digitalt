@@ -78,7 +78,7 @@ function CollageImage({ img, onZoom }: { img: CollageImage; onZoom: () => void }
         />
       </div>
       {(img.caption || img.credit) && (
-        <p className="mt-2 font-heading text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: 'inherit' }}>
+        <p className="mt-2 font-label text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: 'inherit' }}>
           {img.caption}
           {img.credit && <>{img.caption ? ' — ' : ''}Foto: {img.credit}</>}
         </p>
@@ -160,7 +160,7 @@ export function Collage({ data }: CollageProps) {
       </div>
 
       <p
-        className="mt-9 text-center font-heading text-[10px] uppercase tracking-[0.3em]"
+        className="mt-9 text-center font-label text-[10px] uppercase tracking-[0.3em]"
         style={{ color: c.muted }}
       >
         Trykk på et bilde for å forstørre
@@ -194,7 +194,7 @@ export function Collage({ data }: CollageProps) {
               className="max-h-[82vh] w-auto rounded-sm object-contain"
             />
             {(images[focused].caption || images[focused].credit) && (
-              <figcaption className="mt-3 text-center font-heading text-[11px] uppercase tracking-[0.2em] text-white/70">
+              <figcaption className="mt-3 text-center font-label text-[11px] uppercase tracking-[0.2em] text-white/70">
                 {images[focused].caption}
                 {images[focused].credit && (
                   <>

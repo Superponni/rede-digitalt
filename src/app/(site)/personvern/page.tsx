@@ -47,10 +47,10 @@ const portableComponents: PortableTextComponents = {
       <h2 className="mb-4 mt-14 font-display text-2xl text-navy lg:text-3xl">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="mb-3 mt-10 font-heading text-lg font-bold text-navy">{children}</h3>
+      <h3 className="mb-3 mt-10 font-display text-xl font-bold text-navy">{children}</h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-8 border-l-2 border-gold pl-6 font-display text-xl italic text-navy/80">
+      <blockquote className="my-8 border-l-2 border-gold pl-6 font-quote text-xl text-navy/80">
         {children}
       </blockquote>
     ),
@@ -107,7 +107,7 @@ export default async function PrivacyPage() {
       <div className="mx-auto max-w-[760px] px-6 pb-28 pt-28 lg:px-0 lg:pt-36">
         <header>
           {updated && (
-            <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-navy/40">
+            <span className="font-label text-[11px] uppercase tracking-[0.3em] text-navy/40">
               Sist oppdatert {updated}
             </span>
           )}

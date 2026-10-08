@@ -95,7 +95,7 @@ export function StorbyKart({ data }: StorbyKartProps) {
     <section ref={sectionRef} className="relative px-6 py-16 lg:px-16 lg:py-24" style={{ backgroundColor: bgColor }}>
       <div className="mx-auto w-full max-w-[760px] text-center">
         {data.eyebrow && (
-          <span data-head className="mb-3 inline-block font-heading text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
+          <span data-head className="mb-3 inline-block font-label text-[12px] uppercase tracking-[0.3em]" style={{ color: c.accent }}>
             {data.eyebrow}
           </span>
         )}
@@ -147,7 +147,7 @@ export function StorbyKart({ data }: StorbyKartProps) {
             <div key={`lab-${city.name}`} className="absolute" style={{ left: pct(city.x, 300), top: pct(city.y, 520) }}>
               <span
                 data-citylabel
-                className="absolute whitespace-nowrap font-heading text-[12px] font-bold uppercase tracking-[0.12em]"
+                className="absolute whitespace-nowrap font-label text-[12px] font-bold uppercase tracking-[0.12em]"
                 style={{
                   color: c.heading,
                   top: '50%',
@@ -162,7 +162,7 @@ export function StorbyKart({ data }: StorbyKartProps) {
           <div className="absolute" style={{ left: pct(TRH.x, 300), top: pct(TRH.y, 520) }}>
             <span
               data-trh-label
-              className="absolute whitespace-nowrap font-heading text-[13px] font-bold uppercase tracking-[0.12em]"
+              className="absolute whitespace-nowrap font-label text-[13px] font-bold uppercase tracking-[0.12em]"
               style={{ color: c.accent, top: '50%', left: '14px', transform: 'translateY(-50%)' }}
             >
               Trondheim

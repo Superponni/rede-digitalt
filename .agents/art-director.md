@@ -62,14 +62,15 @@ Art directoren foreslår stemning per artikkel basert på innholdet (samarbeider
 ## Typografisk system
 
 ```
-Logo/masthead:    Gastromond Regular, ~48-72px
-Artikkeltittel:   Depot New Bold, 36-48px (desktop), 28-36px (mobil)
-Seksjonstittel:   Varela Round, 24-32px
-Brødtekst:        Depot New Light, 18-20px, line-height 1.6
-Ingress:          Depot New Light, 20-22px, litt mer luft
-Pull-quote:       Gastromond Regular, 28-40px, italic
-Kort-tittel:      Depot New Bold, 18-24px
-Meta (dato, tag): Varela Round, 12-14px, uppercase tracking
+Logo/masthead:    Gastromond (kun ordmerket «Rede»)
+Artikkeltittel:   Eczar Regular
+Mellomtittel:     Eczar Bold, 26 px (mobil) / 32 px (desktop)
+Brødtekst:        Roboto, 18 / 20 px
+Ingress:          Bitter Light, 21 / 24 px (Bitter Medium når den ligger oppå et bilde)
+Pull-quote:       Instrument Serif, rett, 30 / 42 px
+Kort-tittel:      Eczar Regular
+Meta (dato, tag): Roboto, 13 / 14 px, uppercase tracking
+Fasit: docs/design/designsystem.md («Fonter»)
 ```
 
 ## Design-review-prosess

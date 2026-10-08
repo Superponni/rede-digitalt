@@ -143,7 +143,7 @@ export function FullscreenParallax({ data }: FullscreenParallaxProps) {
                     </h2>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="mb-6 mt-10 font-display text-2xl leading-tight text-white lg:text-3xl">
+                    <h3 className="mb-6 mt-10 font-display font-bold text-2xl leading-tight text-white lg:text-3xl">
                       {children}
                     </h3>
                   ),
@@ -160,7 +160,7 @@ export function FullscreenParallax({ data }: FullscreenParallaxProps) {
       {(data.backgroundImage?.caption || data.backgroundImage?.photographer) && (
         <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/65 via-black/25 to-transparent px-6 pb-6 pt-24 lg:px-16 lg:pb-8">
           <p
-            className="mx-auto max-w-[1100px] text-center font-heading text-[11px] uppercase leading-relaxed tracking-[0.28em] text-white/90"
+            className="mx-auto max-w-[1100px] text-center font-label text-[11px] uppercase leading-relaxed tracking-[0.28em] text-white/90"
             style={{ textShadow: '0 1px 10px rgba(0,0,0,0.6)' }}
           >
             {data.backgroundImage.caption}
