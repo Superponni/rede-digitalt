@@ -22,8 +22,12 @@ const SEO_FRAGMENT = `
 // trenger et nytt felt, legges det HER — ett sted i stedet for fem. Spørringer
 // som trenger ekstra (heroVideoUrl, edition, expertPortrait) legger det til
 // etter ${CARD_CORE}.
+// Kort (forside, tema, «Les også», meny) bruker eget kortbilde når det er satt,
+// ellers hovedbildet. Feltet heter fortsatt `heroImage` ut til komponentene.
+const CARD_IMAGE = `"heroImage": coalesce(cardImage, heroImage)`
+
 const CARD_CORE = `
-  _id, title, slug, type, teaser, heroImage,
+  _id, title, slug, type, teaser, ${CARD_IMAGE},
   tags[]->{ _id, title, slug }
 `
 
@@ -80,7 +84,7 @@ export const MENU_QUERY = defineQuery(
   `{
     "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug },
     "featured": *[${PUBLISHABLE_ARTICLE} && frontpagePlacement == "top"] | order(select(menuFeatured == true => 1, 0) desc, publishedAt desc) [0] {
-      _id, title, slug, heroImage, "heroVideoUrl": heroVideo.asset->url, tags[]->{ _id, title }
+      _id, title, slug, ${CARD_IMAGE}, "heroVideoUrl": heroVideo.asset->url, tags[]->{ _id, title }
     }
   }`
 )

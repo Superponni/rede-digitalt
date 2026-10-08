@@ -213,6 +213,22 @@ export const article = defineType({
       ],
     }),
     defineField({
+      name: 'cardImage',
+      title: 'Bilde på kort (valgfritt)',
+      type: 'image',
+      group: 'innhold',
+      options: { hotspot: true },
+      description:
+        'Brukes på forsiden, temasider, «Les også» og i menyen i stedet for hovedbildet. La stå tomt for å bruke hovedbildet også der.',
+      fields: [
+        {
+          name: 'alt',
+          title: 'Alt-tekst',
+          type: 'string',
+        },
+      ],
+    }),
+    defineField({
       name: 'heroVideo',
       title: 'Hero-video',
       type: 'file',
