@@ -73,7 +73,7 @@ export function GifKort({ data }: GifKortProps) {
           <img src={data.src} alt={data.alt || ''} className="w-full rounded-xl" />
         )}
         {data.caption && (
-          <p className="px-2 pb-1 pt-3 text-center font-heading text-[12px] uppercase tracking-[0.18em]" style={{ color: c.muted }}>
+          <p className="px-2 pb-1 pt-3 text-center font-label text-[12px] uppercase tracking-[0.18em]" style={{ color: c.muted }}>
             {data.caption}
           </p>
         )}

@@ -98,7 +98,7 @@ export function StatementPanel({ data }: StatementPanelProps) {
 
       <blockquote ref={quoteRef} className="relative z-10 max-w-4xl text-center">
         <p
-          className="font-display text-[1.7rem] italic leading-[1.3] md:text-4xl lg:text-5xl lg:leading-[1.25]"
+          className="font-quote text-[1.7rem] leading-[1.3] md:text-4xl lg:text-5xl lg:leading-[1.25]"
           style={{ color: textColor }}
         >
           {words.map((word, i) => (
@@ -111,7 +111,7 @@ export function StatementPanel({ data }: StatementPanelProps) {
 
         {data.attribution && (
           <footer
-            className="mt-8 font-heading text-[11px] uppercase tracking-[0.4em]"
+            className="mt-8 font-label text-[11px] uppercase tracking-[0.4em]"
             style={{ color: `${textColor}99` }}
           >
             — {data.attribution}

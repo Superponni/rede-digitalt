@@ -110,7 +110,7 @@ export function Veideling({ data }: VeidelingProps) {
               <span className="block font-display text-base leading-tight sm:text-lg" style={{ color: c.heading }}>
                 {main.label}
               </span>
-              <span className="mt-0.5 block font-heading text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.accent }}>
+              <span className="mt-0.5 block font-label text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.accent }}>
                 {main.badge}
               </span>
             </div>
@@ -118,7 +118,7 @@ export function Veideling({ data }: VeidelingProps) {
               <span className="block font-display text-sm leading-tight sm:text-base" style={{ color: c.muted }}>
                 {side.label}
               </span>
-              <span className="mt-0.5 block font-heading text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.muted }}>
+              <span className="mt-0.5 block font-label text-[11px] font-bold uppercase tracking-[0.16em]" style={{ color: c.muted }}>
                 {side.badge}
               </span>
             </div>

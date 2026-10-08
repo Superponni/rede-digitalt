@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { bodyFont, headingFont } from './fonts'
+import { bodyFont, displayFont, serifFont, quoteFont } from './fonts'
 import { siteUrl, siteName, siteDescription } from '@/lib/site'
 import { metaRobots } from '@/lib/seo'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -39,10 +39,10 @@ export default function RootLayout({
   return (
     <html
       lang="nb"
-      className={`${bodyFont.variable} ${headingFont.variable} h-full antialiased`}
+      className={`${bodyFont.variable} ${displayFont.variable} ${serifFont.variable} ${quoteFont.variable} h-full antialiased`}
     >
       <head>
-        {/* Adobe Fonts — Gastromond (display font) */}
+        {/* Adobe Fonts — Gastromond (kun logoen) */}
         <link rel="stylesheet" href="https://use.typekit.net/ybg3phx.css" />
       </head>
       <body className="min-h-full flex flex-col font-body">

@@ -113,7 +113,7 @@ export default async function AboutPage() {
         {/* ① Tittelblokk + magasincover */}
         <header className="grid grid-cols-12 items-start gap-x-6 gap-y-12 pt-24 lg:pt-36">
           <div className="col-span-12 lg:col-span-7">
-            <span className="font-heading text-[11px] uppercase tracking-[0.4em] text-navy/50">
+            <span className="font-label text-[11px] uppercase tracking-[0.4em] text-navy/50">
               {c.label}
             </span>
             <h1 className="mt-7 font-display text-[2.75rem] leading-[1.05] text-navy sm:text-6xl lg:text-7xl">
@@ -154,7 +154,7 @@ export default async function AboutPage() {
       <section className="bg-navy">
         <div className="mx-auto grid max-w-[1200px] grid-cols-12 items-center gap-x-6 gap-y-6 px-6 py-20 lg:px-12 lg:py-28">
           <div className="col-span-12 lg:col-span-5">
-            <span className="font-heading text-[11px] uppercase tracking-[0.4em] text-gold">
+            <span className="font-label text-[11px] uppercase tracking-[0.4em] text-gold">
               {c.featureLabel}
             </span>
             <p className="mt-4 font-display text-3xl leading-tight text-mint lg:text-5xl">
@@ -191,7 +191,7 @@ export default async function AboutPage() {
         {/* ④ Hva du finner — temaer som fargeord */}
         {tags.length > 0 && (
           <section className="grid grid-cols-12 gap-x-6 py-24 lg:py-36">
-            <span className="col-span-12 mb-8 font-heading text-[11px] uppercase tracking-[0.4em] text-navy/40 lg:col-span-3 lg:mb-0">
+            <span className="col-span-12 mb-8 font-label text-[11px] uppercase tracking-[0.4em] text-navy/40 lg:col-span-3 lg:mb-0">
               {c.topicsLabel}
             </span>
             <div className="col-span-12 grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-3 lg:col-span-9">
@@ -211,7 +211,7 @@ export default async function AboutPage() {
         )}
 
         {/* ⑤ Avsender */}
-        <p className="border-t border-navy/10 pt-10 font-heading text-sm uppercase tracking-[0.2em] text-navy/50">
+        <p className="border-t border-navy/10 pt-10 font-label text-sm uppercase tracking-[0.2em] text-navy/50">
           {c.publisherLine}
         </p>
 
@@ -245,7 +245,7 @@ export default async function AboutPage() {
                       </div>
                     )}
                   </div>
-                  <div className="mt-3 font-heading text-[11px] uppercase tracking-[0.2em] text-navy/50 transition-colors group-hover:text-navy">
+                  <div className="mt-3 font-label text-[11px] uppercase tracking-[0.2em] text-navy/50 transition-colors group-hover:text-navy">
                     Nr {edition.number} · {edition.year}
                   </div>
                 </Link>

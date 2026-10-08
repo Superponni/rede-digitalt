@@ -107,18 +107,18 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
                       </p>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
+                      <h2 className="mb-6 mt-10 font-display font-bold text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
+                      <h3 className="mb-6 mt-10 font-display font-bold text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
-                        className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                        className="my-8 border-l-2 pl-6 font-quote text-xl leading-relaxed lg:text-2xl"
                         style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}
@@ -150,7 +150,7 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
             />
           )}
           {data.image?.photographer && (
-            <p className="absolute bottom-4 left-4 z-10 font-heading text-[10px] uppercase tracking-[0.3em] text-white/60">
+            <p className="absolute bottom-4 left-4 z-10 font-label text-[10px] uppercase tracking-[0.3em] text-white/60">
               Foto: {data.image.photographer}
             </p>
           )}
@@ -173,18 +173,18 @@ export function StickyPortrait({ data }: StickyPortraitProps) {
                       </p>
                     ),
                     h2: ({ children }) => (
-                      <h2 className="mb-6 mt-10 font-display text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
+                      <h2 className="mb-6 mt-10 font-display font-bold text-3xl leading-tight lg:text-4xl" style={{ color: c.heading }}>
                         {children}
                       </h2>
                     ),
                     h3: ({ children }) => (
-                      <h3 className="mb-6 mt-10 font-display text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
+                      <h3 className="mb-6 mt-10 font-display font-bold text-2xl leading-tight lg:text-3xl" style={{ color: c.heading }}>
                         {children}
                       </h3>
                     ),
                     blockquote: ({ children }) => (
                       <blockquote
-                        className="my-8 border-l-2 pl-6 font-display text-xl italic leading-relaxed lg:text-2xl"
+                        className="my-8 border-l-2 pl-6 font-quote text-xl leading-relaxed lg:text-2xl"
                         style={{ borderColor: `rgba(${c.accentRgb}, 0.5)`, color: `rgba(${c.accentRgb}, ${c.isDark ? 0.85 : 1})` }}
                       >
                         {children}

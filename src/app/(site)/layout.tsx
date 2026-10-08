@@ -49,7 +49,7 @@ export default async function SiteLayout({
               rett til hovedinnholdet. */}
           <a
             href="#main"
-            className="sr-only z-[60] rounded-br-lg bg-navy px-5 py-3 font-heading text-[11px] uppercase tracking-[0.2em] text-mint focus:not-sr-only focus:absolute focus:left-0 focus:top-0"
+            className="sr-only z-[60] rounded-br-lg bg-navy px-5 py-3 font-label text-[11px] uppercase tracking-[0.2em] text-mint focus:not-sr-only focus:absolute focus:left-0 focus:top-0"
           >
             Hopp til innhold
           </a>

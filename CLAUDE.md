@@ -43,9 +43,11 @@ Dev-server: `npm run dev` → http://localhost:3100 (port 3100, ikke 3000).
 - Blå: `#0047BB`
 
 **Fonter (merkevare):**
-- Display: Gastromond Regular (logo, store titler) — Adobe Fonts
-- Hovedfont: Depot New Light/Bold (brødtekst) — på nett i dag brukes Roboto som reserve
-- Sekundær: Varela Round Regular (headings)
+- Logo: Gastromond (kun ordmerket) — Adobe Fonts
+- Titler og mellomtitler: Eczar (Regular / Bold)
+- Ingress, teasere: Bitter (bildetekst står i Roboto)
+- Sitater og aksenter: Instrument Serif
+- Brødtekst og etiketter: Roboto (reserve for Depot New, som ikke er lagt inn på nett)
 
 Profil/fonter er under redesign høsten 2026 — se `docs/design/designsystem.md` for gjeldende tilstand.
 

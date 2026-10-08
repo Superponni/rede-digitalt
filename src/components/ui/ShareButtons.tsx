@@ -67,7 +67,7 @@ export function ShareButtons({ url, title, className = '', tone = 'dark' }: Shar
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <span className={`font-heading text-xs uppercase tracking-widest ${t.label}`}>
+      <span className={`font-label text-xs uppercase tracking-widest ${t.label}`}>
         Del
       </span>
       {shareLinks.map((link) => (

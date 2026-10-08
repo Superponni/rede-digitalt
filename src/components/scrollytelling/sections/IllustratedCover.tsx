@@ -65,7 +65,7 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
         {data.kicker && (
           <span
             data-cover-item
-            className="mb-6 inline-block font-heading text-[13px] uppercase tracking-[0.4em]"
+            className="mb-6 inline-block font-label text-[13px] uppercase tracking-[0.4em]"
             style={{ color: c.accent }}
           >
             {data.kicker}
@@ -85,7 +85,7 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
         {data.dek && (
           <p
             data-cover-item
-            className="mt-7 max-w-[560px] text-[18px] leading-[1.7] lg:text-xl"
+            className="mt-7 max-w-[560px] font-serif text-[18px] font-light leading-[1.7] lg:text-xl"
             style={{ color: c.body }}
           >
             {data.dek}
@@ -120,7 +120,7 @@ export function IllustratedCover({ data }: IllustratedCoverProps) {
         className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2"
         aria-hidden="true"
       >
-        <span className="font-heading text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
+        <span className="font-label text-[10px] uppercase tracking-[0.3em]" style={{ color: c.muted }}>
           Bla nedover
         </span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ color: c.accent }}>

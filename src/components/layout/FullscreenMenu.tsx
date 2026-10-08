@@ -145,7 +145,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
           <div className="mt-10">
             <div className="mb-4 flex items-center gap-3">
               <span className="h-px w-8 bg-white/30" />
-              <span className="font-heading text-[11px] uppercase tracking-[0.3em] text-white/70">
+              <span className="font-label text-[11px] uppercase tracking-[0.3em] text-white/70">
                 Temaer
               </span>
             </div>
@@ -183,7 +183,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
                 </div>
               )}
               <div className="min-w-0">
-                <span className="font-heading text-[10px] uppercase tracking-[0.3em] text-gold">
+                <span className="font-label text-[10px] uppercase tracking-[0.3em] text-gold">
                   Utvalgt
                 </span>
                 <span className="mt-1 block font-display text-xl leading-snug text-white/85 transition-colors duration-300 group-hover:text-mint">
@@ -201,16 +201,16 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
 
           {/* Social links — minst white/60 på navy for å bestå kontrastkravet */}
           <div className="mt-12 flex gap-6">
-            <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               TOBB.no
             </a>
-            <a href="https://www.facebook.com/tobbinfo" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <a href="https://www.facebook.com/tobbinfo" target="_blank" rel="noopener noreferrer" className="font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Facebook
             </a>
-            <a href="https://www.instagram.com/boligbyggelaget_tobb/" target="_blank" rel="noopener noreferrer" className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <a href="https://www.instagram.com/boligbyggelaget_tobb/" target="_blank" rel="noopener noreferrer" className="font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Instagram
             </a>
-            <Link href="/personvern" onClick={onClose} className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
+            <Link href="/personvern" onClick={onClose} className="font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               Personvern
             </Link>
           </div>
@@ -243,14 +243,14 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
               )}
               <div className="mt-6 flex flex-col items-center">
                 {featured.tags?.[0] && (
-                  <span className="mb-2 font-heading text-[11px] uppercase tracking-[0.4em] text-white/70">
+                  <span className="mb-2 font-label text-[11px] uppercase tracking-[0.4em] text-white/70">
                     {featured.tags[0].title}
                   </span>
                 )}
                 <h3 className="max-w-md font-display text-3xl leading-[1.1] text-white/80 transition-colors duration-300 group-hover:text-mint lg:text-4xl">
                   {featured.title}
                 </h3>
-                <span className="mt-5 inline-block rounded-sm border border-white/20 px-5 py-2 font-heading text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors group-hover:border-white/40 group-hover:text-white">
+                <span className="mt-5 inline-block rounded-sm border border-white/20 px-5 py-2 font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors group-hover:border-white/40 group-hover:text-white">
                   Les nå
                 </span>
               </div>

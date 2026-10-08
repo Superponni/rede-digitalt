@@ -62,7 +62,7 @@ function HeroAudioButton({ src }: { src: string }) {
           </svg>
         )}
       </span>
-      <span className="font-heading text-[11px] uppercase tracking-[0.2em] text-white/70">
+      <span className="font-label text-[11px] uppercase tracking-[0.2em] text-white/70">
         {playing ? 'Spiller' : 'Hør artikkelen'}
       </span>
     </button>
@@ -156,12 +156,12 @@ export function HeroSection({ data }: HeroSectionProps) {
 
         <div ref={metaRef} className="flex flex-col items-center">
           {data.subtitle && (
-            <p className="mt-4 max-w-xl text-center text-base leading-relaxed text-white/60 lg:text-lg">
+            <p className="mt-6 max-w-xl text-center font-serif text-base font-medium leading-relaxed text-white/60 lg:mt-8 lg:text-lg">
               {data.subtitle}
             </p>
           )}
           {(data.author || data.photographer || data.date) && (
-            <p className="mt-6 font-heading text-[10px] uppercase tracking-[0.4em] text-white/40">
+            <p className="mt-6 font-label text-[10px] uppercase tracking-[0.4em] text-white/40">
               {data.author && data.photographer && data.author === data.photographer ? (
                 <span>Tekst &amp; Foto: {data.author}</span>
               ) : (

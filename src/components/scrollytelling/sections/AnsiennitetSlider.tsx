@@ -62,7 +62,7 @@ export function AnsiennitetSlider({ data }: AnsiennitetSliderProps) {
       <div className="mx-auto max-w-[720px] text-center">
         <span
           data-slider-item
-          className="mb-4 inline-block font-heading text-[12px] uppercase tracking-[0.3em]"
+          className="mb-4 inline-block font-label text-[12px] uppercase tracking-[0.3em]"
           style={{ color: c.accent }}
         >
           Test deg selv
@@ -79,7 +79,7 @@ export function AnsiennitetSlider({ data }: AnsiennitetSliderProps) {
         {/* Stor tallverdi */}
         <div data-slider-item className="mb-2">
           <span className="font-display text-6xl lg:text-7xl" style={{ color: c.accent }}>{years}</span>
-          <span className="ml-2 font-heading text-lg" style={{ color: c.body }}>
+          <span className="ml-2 font-label text-lg" style={{ color: c.body }}>
             {years === 1 ? 'år som medlem' : 'år som medlem'}
           </span>
         </div>
@@ -124,7 +124,7 @@ export function AnsiennitetSlider({ data }: AnsiennitetSliderProps) {
               style={{ left: `${pct}%`, transition: 'left 0.12s ease-out' }}
             >
               <span
-                className="block rounded-full px-3 py-1 font-heading text-[11px] font-bold uppercase tracking-[0.15em] shadow-md"
+                className="block rounded-full px-3 py-1 font-label text-[11px] font-bold uppercase tracking-[0.15em] shadow-md"
                 style={{ backgroundColor: c.accent, color: bgColor }}
               >
                 Du
@@ -132,7 +132,7 @@ export function AnsiennitetSlider({ data }: AnsiennitetSliderProps) {
             </div>
           </div>
           {/* ender-etiketter */}
-          <div className="mt-2 flex justify-between font-heading text-[10px] uppercase tracking-[0.25em]" style={{ color: c.muted }}>
+          <div className="mt-2 flex justify-between font-label text-[10px] uppercase tracking-[0.25em]" style={{ color: c.muted }}>
             <span>Bakerst</span>
             <span>Fremst i køen</span>
           </div>

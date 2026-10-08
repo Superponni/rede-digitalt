@@ -18,9 +18,12 @@
   --color-tobb-blue: #0047BB;
 
   /* Font families */
-  --font-display: "gastromond", Georgia, serif;
+  --font-logo: "gastromond", Georgia, serif;
+  --font-display: var(--font-face-display), Eczar, Georgia, serif;
+  --font-serif: var(--font-face-serif), Bitter, Georgia, serif;
+  --font-quote: var(--font-face-quote), "Instrument Serif", Georgia, serif;
   --font-body: var(--font-face-body), Roboto, system-ui, sans-serif;
-  --font-heading: var(--font-face-heading), "Varela Round", system-ui, sans-serif;
+  --font-label: var(--font-face-body), Roboto, system-ui, sans-serif;
 }
 
 /* Reserver alltid plass til scrollbaren, slik at den sentrerte headeren
@@ -33,6 +36,19 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--color-navy);
+}
+
+/* Ingen enslige ord på siste linje. Løpende tekst brytes «pent» (nettleseren
+   flytter med seg et ord til ned), mens titler, mellomtitler og sitater får
+   jevnt lange linjer. Ligger i base-laget, så klasser som text-balance og
+   inline-stiler fortsatt vinner. */
+@layer base {
+  p, li, dd, figcaption, blockquote {
+    text-wrap: pretty;
+  }
+  h1, h2, h3, h4, .font-display, .font-quote {
+    text-wrap: balance;
+  }
 }
 
 /* Hide scrollbar for horizontal scroll sections */

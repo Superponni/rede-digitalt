@@ -46,7 +46,7 @@ export function ArticleOutro({
         <div className="px-6 pt-16 lg:px-16 lg:pt-24">
           <div className="mx-auto max-w-[1400px]">
             <h2
-              className="mb-10 text-center font-heading text-[11px] uppercase tracking-[0.3em]"
+              className="mb-10 text-center font-label text-[11px] uppercase tracking-[0.3em]"
               style={{ color: theme.muted }}
             >
               Les også
@@ -73,7 +73,7 @@ export function ArticleOutro({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 p-5">
                       {a.tags?.[0] && (
-                        <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.3em] text-white/90">
+                        <span className="mb-2 inline-block font-label text-[10px] uppercase tracking-[0.3em] text-white/90">
                           {a.tags[0].title}
                         </span>
                       )}
@@ -92,7 +92,7 @@ export function ArticleOutro({
         {hasThemeLink && (
           <Link
             href={`/tema/${primaryTag!.slug!.current}`}
-            className="inline-flex items-center gap-2 font-heading text-sm uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
+            className="inline-flex items-center gap-2 font-label text-sm uppercase tracking-[0.2em] transition-opacity hover:opacity-70"
             style={{ color: theme.subhead }}
           >
             Se alle saker om {primaryTag!.title}
@@ -104,7 +104,7 @@ export function ArticleOutro({
 
         <Link
           href="/"
-          className="inline-flex items-center gap-3 font-heading text-[11px] uppercase tracking-[0.3em] transition-opacity hover:opacity-70"
+          className="inline-flex items-center gap-3 font-label text-[11px] uppercase tracking-[0.3em] transition-opacity hover:opacity-70"
           style={{ color: theme.muted }}
         >
           <span className="h-px w-8 bg-current" />

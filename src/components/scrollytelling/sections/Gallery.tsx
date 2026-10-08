@@ -105,7 +105,7 @@ function MontageImage({
         />
       </div>
       {(img.caption || img.credit || img.photographer) && (
-        <figcaption className="mt-3 font-heading text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: c.muted }}>
+        <figcaption className="mt-3 font-label text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: c.muted }}>
           {img.caption}
           {(img.credit || img.photographer) && (
             <>{img.caption ? ' — ' : ''}Foto: {img.credit || img.photographer}</>
@@ -153,7 +153,7 @@ function Montage({ images, c }: { images: GalleryImage[]; c: ReturnType<typeof u
               />
             </div>
             {(img.caption || img.credit || img.photographer) && (
-              <figcaption className="mt-2.5 font-heading text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: c.muted }}>
+              <figcaption className="mt-2.5 font-label text-[10px] uppercase leading-relaxed tracking-[0.2em]" style={{ color: c.muted }}>
                 {img.caption}
                 {(img.credit || img.photographer) && (
                   <>{img.caption ? ' — ' : ''}Foto: {img.credit || img.photographer}</>
@@ -213,7 +213,7 @@ export function Gallery({ data }: GalleryProps) {
                 )}
               </div>
               {(img.caption || img.photographer) && (
-                <p className="mt-3 font-heading text-[10px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
+                <p className="mt-3 font-label text-[10px] uppercase tracking-[0.2em]" style={{ color: c.muted }}>
                   {img.caption}
                   {img.photographer && (
                     <>{img.caption ? ' — ' : ''}Foto: {img.photographer}</>

@@ -76,7 +76,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
 
         {/* Subtitle */}
         {data.subtitle && (
-          <p className="mb-2 font-heading text-[10px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
+          <p className="mb-2 font-label text-[10px] uppercase tracking-[0.4em]" style={{ color: c.muted }}>
             {data.subtitle}
           </p>
         )}
@@ -104,7 +104,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
         {/* Ingredients */}
         {data.ingredients && data.ingredients.length > 0 && (
           <div className="mb-6">
-            <h4 className="mb-3 font-heading text-[11px] uppercase tracking-[0.3em]" style={{ color: accent }}>
+            <h4 className="mb-3 font-label text-[11px] uppercase tracking-[0.3em]" style={{ color: accent }}>
               Ingredienser
             </h4>
             <ul className="space-y-1.5">
@@ -121,7 +121,7 @@ export function RecipeCard({ data }: RecipeCardProps) {
         {/* Instructions */}
         {data.instructions && (
           <div>
-            <h4 className="mb-3 font-heading text-[11px] uppercase tracking-[0.3em]" style={{ color: accent }}>
+            <h4 className="mb-3 font-label text-[11px] uppercase tracking-[0.3em]" style={{ color: accent }}>
               Fremgangsmate
             </h4>
             <p className="text-[15px] leading-[1.7] whitespace-pre-line" style={{ color: c.body }}>

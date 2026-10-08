@@ -1,10 +1,10 @@
-import { Roboto, Varela_Round } from 'next/font/google'
+import { Roboto, Eczar, Bitter, Instrument_Serif } from 'next/font/google'
 
-// Gastromond (display) lastes via Adobe Fonts i layout.tsx
+// Gastromond (kun logoen) lastes via Adobe Fonts i layout.tsx
 // font-family: "gastromond", serif
 
-// Body font — fallback for Depot New (Adobe Fonts)
-// Brukes til brødtekst og generell tekst
+// Brødtekst og etiketter — Roboto (reserve for Depot New, som ikke er lagt inn)
+// Etiketter settes i versaler med font-label.
 export const bodyFont = Roboto({
   subsets: ['latin'],
   variable: '--font-face-body',
@@ -12,11 +12,26 @@ export const bodyFont = Roboto({
   weight: ['300', '400', '700'],
 })
 
-// Heading font — Varela Round (tilgjengelig på Google Fonts)
-// Brukes til headings (h2, h3) og meta-tekst
-export const headingFont = Varela_Round({
+// Titler og mellomtitler — Eczar (Regular for titler, Bold for mellomtitler)
+export const displayFont = Eczar({
   subsets: ['latin'],
-  variable: '--font-face-heading',
+  variable: '--font-face-display',
+  display: 'swap',
+})
+
+// Ingress, undertittel, teasere og bildetekster — Bitter
+export const serifFont = Bitter({
+  subsets: ['latin'],
+  variable: '--font-face-serif',
+  display: 'swap',
+  style: ['normal', 'italic'],
+})
+
+// Sitater og aksenter — Instrument Serif
+export const quoteFont = Instrument_Serif({
+  subsets: ['latin'],
+  variable: '--font-face-quote',
   display: 'swap',
   weight: '400',
+  style: ['normal', 'italic'],
 })

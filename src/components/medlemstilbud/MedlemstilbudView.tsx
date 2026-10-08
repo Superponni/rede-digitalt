@@ -34,7 +34,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
       {/* Hero / intro */}
       <header className="px-6 pt-32 pb-12 lg:px-12 lg:pt-40 lg:pb-16">
         <div className="mx-auto max-w-[1400px]">
-          <p className="mb-4 font-heading text-[11px] uppercase tracking-[0.5em] text-navy/75">
+          <p className="mb-4 font-label text-[11px] uppercase tracking-[0.5em] text-navy/75">
             TOBB · Medlemsfordeler
           </p>
           <h1 className="max-w-4xl font-display text-[2.5rem] leading-[0.95] text-navy sm:text-6xl md:text-7xl lg:text-8xl">
@@ -86,7 +86,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
 
               {/* Regioner */}
               <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-navy/5 pt-3">
-                <span className="mr-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/75">
+                <span className="mr-1 font-label text-[10px] uppercase tracking-[0.3em] text-navy/75">
                   Sted
                 </span>
                 <RegionChip
@@ -111,7 +111,7 @@ export function MedlemstilbudView({ offers }: { offers: MemberOffer[] }) {
           <section aria-label="Tilbud" className="px-6 py-12 lg:px-12 lg:py-16">
             <div className="mx-auto max-w-[1400px]">
               <p
-                className="mb-6 font-heading text-[11px] uppercase tracking-[0.3em] text-navy/75"
+                className="mb-6 font-label text-[11px] uppercase tracking-[0.3em] text-navy/75"
                 aria-live="polite"
               >
                 {filtered.length} tilbud
@@ -154,7 +154,7 @@ function FilterTab({
   return (
     <button
       onClick={onClick}
-      className="group flex items-baseline gap-1.5 font-heading text-sm"
+      className="group flex items-baseline gap-1.5 font-label text-sm"
     >
       {/* Teksten holdes alltid i marineblått for lesbarhet — kategorifargen
           (kan være gull/grønn) brukes kun som understrek-aksent, der lav
@@ -188,7 +188,7 @@ function RegionChip({
   return (
     <button
       onClick={onClick}
-      className={`rounded-sm border px-3 py-1 font-heading text-[12px] transition-colors ${
+      className={`rounded-sm border px-3 py-1 font-label text-[12px] transition-colors ${
         active
           ? 'border-navy bg-navy text-white'
           : 'border-navy/30 text-navy/80 hover:border-navy/50 hover:text-navy'
@@ -232,7 +232,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
               {initialsFor(offer.businessName)}
             </div>
           )}
-          <span className="mt-1 text-right font-heading text-[10px] uppercase tracking-[0.25em] text-navy/70">
+          <span className="mt-1 text-right font-label text-[10px] uppercase tracking-[0.25em] text-navy/70">
             {offer.category}
           </span>
         </div>
@@ -256,7 +256,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
 
         <div className="mt-auto pt-5">
           {regions.length > 0 && (
-            <p className="mb-3 font-heading text-[11px] uppercase tracking-[0.2em] text-navy/70">
+            <p className="mb-3 font-label text-[11px] uppercase tracking-[0.2em] text-navy/70">
               {regions.join(' · ')}
             </p>
           )}
@@ -267,7 +267,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
             {offer.relatedArticleSlug && (
               <Link
                 href={`/artikler/${offer.relatedArticleSlug}`}
-                className="font-heading text-[12px] font-semibold tracking-wide text-navy transition-colors hover:text-navy/70"
+                className="font-label text-[12px] font-semibold tracking-wide text-navy transition-colors hover:text-navy/70"
               >
                 Les saken →
               </Link>
@@ -277,14 +277,14 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
                 href={`https://${offer.website.replace(/^https?:\/\//, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-heading text-[12px] text-navy/70 transition-colors hover:text-navy"
+                className="font-label text-[12px] text-navy/70 transition-colors hover:text-navy"
               >
                 Til nettside ↗
               </a>
             )}
             <button
               onClick={() => setOpen((v) => !v)}
-              className="ml-auto font-heading text-[12px] text-navy/70 transition-colors hover:text-navy"
+              className="ml-auto font-label text-[12px] text-navy/70 transition-colors hover:text-navy"
             >
               {open ? 'Skjul vilkår' : 'Vis vilkår'}
             </button>

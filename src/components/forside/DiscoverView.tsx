@@ -97,7 +97,7 @@ function DiscoverCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10" />
             <div className="absolute inset-0 flex flex-col items-center justify-end px-4 pb-6 text-center lg:px-6 lg:pb-8">
               {tag && (
-                <span className="mb-2 inline-block font-heading text-[10px] uppercase tracking-[0.4em] text-white/75 lg:text-[11px]">
+                <span className="mb-2 inline-block font-label text-[13px] uppercase tracking-[0.25em] text-white/80 lg:text-sm">
                   {tag}
                 </span>
               )}
@@ -119,11 +119,11 @@ function DiscoverCard({
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 p-3 lg:p-4">
               {tag && (
-                <span className="mb-1 inline-block font-heading text-[9px] uppercase tracking-[0.3em] text-white/75 lg:text-[10px]">
+                <span className="mb-1 inline-block font-label text-[11px] uppercase tracking-[0.2em] text-white/80 lg:text-[13px]">
                   {tag}
                 </span>
               )}
-              <h3 className="font-display text-sm leading-snug text-white lg:text-base">
+              <h3 className="font-display text-lg leading-[1.15] text-white lg:text-[22px]">
                 {title}
               </h3>
             </div>
@@ -204,20 +204,20 @@ export function DiscoverView({
                     <div className="flex flex-1 flex-col justify-between p-5 lg:p-7">
                       <div>
                         <span
-                          className="font-heading text-[10px] uppercase tracking-[0.3em] lg:text-[11px]"
+                          className="font-label text-[13px] uppercase tracking-[0.2em] lg:text-sm"
                           style={{ color: theme.muted }}
                         >
                           Leder
                         </span>
                         <h3
-                          className="mt-3 font-display text-lg leading-[1.2] transition-opacity duration-300 group-hover:opacity-80 lg:text-xl xl:text-2xl"
+                          className="mt-3 font-display text-xl leading-[1.15] transition-opacity duration-300 group-hover:opacity-80 lg:text-2xl xl:text-[28px]"
                           style={{ color: theme.title }}
                         >
                           {editorial.title}
                         </h3>
                         {editorial.teaserText && (
                           <p
-                            className="mt-4 line-clamp-3 text-sm leading-relaxed"
+                            className="mt-4 line-clamp-3 font-serif text-[15px] leading-relaxed lg:text-base"
                             style={{ color: theme.bodyText }}
                           >
                             {editorial.teaserText}
@@ -225,7 +225,7 @@ export function DiscoverView({
                         )}
                       </div>
                       <span
-                        className="mt-5 inline-flex items-center gap-1.5 font-heading text-xs uppercase tracking-[0.18em] lg:text-[13px]"
+                        className="mt-5 inline-flex items-center gap-1.5 font-label text-xs uppercase tracking-[0.18em] lg:text-[13px]"
                         style={{ color: theme.link }}
                       >
                         Les lederen
@@ -303,7 +303,7 @@ export function DiscoverView({
             som raden over, så forsiden holder ett kortspråk hele veien ned. */}
         {remaining.length > 0 && (
           <div>
-            <p className="mb-2 px-1 font-heading text-[10px] uppercase tracking-[0.3em] text-navy/40">
+            <p className="mb-2 px-1 font-label text-[13px] uppercase tracking-[0.2em] text-navy/50 lg:text-sm">
               Flere saker
             </p>
             <div className="grid grid-cols-2 gap-2 lg:grid-cols-4 lg:gap-3">

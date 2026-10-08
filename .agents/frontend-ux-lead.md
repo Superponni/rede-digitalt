@@ -32,13 +32,14 @@ app/
 - Blå: `#0047BB`
 
 **Typografi:**
-- Display/logo: Gastromond Regular (Rede-logoen, store titler)
-- Hovedfont: Depot New Light/Bold (brødtekst, mengdetekst)
-- Sekundær: Varela Round Regular (headings, fremhevet tekst)
-- Web fallback: Roboto (Google Fonts), Calibri (system)
-- Last via `next/font` med CSS variables (`--font-display`, `--font-body`, `--font-heading`)
+- Logo: Gastromond (kun ordmerket «Rede», Adobe Fonts)
+- Titler og mellomtitler: Eczar (Regular / Bold)
+- Ingress, undertittel, teasere: Bitter
+- Sitater: Instrument Serif
+- Brødtekst, bildetekst og etiketter: Roboto (Depot New er ikke lagt inn på nett)
+- Lastes via `next/font` med CSS-variabler (`--font-display`, `--font-serif`, `--font-quote`, `--font-body`, `--font-label`)
 
-**Viktig:** Depot New og Gastromond er sannsynligvis lisensierte fonter. Sjekk om TOBB har webfont-lisenser. Hvis ikke, bruk web-alternativene.
+Fasit for roller, størrelser og regler: `docs/design/designsystem.md` («Fonter»).
 
 ### Forsiden (oppdagelsesflaten)
 
