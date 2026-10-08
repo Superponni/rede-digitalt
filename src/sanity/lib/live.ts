@@ -13,6 +13,10 @@ const STEGA_SKIP_FIELDS = [
   'accentColor',
   'colorMode',
   'heroLayout',
+  // forsiden: sammenlignes rått i DiscoverView (frontpagePlacement === 'top') —
+  // med stega-tegn ble ingen sak regnet som toppsak, og toppraden forsvant i
+  // forhåndsvisning.
+  'frontpagePlacement',
   'spotifyUrl',
   'url',
   // medlemstilbud: category er oppslagsnøkkel (fargevalg) + dedup/filter-nøkkel,

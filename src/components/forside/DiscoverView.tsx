@@ -102,10 +102,13 @@ function DiscoverCard({
                 </span>
               )}
               {/* hyphens + break-words: lange enkeltord («Forsvarsrunden») skal
-                  orddeles innenfor kortet, ikke renne ut over kanten på mobil. */}
+                  orddeles innenfor kortet, ikke renne ut over kanten på mobil.
+                  hyphenateLimitChars: bare ord på 12+ tegn deles, så vanlige ord
+                  («mel-lom», «Trond-heim») flyttes hele til neste linje i stedet.
+                  textWrap balance jevner ut linjene. */}
               <h3
                 className="w-full max-w-full break-words font-display text-lg leading-[1.1] text-white sm:text-2xl md:text-3xl lg:text-4xl"
-                style={{ hyphens: 'auto' }}
+                style={{ hyphens: 'auto', hyphenateLimitChars: '12 4 4', textWrap: 'balance' }}
               >
                 {title}
               </h3>
@@ -207,14 +210,14 @@ export function DiscoverView({
                           Leder
                         </span>
                         <h3
-                          className="mt-2 font-display text-lg leading-[1.12] transition-opacity duration-300 group-hover:opacity-80 lg:text-2xl xl:text-3xl"
+                          className="mt-3 font-display text-lg leading-[1.2] transition-opacity duration-300 group-hover:opacity-80 lg:text-xl xl:text-2xl"
                           style={{ color: theme.title }}
                         >
                           {editorial.title}
                         </h3>
                         {editorial.teaserText && (
                           <p
-                            className="mt-3 line-clamp-3 text-sm leading-relaxed lg:text-base"
+                            className="mt-4 line-clamp-3 text-sm leading-relaxed"
                             style={{ color: theme.bodyText }}
                           >
                             {editorial.teaserText}

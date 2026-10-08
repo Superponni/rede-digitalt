@@ -40,6 +40,14 @@ interface StandardArticleProps {
   shareUrl: string
 }
 
+// Aldri ett ord alene på siste linje: bind de to siste ordene sammen med et
+// hardt mellomrom. Virker i alle nettlesere, også der `text-wrap: balance`
+// ikke slår inn (lange ingresser på mobil).
+function noOrphan(text: string): string {
+  const i = text.trimEnd().lastIndexOf(' ')
+  return i > 0 ? text.slice(0, i) + '\u00A0' + text.slice(i + 1) : text
+}
+
 export function StandardArticle({ article, eyebrow, related = [], primaryTag, shareUrl }: StandardArticleProps) {
   const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
@@ -112,7 +120,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
 
       <h1
         className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl"
-        style={{ color: theme.title }}
+        style={{ color: theme.title, textWrap: 'balance' }}
       >
         {noBreakNumbers(article.title)}
       </h1>
@@ -120,7 +128,7 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       {article.subtitle && (
         <p
           className="mt-3 font-display text-2xl italic leading-tight md:text-3xl"
-          style={{ color: theme.subtitle }}
+          style={{ color: theme.subtitle, textWrap: 'balance' }}
         >
           {article.subtitle}
         </p>
@@ -132,9 +140,9 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
           className={`mt-5 font-heading text-lg font-bold leading-snug lg:text-xl ${
             centered ? 'mx-auto max-w-xl' : ''
           }`}
-          style={{ color: theme.standfirst }}
+          style={{ color: theme.standfirst, textWrap: 'balance' }}
         >
-          {article.teaser}
+          {noOrphan(article.teaser)}
         </p>
       )}
 
