@@ -282,7 +282,7 @@ Lag 5-8 seksjoner med god variasjon. Varier overganger.`
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-5-5',
-    max_tokens: 2000,
+    max_tokens: 8000,
     messages: [
       {
         role: 'user',
@@ -305,8 +305,9 @@ ${text.substring(0, 6000)}`,
     ],
   })
 
-  const content = response.content[0]
-  if (content.type !== 'text') throw new Error('Unexpected response type')
+  // Modellen kan legge en thinking-blokk foran svaret — finn tekstblokken.
+  const content = response.content.find((b) => b.type === 'text')
+  if (!content || content.type !== 'text') throw new Error('Unexpected response type')
 
   // Parse JSON from response (handle potential markdown wrapping)
   let jsonStr = content.text.trim()

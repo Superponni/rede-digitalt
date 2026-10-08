@@ -1,0 +1,108 @@
+{
+  "edition": {
+    "id": "edition-3-2026",
+    "title": "Rede nr 3 2026",
+    "number": 3,
+    "year": 2026,
+    "publishedAt": "2026-09-01T00:00:00Z"
+  },
+  "editionFolder": "Rede 3 2026",
+  "tags": [
+    "bolig",
+    "økonomi",
+    "fritid",
+    "kultur",
+    "mat",
+    "sport",
+    "nabolag",
+    "bærekraft",
+    "barn"
+  ],
+  "articles": [
+    {
+      "folder": "Nybygg",
+      "docxFiles": ["Bergslyst_rede3_26.docx"],
+      "title": "Bergslyst",
+      "type": "standard",
+      "slug": "bergslyst",
+      "tags": ["bolig", "nabolag"]
+    },
+    {
+      "folder": "TSO",
+      "docxFiles": ["TSO_rede3_26.docx"],
+      "title": "Klassikere & nye opplevelser",
+      "type": "standard",
+      "slug": "klassikere-og-nye-opplevelser",
+      "tags": ["kultur", "fritid"]
+    },
+    {
+      "folder": "Trygge og gode bomiljø",
+      "docxFiles": ["trygge og gode bomiljø2_rede3.docx"],
+      "title": "Trygghet bygges mellom husene",
+      "type": "standard",
+      "imageDir": "Gjenbruksbua",
+      "slug": "trygghet-bygges-mellom-husene",
+      "tags": ["nabolag", "bolig", "bærekraft"]
+    },
+    {
+      "folder": "Profil Nellie Santamarta",
+      "docxFiles": ["Profil Nellie Santamarta_rede3_26.docx"],
+      "title": "Ung stemme i Trondheim",
+      "type": "standard",
+      "imageDir": "Filemail.com - Ungdomspolitiker TobbREDE",
+      "slug": "ung-stemme-i-trondheim",
+      "tags": ["nabolag", "barn"]
+    },
+    {
+      "folder": "Forsikring og skadeforebygging i egen bolig",
+      "docxFiles": ["Forsikring og skadeforebygging i egen bolig_rede2_26.docx"],
+      "title": "Når uhellet først er ute",
+      "type": "standard",
+      "slug": "nar-uhellet-forst-er-ute",
+      "tags": ["bolig", "økonomi"]
+    },
+    {
+      "folder": "Kattemsrunden",
+      "docxFiles": ["Kattemsrunden_rede3_26.docx"],
+      "title": "Hele Kattem i bevegelse",
+      "type": "standard",
+      "imageDir": "Kattemsrunden",
+      "slug": "hele-kattem-i-bevegelse",
+      "tags": ["sport", "fritid", "nabolag", "barn"]
+    },
+    {
+      "folder": "Nyhavna bistro",
+      "docxFiles": ["Nyhavna Bistro_rede3_26.docx"],
+      "title": "Bistroen i nabolaget",
+      "type": "standard",
+      "imageDir": "Nyhavna Bistro",
+      "slug": "bistroen-i-nabolaget",
+      "tags": ["mat", "nabolag"]
+    },
+    {
+      "folder": "Forkjøpsrett",
+      "docxFiles": ["forkjøpsrett_rede3_26.docx"],
+      "title": "Vil du bruke forkjøpsretten?",
+      "type": "standard",
+      "slug": "vil-du-bruke-forkjopsretten",
+      "tags": ["bolig", "økonomi"]
+    },
+    {
+      "folder": "TV-aksjonen",
+      "docxFiles": ["tv-aksjon_rede3_26.docx"],
+      "title": "Årets viktigste dugnad",
+      "type": "standard",
+      "imageDir": "TV-aksjonen bilder",
+      "slug": "arets-viktigste-dugnad",
+      "tags": ["nabolag"]
+    },
+    {
+      "folder": "Kåseri",
+      "docxFiles": ["Rede 2604_ny ring.docx"],
+      "title": "En ring er den beste gave",
+      "type": "standard",
+      "slug": "en-ring-er-den-beste-gave",
+      "tags": ["bolig"]
+    }
+  ]
+}
