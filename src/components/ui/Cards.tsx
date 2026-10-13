@@ -131,7 +131,7 @@ export function ArticleCard({
         </h3>
         {teaser && (
           <p
-            className={`text-[17px] leading-normal ${hasMedia ? 'line-clamp-2' : 'line-clamp-4'}`}
+            className={`text-[17px] leading-normal ${hasMedia ? 'line-clamp-3' : 'line-clamp-4'}`}
             style={{ color: palette.text, textWrap: 'balance' }}
           >
             {shortTeaser(teaser, 110)}
@@ -211,7 +211,7 @@ export function HairlineRow({ items }: { items: HairlineItem[] }) {
           </h3>
           {item.teaser && (
             <p
-              className="line-clamp-3 font-serif text-base font-medium leading-normal"
+              className="line-clamp-5 font-serif text-base font-medium leading-normal"
               style={{ color: MAGENTA, textWrap: 'balance' }}
             >
               {shortTeaser(item.teaser, 110)}

@@ -119,7 +119,8 @@ function CardGrid({ articles, palettes }: { articles: FrontArticle[]; palettes: 
           key={article._id}
           article={article}
           palette={palettes[i]}
-          className={i >= wideFrom ? 'desk:col-span-6' : 'desk:col-span-4'}
+          // Nettbrett har to kort i bredden: blir det ett til overs, fyller det raden.
+          className={`${n % 2 === 1 && i === n - 1 ? 'tab:col-span-2' : ''} ${i >= wideFrom ? 'desk:col-span-6' : 'desk:col-span-4'}`}
           sizes={
             i >= wideFrom
               ? '(min-width: 1200px) 640px, (min-width: 720px) 50vw, 100vw'

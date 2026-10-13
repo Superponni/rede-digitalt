@@ -106,6 +106,13 @@ En sak vises bare ett sted. Valgfritt felt «Stor sak nr. 2» gir en stor sak ti
 
 Deling → «Se alle saker om [tema]» → tre fargede kort → «Les også» (tre tekstkort). Står alltid på krem, også etter feature-saker.
 
+### Mobil og nettbrett (sett gjennom 13. okt.)
+
+- Toppen av saken er **venstrestilt** på mobil og nettbrett; midtstilling gjelder bare desktop (og rundt kildeportrett).
+- Nettbrett har to kort i bredden. Blir ett kort til overs, fyller det hele raden.
+- Kortfargene trekkes så to like aldri står over hverandre — heller ikke på mobil (ett kort i bredden) og nettbrett (to).
+- Ingress på bildekort får inntil tre linjer, på tekstkort (hårstrek) inntil fem.
+
 ### Nye felt i Studio (vises på rede.no/studio først når grenen er publisert)
 
 - «Forsiden» (eget dokument): «Forsidesak» og «Stor sak nr. 2».
@@ -128,7 +135,6 @@ En «Annonse»-pille for annonseinnhold ble laget og fjernet igjen samme dag —
 - Illustrasjoner på tekstkort (malen viser transparente PNG-er; finnes nesten ikke).
 - Samleside «Alle saker» når det blir flere enn 9 eldre saker.
 - Teal-verdien. Sitat på mobil (malen har midtstilt i lilla bånd; vi har venstrestilt).
-- Nettbrett er ikke sett gjennom.
 
 ---
 

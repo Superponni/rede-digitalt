@@ -50,7 +50,12 @@ export function ArticleOutro({ related = [], primaryTag, shareUrl, shareTitle }:
         {cards.length > 0 && (
           <div className={`grid gap-6 tab:grid-cols-2 desk:grid-cols-3 ${hasThemeLink ? '' : 'mt-10 tab:mt-16'}`}>
             {cards.map((a, i) => (
-              <ArticleCard key={a._id} article={a} palette={palettes[i]} />
+              <ArticleCard
+                key={a._id}
+                article={a}
+                palette={palettes[i]}
+                className={cards.length % 2 === 1 && i === cards.length - 1 ? 'tab:col-span-2 desk:col-span-1' : ''}
+              />
             ))}
           </div>
         )}

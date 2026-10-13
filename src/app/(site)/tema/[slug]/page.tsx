@@ -104,6 +104,7 @@ export default async function TemaPage({
               palette={palettes[i]}
               tag={data.tag!.title}
               showTeaser
+              className={articles.length % 2 === 1 && i === articles.length - 1 ? 'tab:col-span-2 desk:col-span-1' : ''}
             />
           ))}
         </div>

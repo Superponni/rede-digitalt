@@ -100,18 +100,27 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
     article.edition && `Rede nr ${article.edition.number} ${article.edition.year}`,
   ].filter(Boolean)
 
+  // På mobil og nettbrett er toppen venstrestilt (som i malen); midtstillingen
+  // gjelder desktop. Rundt kildeportrett er midtstilt på alle størrelser.
+  const ALIGN = {
+    side: 'items-start',
+    full: 'items-start desk:items-center desk:text-center',
+    none: 'items-start desk:items-center desk:text-center',
+    portrait: 'items-center text-center',
+  } as const
+
   const header = (
     <Reveal
       as="header"
       immediate
       y={22}
       duration={0.9}
-      className={`flex flex-col gap-6 ${centered ? 'items-center text-center' : 'items-start'}`}
+      className={`flex flex-col gap-6 ${ALIGN[layout]}`}
     >
       {showExpertBadge && <ExpertRow experts={experts} color={NAVY} fallbackAlt={article.title} />}
 
       {(eyebrow || (article.tags && article.tags.length > 0)) && (
-        <div className={`flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}>
+        <div className={`flex flex-wrap gap-2 ${layout === 'portrait' ? 'justify-center' : centered ? 'desk:justify-center' : ''}`}>
           {eyebrow && <span className={PILL}>{eyebrow}</span>}
           {article.tags?.map((tag) => (
             <Link key={tag._id} href={`/tema/${tag.slug.current}`} className={`${PILL} hover:bg-[#9FB3C3]`}>

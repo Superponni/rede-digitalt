@@ -179,24 +179,26 @@ export function assignCardPalettes(
       out.push(chosen)
       return
     }
-    const rowStart = i - (i % perRow)
-    const row = out.slice(rowStart, i)
-    const left = i % perRow > 0 ? out[i - 1] : undefined
-    const above = i - perRow >= 0 ? out[i - perRow] : undefined
-    // Håndvalgt farge på neste kort i raden: unngå den også.
-    const right = (i + 1) % perRow > 0 ? items[i + 1]?.cardColor : undefined
-    let p = hash(_id.replace(/^drafts\./, '')) % n
-    for (let tries = 0; tries < n; tries++) {
-      const cand = CARD_PALETTES[p]
-      const clash =
-        cand.key === left?.key ||
-        cand.key === above?.key ||
-        cand.key === right ||
-        (cand.solid && (row.some((r) => r.solid) || right === 'navy'))
-      if (!clash) break
-      p = (p + 1) % n
-    }
-    out.push(CARD_PALETTES[p])
+    const row = out.slice(i - (i % perRow), i)
+    // Naboer på alle skjermbredder: kortet rett før (mobil: over, ellers til
+    // venstre), to før (nettbrett: over) og `perRow` før (desktop: over).
+    const near = [out[i - 1], out[i - 2], out[i - perRow]].filter(Boolean).map((c) => c.key)
+    // Håndvalgt farge på neste kort: unngå den også.
+    const next = items[i + 1]?.cardColor
+    const start = hash(_id.replace(/^drafts\./, '')) % n
+    const order = CARD_PALETTES.map((_, k) => CARD_PALETTES[(start + k) % n])
+    const pick =
+      // Strengt: ingen like naboer, maks ett mørkt kort per rad.
+      order.find(
+        (c) =>
+          !near.includes(c.key) &&
+          c.key !== next &&
+          !(c.solid && (row.some((r) => r.solid) || next === 'navy')),
+      ) ??
+      // Går ikke det opp: i det minste ikke lik kortet rett før.
+      order.find((c) => c.key !== out[i - 1]?.key) ??
+      order[0]
+    out.push(pick)
   })
   return out
 }
