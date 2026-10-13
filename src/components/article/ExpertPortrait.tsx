@@ -41,8 +41,8 @@ export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortrait
       {/* Buet rolle (øverst) + navn (nederst). Buene er valgt slik at tekstens
           INNERKANT (mot fotoet) ligger på samme sirkellinje for begge – ellers
           ville rollen øverst (som vokser utover) ligget lenger fra fotoet enn
-          navnet nederst (som vokser innover). Navn r=128, rolle r=117.5 ≈ navnets
-          innerkant (128 − versalhøyde). */}
+          navnet nederst (som vokser innover). Navn r=131, rolle r=117.5 ≈ navnets
+          innerkant (131 − versalhøyde). */}
       <svg viewBox="0 0 300 300" className="absolute inset-0 h-full w-full" aria-hidden="true">
         <defs>
           {/* Øvre bue (rolle): venstre → topp → høyre, lesbar. Buen går 250°
@@ -50,17 +50,17 @@ export function ExpertPortrait({ image, alt, name, role, color }: ExpertPortrait
               skriftstørrelse som kan leses (minst 12 px på skjerm). */}
           <path id={roleArcId} d="M 53.8,217.4 A 117.5,117.5 0 1,1 246.2,217.4" fill="none" />
           {/* Nedre bue (navn): venstre → bunn → høyre, lesbar */}
-          <path id={nameArcId} d="M 22,150 A 128,128 0 0,0 278,150" fill="none" />
+          <path id={nameArcId} d="M 19,150 A 131,131 0 0,0 281,150" fill="none" />
         </defs>
         {name && (
-          <text fill={color} className="font-label" fontSize="17" fontWeight="500" letterSpacing="2.5">
+          <text fill={color} className="font-label" fontSize="19" fontWeight="500" letterSpacing="2">
             <textPath href={`#${nameArcId}`} startOffset="50%" textAnchor="middle">
               {name.toUpperCase()}
             </textPath>
           </text>
         )}
         {role && (
-          <text fill={color} className="font-label" fontSize="13.5" fontWeight="500" letterSpacing="1.2">
+          <text fill={color} className="font-label" fontSize="15.5" fontWeight="500" letterSpacing="1.2">
             <textPath href={`#${roleArcId}`} startOffset="50%" textAnchor="middle">
               {role.toUpperCase()}
             </textPath>

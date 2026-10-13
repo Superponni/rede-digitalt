@@ -113,6 +113,16 @@ Deling → «Se alle saker om [tema]» → tre fargede kort → «Les også» (t
 - Kortfargene trekkes så to like aldri står over hverandre — heller ikke på mobil (ett kort i bredden) og nettbrett (to).
 - Ingress på bildekort får inntil tre linjer, på tekstkort (hårstrek) inntil fem.
 
+### Andre sider (justert 13. okt.)
+
+- **Medlemstilbud:** kortene er flate og firkantede med tynn marineblå ramme (ingen skygge, ingen hvit flate). Stedsvalgene er piller.
+- **Rundt kildeportrett:** teksten rundt står i versaler, navn ca. 18 px og rolle ca. 14,5 px på skjerm (var 11,5 og 8). Portrettet er 280 px. Små bokstaver ble prøvd og forkastet — Elise ville ha versaler. Plass til roller på ca. 40 tegn.
+- **Personvern:** lys topp som resten av siden.
+
+### Status ved dagens slutt (13. okt.)
+
+Elise er fornøyd med utseendet og vil publisere **i morgen (14. okt.)** — ikke publiser før hun sier «publiser». Grenen er lastet opp; forhåndsvisning for Asbjørn: `https://rede-digitalt-git-feat-ny-mal-superponni.vercel.app` (krever Vercel-innlogging). Publisering = prøvebygg, pull request, slå sammen med `main`. Utkastene i Sanity (se under) publiseres i Studio av Elise/Asbjørn, ikke av Claude.
+
 ### Nye felt i Studio (vises på rede.no/studio først når grenen er publisert)
 
 - «Forsiden» (eget dokument): «Forsidesak» og «Stor sak nr. 2».
