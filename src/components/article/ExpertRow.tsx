@@ -8,10 +8,10 @@ export interface ExpertItem {
 
 /**
  * Rad med ekspert-/kilde-portretter. Med flere portretter skaleres de ned så de
- * står pent på én rad på desktop (1 → 230px, 2 → 200px, 3 → 175px). På smale
+ * står pent på én rad på desktop (1 → 280px, 2 → 250px, 3 → 230px). På smale
  * skjermer bryter raden til flere linjer. Alle portrettene er like store.
  */
-const widthForCount = (n: number) => (n >= 3 ? 175 : n === 2 ? 200 : 230)
+const widthForCount = (n: number) => (n >= 3 ? 230 : n === 2 ? 250 : 280)
 
 export function ExpertRow({
   experts,
