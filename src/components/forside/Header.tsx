@@ -15,6 +15,7 @@ function lightFromRoute(pathname: string): boolean {
     pathname === '/' ||
     pathname === '/om' ||
     pathname === '/medlemstilbud' ||
+    pathname === '/personvern' ||
     pathname.startsWith('/tema/')
   )
 }
