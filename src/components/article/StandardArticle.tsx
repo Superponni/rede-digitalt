@@ -1,4 +1,5 @@
-import { naturalSrc, coverSrc, imageDims, focalPosition } from '@/sanity/lib/imageHelpers'
+import Link from 'next/link'
+import { naturalSrc, imageDims, focalPosition } from '@/sanity/lib/imageHelpers'
 import { PortableTextRenderer } from './PortableTextRenderer'
 import { AudioPlayer } from './AudioPlayer'
 import { Reveal } from './Reveal'
@@ -8,12 +9,8 @@ import { ArticleOutro } from './ArticleOutro'
 import { SetHeaderSurface } from '@/components/layout/HeaderTheme'
 import type { RelatedArticle } from '@/lib/related'
 import { noBreakNumbers } from '@/lib/typography'
-import {
-  getArticleTheme,
-  type AccentColor,
-  type ColorMode,
-  type HeroLayout,
-} from './theme'
+import { NAVY } from '@/lib/palette'
+import type { AccentColor, ColorMode, HeroLayout } from './theme'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface StandardArticleProps {
@@ -48,36 +45,60 @@ function noOrphan(text: string): string {
   return i > 0 ? text.slice(0, i) + '\u00A0' + text.slice(i + 1) : text
 }
 
+const PILL =
+  'label inline-flex h-7 items-center rounded-full bg-navy-30 px-3.5 text-navy transition-colors'
+
+/**
+ * Standardsak etter malen høsten 2026. Alle saker står på krem med marineblå
+ * tekst og magenta ingress/byline — fargen skifter ikke fra sak til sak (det
+ * er feature-sakene som har den friheten). Signaturfargen brukes bare på
+ * faktaboksene i høyrefeltet.
+ *
+ * To topper:
+ *   - «side»  (layout 1): tekst i kolonne 1–5, bilde i kolonne 7–12.
+ *   - «full»  (layout 2): bilde i full bredde først, så midtstilt tekst.
+ * Bildet vises i originalformat. Stående bilder får alltid «side», siden et
+ * stående bilde i full bredde blir flere skjermhøyder.
+ * I tillegg finnes «none» (ingen bilde) og «portrait» (rundt kildeportrett)
+ * fra før — de har ingen plass i malen ennå og beholder midtstilt topp.
+ */
 export function StandardArticle({ article, eyebrow, related = [], primaryTag, shareUrl }: StandardArticleProps) {
-  const theme = getArticleTheme(article.accentColor, article.colorMode)
   const hasHero = Boolean(article.heroImage?.asset)
   // Én eller flere ekspertkilder med portrett. Portrett-modus krever minst én.
   const experts = (article.experts ?? []).filter((e) => e.portrait?.asset)
   const hasExperts = experts.length > 0
-  const layout: HeroLayout =
+  const heroDims = imageDims(article.heroImage)
+  const heroIsUpright = heroDims.height > heroDims.width * 1.05
+
+  const layout: 'side' | 'full' | 'none' | 'portrait' =
     article.heroLayout === 'portrait'
       ? hasExperts
         ? 'portrait'
         : 'none'
-      : hasHero
-        ? article.heroLayout || 'image-first'
-        : 'none'
+      : !hasHero || article.heroLayout === 'none'
+        ? 'none'
+        : article.heroLayout === 'image-first' && !heroIsUpright
+          ? 'full'
+          : 'side'
+
   // Toppbilde i full oppløsning og originalformat — next/image lager skarpe
-  // varianter per skjermstørrelse. Fikser kornete heldekkende toppbilder.
-  const heroSrc = article.heroImage?.asset ? naturalSrc(article.heroImage) : ''
-  // Side-oppsettet bruker en fast stående 3/4-ramme, fokus-bevisst beskjært.
-  const heroSideSrc = article.heroImage?.asset ? coverSrc(article.heroImage, 3, 4) : ''
+  // varianter per skjermstørrelse.
+  const heroSrc = hasHero ? naturalSrc(article.heroImage!) : ''
   const heroAlt = article.heroImage?.alt || article.title
-  const heroDims = imageDims(article.heroImage)
   const heroFocal = focalPosition(article.heroImage)
 
-  // Magasin-logikk: venstrestilt KUN når tittel og bilde står ved siden av
-  // hverandre. Når teksten står alene eller over/under bilde ⇒ midtstilt.
+  // Venstrestilt KUN når tittel og bilde står ved siden av hverandre.
   const centered = layout !== 'side'
 
   // Ekspert-badge(r) vises oppå andre topp-oppsett (ikke i ren portrett-modus),
   // slik trykksaken gjør på saker med både illustrasjon og kilde-portrett.
   const showExpertBadge = layout !== 'portrait' && hasExperts
+
+  const byline = [
+    article.author && `Tekst: ${article.author.name}`,
+    article.heroImage?.credit && `Foto: ${article.heroImage.credit}`,
+    article.edition && `Rede nr ${article.edition.number} ${article.edition.year}`,
+  ].filter(Boolean)
 
   const header = (
     <Reveal
@@ -85,51 +106,30 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       immediate
       y={22}
       duration={0.9}
-      className={`mx-auto max-w-prose px-6 lg:px-0 ${centered ? 'text-center' : ''}`}
+      className={`flex flex-col gap-6 ${centered ? 'items-center text-center' : 'items-start'}`}
     >
-      {showExpertBadge && (
-        <div className="mb-5">
-          <ExpertRow experts={experts} color={theme.title} fallbackAlt={article.title} />
-        </div>
-      )}
+      {showExpertBadge && <ExpertRow experts={experts} color={NAVY} fallbackAlt={article.title} />}
 
-      {eyebrow && (
-        <div className={`mb-4 ${centered ? 'flex justify-center' : ''}`}>
-          <span
-            className="inline-block rounded-sm px-3 py-1 font-label text-[13px] uppercase tracking-[0.16em] lg:text-sm"
-            style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
-          >
-            {eyebrow}
-          </span>
-        </div>
-      )}
-
-      {article.tags && article.tags.length > 0 && (
-        <div className={`mb-4 flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}>
-          {article.tags.map((tag) => (
-            <span
-              key={tag._id}
-              className="rounded-sm px-3 py-1 font-label text-[13px] uppercase tracking-[0.16em] lg:text-sm"
-              style={{ backgroundColor: theme.chipBg, color: theme.chipText }}
-            >
+      {(eyebrow || (article.tags && article.tags.length > 0)) && (
+        <div className={`flex flex-wrap gap-2 ${centered ? 'justify-center' : ''}`}>
+          {eyebrow && <span className={PILL}>{eyebrow}</span>}
+          {article.tags?.map((tag) => (
+            <Link key={tag._id} href={`/tema/${tag.slug.current}`} className={`${PILL} hover:bg-[#9FB3C3]`}>
               {tag.title}
-            </span>
+            </Link>
           ))}
         </div>
       )}
 
       <h1
-        className="font-display text-4xl leading-[1.05] md:text-5xl lg:text-6xl"
-        style={{ color: theme.title, textWrap: 'balance' }}
+        className="font-display text-[40px] leading-[1.08] tracking-[-0.01em] text-navy desk:text-[64px] desk:leading-[1.05] desk:tracking-[-0.015em]"
+        style={{ textWrap: 'balance' }}
       >
         {noBreakNumbers(article.title)}
       </h1>
 
       {article.subtitle && (
-        <p
-          className="mt-6 font-serif text-2xl italic leading-tight md:mt-8 md:text-3xl"
-          style={{ color: theme.subtitle, textWrap: 'balance' }}
-        >
+        <p className="font-serif text-2xl italic leading-tight text-navy md:text-3xl" style={{ textWrap: 'balance' }}>
           {article.subtitle}
         </p>
       )}
@@ -137,125 +137,95 @@ export function StandardArticle({ article, eyebrow, related = [], primaryTag, sh
       {article.teaser && (
         <p
           data-speakable
-          className={`mt-6 font-serif text-[21px] font-light leading-snug md:mt-8 lg:text-2xl ${
-            centered ? 'mx-auto max-w-xl' : ''
-          }`}
-          style={{ color: theme.standfirst, textWrap: 'balance' }}
+          className="font-serif text-[21px] font-medium leading-snug text-magenta desk:text-2xl"
+          style={{ textWrap: 'pretty' }}
         >
           {noOrphan(article.teaser)}
         </p>
       )}
 
-      <div
-        className={`mt-6 flex items-center gap-4 border-t pt-4 text-sm ${
-          centered ? 'justify-center' : ''
-        }`}
-        style={{ color: theme.muted, borderColor: theme.chipBg }}
-      >
-        {article.author && <span>Tekst: {article.author.name}</span>}
-        {article.edition && (
-          <span>
-            Rede nr {article.edition.number} {article.edition.year}
-          </span>
-        )}
-      </div>
+      {byline.length > 0 && (
+        <p className="font-label text-[13px] font-medium leading-snug tracking-[0.04em] text-magenta">
+          {byline.join('  •  ')}
+        </p>
+      )}
 
       {article.audioFileUrl && (
-        <div className="mt-6">
-          <AudioPlayer src={article.audioFileUrl} theme={theme.isDark ? 'dark' : 'light'} />
+        <div className="w-full max-w-sm">
+          <AudioPlayer src={article.audioFileUrl} theme="light" />
         </div>
       )}
     </Reveal>
   )
 
-  // Menyfarge ut fra hva som faktisk ligger øverst: et heldekkende toppbilde
-  // (image-first) gir mørk flate ⇒ hvit logo. Ellers følger den artikkelens
-  // egen flate (mørk filled/dark ⇒ hvit, lys mint/tinted ⇒ marineblå logo).
-  const headerSurface = layout === 'image-first' ? 'dark' : theme.isDark ? 'dark' : 'light'
-
   return (
-    <article style={{ backgroundColor: theme.pageBg }}>
-      <SetHeaderSurface surface={headerSurface} />
-      {/* Topp */}
-      {layout === 'image-first' && (
-        <>
-          {/* Heldekkende toppbilde, men høydebegrenset så tittelen alltid er
-              synlig over folden. Fokuspunktet holder motivet i ramme. */}
-          <div className="relative h-[58vh] w-full min-h-[380px] max-h-[820px] sm:h-[66vh] lg:h-[74vh]">
+    <article className="bg-cream text-navy">
+      <SetHeaderSurface surface="light" />
+      <div className="wrap pb-14 pt-[69px] tab:pb-24 tab:pt-[109px]">
+        {/* Topp */}
+        {layout === 'side' && (
+          <div className="grid items-center gap-x-6 gap-y-10 pt-10 tab:pt-16 desk:grid-cols-12">
+            <div className="desk:col-span-5">{header}</div>
             <ArticleHeroImage
               src={heroSrc}
               alt={heroAlt}
               width={heroDims.width}
               height={heroDims.height}
-              cover
-              focal={heroFocal}
               priority
-              sizes="100vw"
-              className="h-full w-full"
-            />
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                backgroundImage: `linear-gradient(to top, ${theme.pageBg}, transparent 55%)`,
-              }}
+              sizes="(min-width: 1200px) 640px, 100vw"
+              className={`-mx-5 tab:mx-0 desk:col-span-6 desk:col-start-7 ${
+                heroIsUpright ? 'tab:mx-auto tab:w-full tab:max-w-[520px] desk:max-w-none' : ''
+              }`}
             />
           </div>
-          <div className="relative z-10 -mt-16">{header}</div>
-        </>
-      )}
+        )}
 
-      {layout === 'heading-first' && (
-        <>
-          <div className="pt-16 lg:pt-24">{header}</div>
-          <ArticleHeroImage
-            src={heroSrc}
-            alt={heroAlt}
-            width={heroDims.width}
-            height={heroDims.height}
-            sizes="(min-width: 1024px) 42rem, 100vw"
-            className="mx-auto mt-10 w-full max-w-2xl lg:mt-12"
-          />
-        </>
-      )}
+        {layout === 'full' && (
+          <div className="flex flex-col gap-10 pt-10 tab:gap-16 tab:pt-16">
+            {/* Bildet først på desktop, etter teksten på mobil. Originalformat,
+                men aldri høyere enn ca. 70 % av skjermen — da beskjæres det rundt
+                fokuspunktet, så tittelen ikke skyves langt under folden. */}
+            <div
+              className="relative order-2 -mx-5 max-h-[70vh] overflow-hidden tab:mx-0 tab:w-full desk:order-1"
+              style={{ aspectRatio: `${heroDims.width} / ${heroDims.height}` }}
+            >
+              <ArticleHeroImage
+                src={heroSrc}
+                alt={heroAlt}
+                width={heroDims.width}
+                height={heroDims.height}
+                cover
+                focal={heroFocal}
+                priority
+                sizes="(min-width: 1440px) 1280px, 100vw"
+                className="h-full w-full"
+              />
+            </div>
+            <div className="order-1 desk:order-2 desk:mx-auto desk:w-2/3">{header}</div>
+          </div>
+        )}
 
-      {layout === 'side' && (
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 pt-16 lg:grid-cols-2 lg:gap-12 lg:px-8 lg:pt-24">
-          {header}
-          <ArticleHeroImage
-            src={heroSideSrc}
-            alt={heroAlt}
-            width={heroDims.width}
-            height={heroDims.height}
-            priority
-            aspect="3 / 4"
-            sizes="(min-width: 1024px) 40vw, 100vw"
-            className="mx-auto w-full max-w-md"
-          />
-        </div>
-      )}
+        {layout === 'portrait' && (
+          <div className="pt-10 tab:pt-16 desk:mx-auto desk:w-2/3">
+            <Reveal immediate y={20} duration={0.9} className="mb-10">
+              <ExpertRow experts={experts} color={NAVY} fallbackAlt={article.title} />
+            </Reveal>
+            {header}
+          </div>
+        )}
 
-      {layout === 'portrait' && (
-        <div className="pt-16 lg:pt-24">
-          <Reveal immediate y={20} duration={0.9} className="mb-10 px-6">
-            <ExpertRow experts={experts} color={theme.title} fallbackAlt={article.title} />
-          </Reveal>
-          {header}
-        </div>
-      )}
+        {layout === 'none' && <div className="pt-10 tab:pt-16 desk:mx-auto desk:w-2/3">{header}</div>}
 
-      {layout === 'none' && <div className="pt-16 lg:pt-28">{header}</div>}
-
-      {/* Brødtekst */}
-      {article.body && (
-        <div className="mb-16 mt-12 lg:mb-24">
-          <PortableTextRenderer value={article.body} theme={theme} />
-        </div>
-      )}
+        {/* Brødtekst */}
+        {article.body && (
+          <div className="mt-14 tab:mt-24">
+            <PortableTextRenderer value={article.body} accentColor={article.accentColor} />
+          </div>
+        )}
+      </div>
 
       {/* Veien videre — delt på tvers av alle artikkeltyper */}
       <ArticleOutro
-        accentColor={article.accentColor}
-        colorMode={article.colorMode}
         related={related}
         primaryTag={primaryTag}
         shareUrl={shareUrl}

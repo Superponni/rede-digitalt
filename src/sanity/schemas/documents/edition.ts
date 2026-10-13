@@ -34,6 +34,14 @@ export const edition = defineType({
       type: 'image',
       options: { hotspot: true },
     }),
+    defineField({
+      name: 'articleOrder',
+      title: 'Sakenes rekkefølge (som på trykk)',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'article' }] }],
+      description:
+        'Dra sakene i samme rekkefølge som i det trykte magasinet. Forsiden viser kortene i denne rekkefølgen. Saker som ikke står i lista, kommer til slutt (nyeste først).',
+    }),
   ],
   preview: {
     select: {

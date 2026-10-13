@@ -11,7 +11,12 @@ import { useHeaderSurface } from '@/components/layout/HeaderTheme'
 // Andre ruter antar mørk topp (hero-bilde/navy) som standard, men kan overstyres
 // per side via <SetHeaderSurface> (f.eks. standard-artikler med lys mint-topp).
 function lightFromRoute(pathname: string): boolean {
-  return pathname === '/' || pathname === '/om' || pathname === '/medlemstilbud'
+  return (
+    pathname === '/' ||
+    pathname === '/om' ||
+    pathname === '/medlemstilbud' ||
+    pathname.startsWith('/tema/')
+  )
 }
 
 interface Tag {
@@ -79,62 +84,67 @@ export function Header({ tags = [], featured = null }: HeaderProps) {
       <header
         className={`fixed top-0 z-50 w-full transition-transform duration-300 ease-out ${
           hidden && !menuOpen ? '-translate-y-full' : 'translate-y-0'
-        }`}
+        } ${onLight ? 'bg-cream' : ''}`}
       >
         {/* Diskret scrim KUN når logoen er hvit — garanterer lesbarhet selv
             over et lyst eller travelt toppbilde. På lys flate trengs den ikke. */}
         {!onLight && (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent"
+            className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/25 to-transparent"
           />
         )}
-        <div className="relative mx-auto flex h-16 max-w-[1400px] items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              aria-label="Rede – til forsiden"
-              className={`transition-colors ${textColor} ${hoverColor}`}
-            >
-              <RedeLogo className="h-[22px] w-auto" />
-            </Link>
-            {/* Avsenderen skal være klikkbar: leseren som lurer på hvem TOBB er,
-                skal komme rett til tobb.no. Understreken vises på hover/fokus
-                slik at det er tydelig at det ER en lenke. */}
-            <a
-              href="https://www.tobb.no"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`hidden border-l pl-3 font-label text-[11px] uppercase leading-tight tracking-[0.12em] underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-none sm:inline-block ${
-                onLight
-                  ? 'border-navy/20 text-navy/70 hover:text-navy focus-visible:text-navy'
-                  : 'border-white/30 text-white/80 hover:text-white focus-visible:text-white'
-              }`}
-            >
-              Et medlemsmagasin fra TOBB
-            </a>
-          </div>
-          {/* Bred hamburger (to streker) som morpher til X — renere enn tekst-
-              knappen «Meny +», og selvforklarende på alle flater. */}
-          <button
-            id="menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-expanded={menuOpen}
-            aria-controls="fullscreen-menu"
-            aria-label={menuOpen ? 'Lukk menyen' : 'Åpne menyen'}
-            className={`relative -mr-2 flex h-11 w-11 cursor-pointer items-center justify-center transition-colors ${textColor} ${hoverColor}`}
+        <div className="wrap relative">
+          {/* Malens topp: logo til venstre, to streker til høyre, og en hel
+              marineblå strek under på lyse flater. */}
+          <div
+            className={`flex items-center justify-between gap-6 border-b pb-3 pt-3 tab:pb-6 tab:pt-10 ${
+              onLight ? 'border-navy' : 'border-transparent'
+            }`}
           >
-            <span
-              aria-hidden
-              className="absolute h-[2px] w-8 rounded-full bg-current transition-transform duration-300 ease-out"
-              style={{ transform: menuOpen ? 'rotate(45deg)' : 'translateY(-5px)' }}
-            />
-            <span
-              aria-hidden
-              className="absolute h-[2px] w-8 rounded-full bg-current transition-transform duration-300 ease-out"
-              style={{ transform: menuOpen ? 'rotate(-45deg)' : 'translateY(5px)' }}
-            />
-          </button>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/"
+                aria-label="Rede – til forsiden"
+                className={`transition-colors ${textColor} ${hoverColor}`}
+              >
+                <RedeLogo className="h-[24px] w-auto tab:h-[32px]" />
+              </Link>
+              {/* Avsenderen skal være klikkbar: leseren som lurer på hvem TOBB er,
+                  skal komme rett til tobb.no. Understreken vises på hover/fokus
+                  slik at det er tydelig at det ER en lenke. */}
+              <a
+                href="https://www.tobb.no"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`hidden border-l py-2 pl-4 font-label text-[11px] font-medium uppercase leading-tight tracking-[0.06em] underline-offset-4 transition-colors hover:underline focus-visible:underline sm:inline-block ${
+                  onLight ? 'border-navy text-navy' : 'border-white/60 text-white'
+                }`}
+              >
+                Et medlemsmagasin fra TOBB
+              </a>
+            </div>
+            {/* To streker som morpher til X — selvforklarende på alle flater. */}
+            <button
+              id="menu-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-expanded={menuOpen}
+              aria-controls="fullscreen-menu"
+              aria-label={menuOpen ? 'Lukk menyen' : 'Åpne menyen'}
+              className={`relative flex h-11 w-11 cursor-pointer items-center justify-end transition-colors ${textColor} ${hoverColor}`}
+            >
+              <span
+                aria-hidden
+                className="absolute right-0 h-[2px] w-[26px] bg-current transition-transform duration-300 ease-out"
+                style={{ transform: menuOpen ? 'rotate(45deg)' : 'translateY(-4px)' }}
+              />
+              <span
+                aria-hidden
+                className="absolute right-0 h-[2px] w-[26px] bg-current transition-transform duration-300 ease-out"
+                style={{ transform: menuOpen ? 'rotate(-45deg)' : 'translateY(4px)' }}
+              />
+            </button>
+          </div>
         </div>
       </header>
 

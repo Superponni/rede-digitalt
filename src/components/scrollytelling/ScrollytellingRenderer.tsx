@@ -140,8 +140,6 @@ export function ScrollytellingRenderer({ article, related = [], primaryTag, shar
 
       {/* Veien videre — delt på tvers av alle artikkeltyper */}
       <ArticleOutro
-        accentColor={article.accentColor}
-        colorMode={article.colorMode}
         related={related}
         primaryTag={primaryTag}
         shareUrl={shareUrl}

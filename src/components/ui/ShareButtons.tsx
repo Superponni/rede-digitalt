@@ -15,8 +15,9 @@ const TONES = {
     button: 'bg-white/10 text-white/60 hover:bg-white/20 hover:text-white',
   },
   light: {
-    label: 'text-navy/40',
-    button: 'bg-navy/10 text-navy/55 hover:bg-navy/20 hover:text-navy',
+    label: 'text-navy/70',
+    // Malens ikonknapp: 40 × 40 (44 på berøring), omriss, aldri fylt.
+    button: 'border border-navy text-navy hover:bg-navy-10',
   },
 } as const
 
@@ -67,7 +68,7 @@ export function ShareButtons({ url, title, className = '', tone = 'dark' }: Shar
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <span className={`font-label text-xs uppercase tracking-widest ${t.label}`}>
+      <span className={`label ${t.label}`}>
         Del
       </span>
       {shareLinks.map((link) => (
@@ -77,7 +78,7 @@ export function ShareButtons({ url, title, className = '', tone = 'dark' }: Shar
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Del på ${link.label}`}
-          className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${t.button}`}
+          className={`flex h-11 w-11 items-center justify-center rounded-full transition-colors desk:h-10 desk:w-10 ${t.button}`}
         >
           {link.icon}
         </a>

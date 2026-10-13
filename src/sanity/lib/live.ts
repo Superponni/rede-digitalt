@@ -13,7 +13,9 @@ const STEGA_SKIP_FIELDS = [
   'accentColor',
   'colorMode',
   'heroLayout',
-  // forsiden: sammenlignes rått i DiscoverView (frontpagePlacement === 'top') —
+  // kortpalett-nøkkel (palette.ts) — sammenlignes rått
+  'cardColor',
+  // forsiden: sammenlignes rått i Forside (frontpagePlacement === 'top') —
   // med stega-tegn ble ingen sak regnet som toppsak, og toppraden forsvant i
   // forhåndsvisning.
   'frontpagePlacement',

@@ -19,6 +19,11 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Innhold')
     .items([
+      // Singleton: fast dokument-id, redigeres direkte
+      S.listItem()
+        .title('Forsiden')
+        .icon(HomeIcon)
+        .child(S.document().schemaType('frontPage').documentId('frontPage').title('Forsiden')),
       S.listItem()
         .title('Artikler')
         .icon(DocumentTextIcon)

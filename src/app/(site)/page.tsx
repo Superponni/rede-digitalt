@@ -1,32 +1,20 @@
 import { sanityFetch } from '@/sanity/lib/live'
 import { FRONTPAGE_QUERY } from '@/sanity/lib/queries'
-import { DiscoverView } from '@/components/forside/DiscoverView'
+import { Forside, type FrontArticle } from '@/components/forside/Forside'
+import type { SanityImageRef } from '@/sanity/lib/imageHelpers'
 
 export default async function Home() {
   const data = await sanityFetch<{
-    edition: { _id: string; title: string; number: number; year: number } | null
-    articles: Array<{
-      _id: string
-      title: string
-      slug: { current: string }
-      type: string
-      frontpagePlacement?: 'top' | 'regular'
-      teaser?: string
-      heroImage?: { asset: { _ref: string }; alt?: string }
-      expertPortrait?: { asset: { _ref: string }; alt?: string }
-      heroVideoUrl?: string
-      tags?: { _id: string; title: string }[]
-    }>
-    editorial: {
-      _id: string; title: string; slug: { current: string }; teaserText?: string
-      heroImage?: { asset: { _ref: string }; alt?: string }
-      accentColor?: string; colorMode?: string
-    } | null
+    heroId?: string
+    secondId?: string
+    currentEdition: { _id: string; order?: string[] } | null
+    articles: Array<FrontArticle & { expertPortrait?: SanityImageRef }>
+    editorial: { _id: string; title: string; teaserText?: string } | null
     podcast: {
-      _id: string; title: string; description?: string; spotifyUrl?: string
-      thumbnail?: { asset: { _ref: string } }; duration?: number; episodeNumber?: number
-      tags?: { _id: string; title: string }[]
+      _id: string; title: string; spotifyUrl?: string
+      thumbnail?: SanityImageRef; duration?: number; episodeNumber?: number
     } | null
+    tags: { _id: string; title: string; slug: { current: string } }[]
   }>({ query: FRONTPAGE_QUERY })
 
   // Mangler hovedbilde? Fall tilbake til ekspertportrettet som forsidebilde, slik
@@ -37,11 +25,14 @@ export default async function Home() {
   }))
 
   return (
-    <DiscoverView
+    <Forside
+      heroId={data.heroId}
+      secondId={data.secondId}
+      currentEdition={data.currentEdition}
       articles={articles}
       editorial={data.editorial}
       podcast={data.podcast}
-      edition={data.edition}
+      tags={data.tags || []}
     />
   )
 }

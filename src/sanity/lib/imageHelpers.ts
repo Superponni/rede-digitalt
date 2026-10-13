@@ -65,5 +65,10 @@ export function coverSrc(
   baseWidth = 1600,
 ): string {
   const height = Math.round((baseWidth * ratioH) / ratioW)
-  return urlFor(image).width(baseWidth).height(height).fit('crop').url()
+  const builder = urlFor(image).width(baseWidth).height(height).fit('crop')
+  // Uten fokuspunkt beskjærer Sanity rundt midten — på stående bilder kutter
+  // det ofte hodet av folk. Da sikter vi i stedet mot øvre tredjedel, der
+  // ansikter som regel er. Et fokuspunkt satt i Studio vinner alltid.
+  if (!image.hotspot) return builder.crop('focalpoint').focalPoint(0.5, 0.3).url()
+  return builder.url()
 }
