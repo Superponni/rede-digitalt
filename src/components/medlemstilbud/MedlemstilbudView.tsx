@@ -188,7 +188,7 @@ function RegionChip({
   return (
     <button
       onClick={onClick}
-      className={`rounded-sm border px-3 py-1 font-label text-[12px] transition-colors ${
+      className={`rounded-full border px-3.5 py-1.5 font-label text-[12px] transition-colors ${
         active
           ? 'border-navy bg-navy text-white'
           : 'border-navy/30 text-navy/80 hover:border-navy/50 hover:text-navy'
@@ -209,7 +209,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
     : null
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-lg border border-navy/8 bg-white shadow-[0_1px_3px_rgba(0,56,101,0.06)] transition-shadow hover:shadow-[0_8px_30px_rgba(0,56,101,0.10)]">
+    <article className="flex flex-col overflow-hidden border border-navy/30 transition-colors duration-200 hover:bg-navy-10">
       <div className="flex flex-1 flex-col p-6">
         {/* Topp: logo + kategori */}
         <div className="flex items-start justify-between gap-3">
@@ -225,7 +225,7 @@ function OfferCard({ offer }: { offer: MemberOffer }) {
             </div>
           ) : (
             <div
-              className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md font-display text-base"
+              className="flex h-12 w-12 shrink-0 items-center justify-center font-display text-base"
               style={{ backgroundColor: s.color, color: s.on }}
               aria-hidden
             >
