@@ -19,6 +19,9 @@ const EASE = 'ease-[cubic-bezier(0.22,0.61,0.36,1)]'
 // for å renne ut over kanten; bare ord på 12+ tegn deles.
 const TITLE_BREAK: CSSProperties = { hyphens: 'auto', hyphenateLimitChars: '12 4 4' }
 
+// Linjebegrensningen (line-clamp) klipper alt utenfor boksen — også ringen på
+// «Å» og aksenter over store bokstaver i Eczar. Litt luft på toppen (som tas
+// igjen med negativ marg) holder dem synlige uten å flytte tittelen.
 const TITLE_HOVER = `underline decoration-transparent decoration-2 underline-offset-[6px] transition-[text-decoration-color] duration-200 ${EASE} group-hover:decoration-current group-focus-visible:decoration-current`
 
 /** Kategoritagg — pilleform, gråblå som standard. */
@@ -124,7 +127,7 @@ export function ArticleCard({
           </TagPill>
         )}
         <h3
-          className={`line-clamp-3 font-display text-[26px] leading-[1.15] desk:text-[32px] ${TITLE_HOVER}`}
+          className={`-mt-[0.2em] line-clamp-3 pt-[0.2em] font-display text-[26px] leading-[1.15] desk:text-[32px] ${TITLE_HOVER}`}
           style={{ color: palette.title, ...TITLE_BREAK }}
         >
           {noBreakNumbers(article.title)}

@@ -51,6 +51,8 @@ Påbegynt 13. oktober 2026 etter designpakken «Rede.no website design system» 
 | Etikett (tagg, «Les saken», temavalg) | Roboto Medium, versaler, sperret 0,08em | 12 px | 12 px |
 | Bildetekst | Roboto | 14 px | 14 px |
 
+**Regel: Å-ringen skal aldri kuttes.** Ringen på «Å/å» (og aksenter over store bokstaver, som «É») stikker over linjen i Eczar. Der tekst begrenses til et antall linjer (`line-clamp`) eller ligger i en boks som klipper (`overflow: hidden`), skal tittelen ha luft på toppen, så ringen alltid synes. Korttitlene har det (`pt-[0.2em]` + `-mt-[0.2em]` i `Cards.tsx`). Nye komponenter med klipping må testes med en tittel som begynner på «Å» (Elise, 14. okt. 2026).
+
 Ingress var Bitter Light etter fontbyttet 8. okt. Den ble byttet til **Medium** 13. okt. fordi Light ble for tynn i magenta på krem. Feature-sakene har fortsatt Light.
 
 ### Former, ramme og luft
@@ -212,6 +214,8 @@ Tokens ligger i `src/app/globals.css` (`@theme`): `--font-logo`, `--font-display
 Størrelsene er innført på **forsiden og standardsaker**. Feature-sakene (scrollytelling) har fått fontene, men har fortsatt sine gamle, håndsatte størrelser — de er ikke gått gjennom.
 
 ### Luft og linjebryting
+
+- **Å-ringen skal aldri kuttes** — se regelen under «Redesign etter malen» → «Typografi».
 
 - Avstand fra sakstittel til undertittel/ingress: 24 px på mobil, 32 px på desktop (`mt-6 md:mt-8`).
 - **Ingen enslige ord på siste linje.** Én felles regel i `globals.css` (`@layer base`): løpende tekst (`p`, `li`, `blockquote`, `figcaption`) har `text-wrap: pretty`; titler, mellomtitler og sitater (`h1`–`h4`, `.font-display`, `.font-quote`) har `text-wrap: balance`. Eldre nettlesere ignorerer regelen og bryter som før.
