@@ -6,10 +6,19 @@
   /* TOBB Brand */
   --color-navy: #003865;
   --color-navy-light: #0a4a7a;
-  --color-mint: #F1F8F0;
-  /* Forsidens bakgrunn — lys, tydelig blåtone som beholder en kjølig
-     TOBB-stemning men lar de fargerike kortene komme fram. */
-  --color-canvas: #D3E4F5;
+  /* Sidens bakgrunn — krem, overalt (malen høsten 2026). `mint` og `canvas`
+     var de gamle lyse flatene; de peker nå på samme kremfarge, så alle lyse
+     sider følger med. Feature-sakene har egne flater i article/theme.ts. */
+  --color-cream: #FEFAE8;
+  --color-mint: #FEFAE8;
+  --color-canvas: #FEFAE8;
+  /* Nye fra malen */
+  --color-violet: #3E2A57;
+  --color-lightblue: #49C5FA;
+  /* Marineblå over hvitt i 10/20/30 % — tagger, hårstrek-kort, dempede flater */
+  --color-navy-10: #E6EBF0;
+  --color-navy-20: #CCD7E0;
+  --color-navy-30: #B3C3D1;
   --color-gold: #F6BE00;
   --color-tobb-green: #74AA50;
   --color-teal: #487A7B;
@@ -24,6 +33,42 @@
   --font-quote: var(--font-face-quote), "Instrument Serif", Georgia, serif;
   --font-body: var(--font-face-body), Roboto, system-ui, sans-serif;
   --font-label: var(--font-face-body), Roboto, system-ui, sans-serif;
+}
+
+/* Malens brytpunkter: nettbrett fra 720, desktop fra 1200. */
+@theme {
+  --breakpoint-tab: 45rem;
+  --breakpoint-desk: 75rem;
+}
+
+/* Malens ramme: innhold maks 1280 + marg (80 desktop, 48 nettbrett, 20 mobil). */
+.wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1440px;
+  padding-inline: 20px;
+}
+@media (min-width: 45rem) {
+  .wrap { padding-inline: 48px; }
+}
+@media (min-width: 75rem) {
+  .wrap { padding-inline: 80px; }
+}
+
+/* Etiketter (tagger, «Les saken», temavalg): 12 px, halvfet, sperret, versaler. */
+.label {
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Fokus: 2 px magenta ramme, fjernes aldri. */
+:focus-visible {
+  outline: 2px solid var(--color-magenta);
+  outline-offset: 2px;
 }
 
 /* Reserver alltid plass til scrollbaren, slik at den sentrerte headeren

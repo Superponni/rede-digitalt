@@ -121,7 +121,7 @@ export default async function ArticlePage({ params }: PageProps) {
     query: RELATED_ARTICLES_QUERY,
     params: { id: article._id, tagIds: article.tags?.map((t) => t._id) ?? [] },
   })
-  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent)
+  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent, 6)
 
   // Typen bestemmer visningen, men innholdet vinner alltid: siden skal aldri bli
   // blank fordi typen peker på et tomt felt. Feature uten seksjoner ⇒ lesevisning

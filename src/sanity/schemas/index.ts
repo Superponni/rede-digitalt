@@ -11,6 +11,7 @@ import { podcastEpisode } from './documents/podcastEpisode'
 import { tag } from './documents/tag'
 import { author } from './documents/author'
 import { memberOffer } from './documents/memberOffer'
+import { frontPage } from './documents/frontPage'
 
 // Objekttyper (seksjoner + blockContent)
 import { seo } from './objects/seo'
@@ -45,6 +46,7 @@ import { expertSource } from './objects/expertSource'
 export const schemaTypes: SchemaTypeDefinition[] = [
   // Dokumenter
   article,
+  frontPage,
   aboutPage,
   privacyPage,
   edition,

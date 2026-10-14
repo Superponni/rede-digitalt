@@ -9,7 +9,7 @@ export const bodyFont = Roboto({
   subsets: ['latin'],
   variable: '--font-face-body',
   display: 'swap',
-  weight: ['300', '400', '700'],
+  weight: ['300', '400', '500', '700'],
 })
 
 // Titler og mellomtitler — Eczar (Regular for titler, Bold for mellomtitler)

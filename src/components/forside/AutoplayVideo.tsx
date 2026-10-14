@@ -4,7 +4,7 @@ import { usePrefersReducedMotion } from '@/lib/usePrefersReducedMotion'
 
 /**
  * Lite klient-øyfor de autospillende (muted, dekorative) videokortene på
- * forsiden. Holdes adskilt fra DiscoverView slik at selve forsiden forblir en
+ * forsiden. Holdes adskilt fra forsiden slik at selve forsiden forblir en
  * server-komponent. Ved «redusert bevegelse» autospilles ikke videoen — da
  * vises plakatbildet (første bilde) statisk i stedet.
  */

@@ -44,7 +44,7 @@ export default async function SiteLayout({
   return (
     <SmoothScroll>
       <HeaderSurfaceProvider>
-        <div className="flex min-h-screen flex-col bg-canvas">
+        <div className="flex min-h-screen flex-col bg-cream">
           {/* Skip-lenke: synlig kun ved tastaturfokus, hopper forbi header/meny
               rett til hovedinnholdet. */}
           <a

@@ -121,7 +121,7 @@ export default async function LederPage() {
     query: RELATED_ARTICLES_QUERY,
     params: { id: editorial._id, tagIds: [] },
   })
-  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent)
+  const related = mergeRelated(relatedData?.sameTheme, relatedData?.recent, 6)
 
   return (
     <>

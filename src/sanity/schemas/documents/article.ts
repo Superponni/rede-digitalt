@@ -229,6 +229,24 @@ export const article = defineType({
       ],
     }),
     defineField({
+      name: 'cardColor',
+      title: 'Kortfarge (valgfri)',
+      type: 'string',
+      group: 'innhold',
+      options: {
+        list: [
+          { title: 'Lilla', value: 'purple' },
+          { title: 'Lyseblå', value: 'lightblue' },
+          { title: 'Teal', value: 'teal' },
+          { title: 'Gul', value: 'yellow' },
+          { title: 'Mørk marineblå', value: 'navy' },
+        ],
+        layout: 'dropdown',
+      },
+      description:
+        'Fargen på sakens kort på forsiden, temasider og «Les også». La stå tom: da trekkes fargen automatisk. Velg selv når bildet krever det — f.eks. mørk marineblå til en illustrasjon med mørkeblå bakgrunn.',
+    }),
+    defineField({
       name: 'heroVideo',
       title: 'Hero-video',
       type: 'file',

@@ -200,7 +200,7 @@ export function FullscreenMenu({ isOpen, onClose, tags, featured }: FullscreenMe
           )}
 
           {/* Social links — minst white/60 på navy for å bestå kontrastkravet */}
-          <div className="mt-12 flex gap-6">
+          <div className="mt-12 flex flex-wrap gap-x-6 gap-y-3">
             <a href="https://www.tobb.no" target="_blank" rel="noopener noreferrer" className="font-label text-[11px] uppercase tracking-[0.2em] text-white/60 transition-colors hover:text-white/90">
               TOBB.no
             </a>

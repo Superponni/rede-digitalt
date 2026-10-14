@@ -6,6 +6,148 @@ Kildemateriale: TOBBs profilmanual i `docs/brand/`, opprinnelige skisser i `docs
 
 ---
 
+## Redesign etter malen (gren `feat/ny-mal`, ikke publisert)
+
+Påbegynt 13. oktober 2026 etter designpakken «Rede.no website design system» (laget av Elise i Claude Design). Pakken ligger i Drive: `TOBB/REDE/Rede digitalt - ny mal design package/`. Asbjørn har godkjent malen.
+
+**Alt i denne seksjonen gjelder grenen `feat/ny-mal`, ikke rede.no.** Resten av dokumentet beskriver fortsatt det som er live. Når grenen publiseres, skal seksjonene under («Farger», «Fonter», «Prinsipper») skrives om etter dette.
+
+### Elises valg — der vi avviker fra malen
+
+| Tema | Malen sier | Vi gjør |
+|---|---|---|
+| Brødtekst og etiketter | Depot New | **Roboto** (Depot New mangler weblisens og Medium-vekt) |
+| Logo | «Rede» i Eczar Bold | **Gastromond** (som før) |
+| Mellomtittel | Depot New Bold 24 | **Eczar Bold 26/32** (som forrige uke) |
+| Sitat | Instrument Serif 32 | **Instrument Serif 30/42** (som forrige uke), uten strek til venstre |
+| Ingress | Bitter 600, 22 px | **Bitter Medium (500), 21/24 px, magenta** |
+| Fargeverdier | Avrundede varianter | **TOBBs profilverdier**, pluss det nye under |
+| Aksentfarge per sak | Ingress/byline i sakens farge | **Alltid magenta** på standardsaker og forsiden |
+| Tagger | Kategoriens farge | **Alltid gråblå** |
+| «Maks to aksentfarger per side» | Regel | **Gjelder ikke** |
+| Bilder i saker | Faste formater (4:3, 21:9, 4:5) | **Originalformat** så lenge det passer i griden |
+| Minstestørrelse på bilder | Avvises | Skal gi **advarsel**, ikke avvises (ikke bygget) |
+
+### Farger
+
+- Bakgrunn overalt: krem `#FEFAE8`. (`mint` og `canvas` peker nå på samme kremfarge.)
+- Tekst: marineblå `#003865`. Ingress og byline: magenta `#AA0061`.
+- Nye fra malen: mørk fiolett `#3E2A57`, lyseblå `#49C5FA`.
+- Teal er profilens `#487A7B`. Malens `#028C7B` er friskere — **ikke avgjort** om vi bytter. Teal-kortene er derfor grålige.
+- Lyse toner = fargen over hvitt i 10/20/30 % (regnes ut i `src/lib/palette.ts`).
+- Standardsaker har ikke lenger egen bakgrunnsfarge. `colorMode` brukes bare av feature-sakene. Signaturfargen (`accentColor`) farger bare faktaboksene i høyrefeltet.
+
+### Typografi (forside og standardsaker)
+
+| Teksttype | Font | Mobil | Desktop |
+|---|---|---|---|
+| Sakstittel / stor forsidesak | Eczar Regular | 40 px | 64 px |
+| Korttittel | Eczar Regular | 26 px | 32 px |
+| Tittel på tekstkort (hårstrek) | Eczar Regular | 24 px | 28 px |
+| Ingress | Bitter Medium, magenta | 21 px | 24 px |
+| Ingress på tekstkort (hårstrek) | Bitter Medium, magenta | 16 px | 16 px |
+| Byline | Roboto Medium, magenta, sperret 0,04em | 13 px | 13 px |
+| Brødtekst | Roboto | 18 px | 20 px |
+| Etikett (tagg, «Les saken», temavalg) | Roboto Medium, versaler, sperret 0,08em | 12 px | 12 px |
+| Bildetekst | Roboto | 14 px | 14 px |
+
+Ingress var Bitter Light etter fontbyttet 8. okt. Den ble byttet til **Medium** 13. okt. fordi Light ble for tynn i magenta på krem. Feature-sakene har fortsatt Light.
+
+### Former, ramme og luft
+
+- **Pilleformer** på tagger, temavalg og knapper (opphever «ingen pill-knapper»). Kort og bilder har firkantede hjørner. Ingen skygger.
+- Ramme: innhold maks 1280 px + marg (80 desktop, 48 nettbrett, 20 mobil) — klassen `.wrap`. 12 kolonner, 24 px mellomrom.
+- Brytpunkter: `tab:` fra 720 px, `desk:` fra 1200 px.
+- Luft i brødtekst: avsnitt→avsnitt 16, tekst→mellomtittel 48, mellomtittel→tekst 16, tekst→bilde/sitat/boks 48, bilde→bildetekst 12.
+- Fokus (tastatur): 2 px magenta ramme.
+
+### Kort (`src/components/ui/Cards.tsx`)
+
+- **Fem faste kortpaletter** fra malen — bakgrunn, tittelfarge og pil hører sammen og blandes aldri:
+
+  | Palett | Bakgrunn | Tittel |
+  |---|---|---|
+  | Lilla | lys lilla | mørk fiolett |
+  | Lyseblå | lys lyseblå | marineblå |
+  | Teal | lys teal | blå |
+  | Gul | lys gul | magenta |
+  | Mørk marineblå | marineblå | hvit |
+
+- **Fargen trekkes automatisk, men er fast per sak** (regnes ut fra sakens id). To kort ved siden av eller over hverandre får aldri samme palett, og det er maks ett mørkt kort per rad.
+- **Kan overstyres** i Studio med feltet «Kortfarge (valgfri)» på artikkelen. Da viker nabokortene. Brukt på «Vil du bruke forkjøpsretten?» (mørk marineblå, fordi illustrasjonen har mørkeblå bakgrunn).
+- **Bildekort:** bildet beskjæres til 4:3 og går helt ut i kantene. «Les saken» ligger i en **hvit pille** på bildet (malens hvite tekst rett på bildet forsvant på lyse bilder).
+- **Beskjæring:** følger fokuspunktet satt i Studio. Mangler fokuspunkt, sikter utsnittet mot øvre tredjedel (der ansikter som regel er). De fleste bilder mangler fokuspunkt — sett det i Studio når et kort kuttes uheldig.
+- **Tekstkort uten flate** («hårstrek-kort»): tre i bredden, delt av hårstreker. Brukes under forsidesaken og i «Les også».
+- **Ingress på forsiden og kort er kortet ned:** hele setninger fra starten, innenfor ca. 160 tegn (stor sak) / 110 tegn (kort). Første setning er alltid med. Inne i saken vises hele ingressen. (`shortTeaser` i `src/lib/typography.ts`.)
+- **Hover:** flaten blir ett trinn dypere, tittelen understrekes, pilen glir, bildet zoomer svakt. Ingen løft.
+- **Alle saker skal ha tema**, ellers mangler pillen på kortet.
+
+### Forsiden (`src/components/forside/Forside.tsx`)
+
+Elises plan, 13. okt.:
+1. **Stor sak øverst** — velges for hånd i Studio under «Forsiden» → «Forsidesak». Tomt felt: nyeste sak merket «toppraden», ellers nyeste sak.
+2. **Tre tekstkort** — lederen + de to nyeste sakene. Ved lik dato (hele utgaven har samme dato) avgjør trykkrekkefølgen.
+3. **Fargede kort** — resten av gjeldende utgave i trykkrekkefølge (lista «Sakenes rekkefølge» på utgaven i Studio; ikke fylt ut ennå, så dato brukes). Podkastkortet viser nyeste episode og lenker til Spotify.
+4. **«Flere saker»** — eldre saker, inntil 9, i en rekkefølge som byttes hver uke.
+
+En sak vises bare ett sted. Valgfritt felt «Stor sak nr. 2» gir en stor sak til midt på siden. Går ikke antall kort opp i tre, blir de siste kortene bredere. Temalinjen («Alle» + temaene som piller) står øverst.
+
+### Standardsak (`StandardArticle.tsx`, `PortableTextRenderer.tsx`)
+
+- **To topper**, valgt ut fra «Topp-oppsett» og bildets retning:
+  - *Bilde ved siden:* tekst i kolonne 1–5, bilde i kolonne 7–12. Brukes for «side», «tittel først» og alle stående toppbilder.
+  - *Bilde i full bredde:* bildet først, så midtstilt tekst. Brukes for «bilde øverst» med liggende bilde. Bildet vises i originalformat, men aldri høyere enn ca. 70 % av skjermen.
+  - «Ingen bilde» og «rundt portrett av kilde» har ingen plass i malen ennå og har midtstilt topp som før — **ikke avgjort**.
+- På mobil kommer teksten alltid først, så bildet.
+- **Brødtekst** i kolonne 1–7. **Faktabokser og stående bilder** står i høyrefeltet (kolonne 9–12) ved siden av teksten som følger etter dem; på mobil og nettbrett står de i tekstflyten. De følger ikke med ved scrolling.
+- Tema-pillene øverst i saken lenker til temasiden.
+
+### Felles bunn (`ArticleOutro.tsx`)
+
+Deling → «Se alle saker om [tema]» → tre fargede kort → «Les også» (tre tekstkort). Står alltid på krem, også etter feature-saker.
+
+### Mobil og nettbrett (sett gjennom 13. okt.)
+
+- Toppen av saken er **venstrestilt** på mobil og nettbrett; midtstilling gjelder bare desktop (og rundt kildeportrett).
+- Nettbrett har to kort i bredden. Blir ett kort til overs, fyller det hele raden.
+- Kortfargene trekkes så to like aldri står over hverandre — heller ikke på mobil (ett kort i bredden) og nettbrett (to).
+- Ingress på bildekort får inntil tre linjer, på tekstkort (hårstrek) inntil fem.
+
+### Andre sider (justert 13. okt.)
+
+- **Medlemstilbud:** kortene er flate og firkantede med tynn marineblå ramme (ingen skygge, ingen hvit flate). Stedsvalgene er piller.
+- **Rundt kildeportrett:** teksten rundt står i versaler, navn ca. 18 px og rolle ca. 14,5 px på skjerm (var 11,5 og 8). Portrettet er 280 px. Små bokstaver ble prøvd og forkastet — Elise ville ha versaler. Plass til roller på ca. 40 tegn.
+- **Personvern:** lys topp som resten av siden.
+
+### Status ved dagens slutt (13. okt.)
+
+Elise er fornøyd med utseendet og vil publisere **i morgen (14. okt.)** — ikke publiser før hun sier «publiser». Grenen er lastet opp; forhåndsvisning for Asbjørn: `https://rede-digitalt-git-feat-ny-mal-superponni.vercel.app` (krever Vercel-innlogging). Publisering = prøvebygg, pull request, slå sammen med `main`. Utkastene i Sanity (se under) publiseres i Studio av Elise/Asbjørn, ikke av Claude.
+
+### Nye felt i Studio (vises på rede.no/studio først når grenen er publisert)
+
+- «Forsiden» (eget dokument): «Forsidesak» og «Stor sak nr. 2».
+- Utgave: «Sakenes rekkefølge (som på trykk)».
+- Artikkel: «Kortfarge (valgfri)».
+
+### Innhold lagret som utkast 13. okt. (må publiseres i Studio)
+
+- Tema lagt til: Jarlerunden (sport, nabolag), Norgespris (økonomi, bolig), Fra «pensjonistsport» til ungdomstrend (sport, fritid), strømforsikring-saken (økonomi).
+- Fokuspunkt: kortbildet til «Ung stemme i Trondheim», hovedbildet til «Vil du bruke forkjøpsretten?».
+- Kortfarge mørk marineblå: «Vil du bruke forkjøpsretten?».
+
+En «Annonse»-pille for annonseinnhold ble laget og fjernet igjen samme dag — Elise vil ikke ha den. Strømforsikring-saken har fortsatt ingressen «Annonseinnhold».
+
+### Ikke gjort / ikke avgjort
+
+- Feature-sakene (bare bunnen er ny) og reportasjemalen. Skal dagens seks feature-saker beholdes som de er?
+- Avstemning, tallboks og kart i høyrefeltet. Sperrer i Studio (tegntellere, bildeadvarsel).
+- Lydspillerens utseende, menyen, og sidene Om, Medlemstilbud og Personvern (har bare krem bakgrunn og ny topp/bunn).
+- Illustrasjoner på tekstkort (malen viser transparente PNG-er; finnes nesten ikke).
+- Samleside «Alle saker» når det blir flere enn 9 eldre saker.
+- Teal-verdien. Sitat på mobil (malen har midtstilt i lilla bånd; vi har venstrestilt).
+
+---
+
 ## Farger
 
 Definert i `src/app/globals.css` (`@theme`) og, per artikkel, i `src/components/article/theme.ts`.

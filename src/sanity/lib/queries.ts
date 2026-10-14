@@ -27,7 +27,7 @@ const SEO_FRAGMENT = `
 const CARD_IMAGE = `"heroImage": coalesce(cardImage, heroImage)`
 
 const CARD_CORE = `
-  _id, title, slug, type, teaser, ${CARD_IMAGE},
+  _id, title, slug, type, teaser, cardColor, ${CARD_IMAGE},
   tags[]->{ _id, title, slug }
 `
 
@@ -91,31 +91,45 @@ export const MENU_QUERY = defineQuery(
 
 export const TAG_PAGE_QUERY = defineQuery(
   `{
+    "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug },
     "tag": *[_type == "tag" && slug.current == $slug][0] { _id, title, slug },
     "articles": *[${PUBLISHABLE_ARTICLE} && references(*[_type == "tag" && slug.current == $slug][0]._id)] | order(publishedAt desc) {
-      ${CARD_CORE}
+      ${CARD_CORE},
+      "heroVideoUrl": heroVideo.asset->url
     }
   }`
 )
 
+// Forsiden (malen høsten 2026). Selve fordelingen på rader skjer i Forside.tsx;
+// spørringen henter bare råstoffet:
+//   - hero/second: håndplukket på forside-dokumentet (kan stå tomt)
+//   - articles: alle saker, nyeste først, med utgave-id
+//   - currentEdition: nyeste utgave som faktisk har saker, med trykkrekkefølgen
 export const FRONTPAGE_QUERY = defineQuery(
   `{
-    "edition": *[_type == "edition"] | order(year desc, number desc) [0] {
-      _id, title, number, year, coverImage
+    "heroId": *[_type == "frontPage"][0].heroArticle._ref,
+    "secondId": *[_type == "frontPage"][0].secondArticle._ref,
+    "currentEdition": *[_type == "edition" && count(*[${PUBLISHABLE_ARTICLE} && edition._ref == ^._id]) > 0] | order(year desc, number desc) [0] {
+      _id, title, number, year,
+      "order": articleOrder[]._ref
     },
-    "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc) {
+    "articles": *[${PUBLISHABLE_ARTICLE}] | order(publishedAt desc, _id asc) {
       ${CARD_CORE},
+      publishedAt,
       frontpagePlacement,
+      "editionId": edition._ref,
+      "credit": heroImage.credit,
+      "authorName": author->name,
       "expertPortrait": experts[0].portrait,
       "heroVideoUrl": heroVideo.asset->url
     },
     "editorial": *[_type == "editorial"] | order(publishedAt desc) [0] {
-      _id, title, slug, teaserText, heroImage, accentColor, colorMode
+      _id, title, slug, teaserText
     },
-    "podcast": *[_type == "podcastEpisode"] | order(publishedAt desc) [0] {
-      _id, title, slug, description, spotifyUrl, thumbnail, duration, episodeNumber,
-      tags[]->{ _id, title }
-    }
+    "podcast": *[_type == "podcastEpisode"] | order(episodeNumber desc, publishedAt desc) [0] {
+      _id, title, spotifyUrl, thumbnail, duration, episodeNumber, publishedAt
+    },
+    "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug }
   }`
 )
 

@@ -8,6 +8,7 @@ export interface RelatedArticle {
   slug: { current: string }
   type?: string
   teaser?: string
+  cardColor?: string
   heroImage?: { asset: { _ref: string }; alt?: string }
   tags?: { _id: string; title: string; slug?: { current: string } }[]
 }
