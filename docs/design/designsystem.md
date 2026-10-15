@@ -6,6 +6,55 @@ Kildemateriale: TOBBs profilmanual i `docs/brand/`, opprinnelige skisser i `docs
 
 ---
 
+## Forside, video og kortfarger (gren `feat/forside-og-video`, ikke publisert)
+
+Laget 15. oktober 2026 med Elise. **Venter på godkjenning fra Christoffer** (redaktør for Rede digitalt) før publisering. Forhåndsvisning: https://rede-digitalt-git-feat-forside-og-video-superponni.vercel.app (krever Vercel-innlogging — del med «Share» i Vercel-verktøylinjen). Når grenen er publisert, erstatter dette punktene om forside og kort lenger ned.
+
+### Hvorfor
+
+Tilbakemelding om at forsiden var «litt kjedelig»: for få bilder i første skjermbilde, og for mye mørkeblått. Christoffer ville publisere videoer, men «Hero-video» på artikkelen er bare en stum loop på forsidekortet — det fantes ingen videoside.
+
+### Forsiden (`Forside.tsx`), ovenfra
+
+1. **Tre toppsaker** som store fargede kort: bildet øverst (stående 4:5 på desktop, liggende 4:3 på mobil), så fargeflaten med tema, tittel (30/40 px), ingress og «Les saken» med pilsirkel nederst på flaten. Velges i Studio under «Forsiden» → «Toppsaker» (opptil tre, i rekkefølge). Tomme plasser fylles med saker merket «toppraden», så de nyeste.
+2. **Leder og podkast** side om side (5 + 7 kolonner). Lederen står på marineblått kort uten bilde, tittel 26/32 px, ingress 17/19 px.
+3. **Videokort** i full bredde, grønnblå `#028C7B` med hvit tekst. Nyeste video.
+4. **Fargede kort** i ett sammenhengende rutenett, uten overskrift: først resten av utgaven, så eldre saker (byttes hver uke).
+   - Etter første rad: **stor sak mellom to linjer** (tekst venstre, bilde høyre). Kan velges i Studio: «Stor sak midt på siden»; ellers neste sak i rekka.
+   - Etter to rader til: **stor sak nr. 2**, speilvendt (bilde venstre). Alltid automatisk.
+   - Én rad til nederst.
+- **Fjernet:** stor sak øverst med tekst ved siden av, hårstrek-raden (tekstkort uten flate) og overskriften «Flere saker». Hårstrek-kortene finnes fortsatt i «Les også».
+- **Pass på:** den automatiske store saken kan bli en annonsesak (skjedde med strømforsikring) — velg sak for hånd, eller lag et «Annonse»-felt som holder dem unna (ikke bygget).
+
+### Kortfarger (`src/lib/palette.ts`)
+
+- **Ni paletter:** lilla, lyseblå, teal, gul, **grønn**, **rosa** (magenta 20 %), **mint** (`#028C7B` 20 %) — og mørke: marineblå og **mørk teal** (`#028C7B`, hvit tekst). Nye kan velges under «Kortfarge» i Studio.
+- **Trekningen** velger tilfeldig (men fast per sak) blant fargene som er lov — før ble første lovlige farge i lista valgt, og noen farger kom mye oftere.
+- Regler som før: ingen like naboer (side eller over), maks ett mørkt kort per rad. Nytt: kortene grenser aldri til en flate i samme farge — toppsakene blir ikke marineblå (lederen står under), raden under videokortet blir ikke mørk teal.
+- Kontrast: hvit brødtekst på `#028C7B` er ca. 4,2:1 (litt under 4,5). Elise valgte fargen; `#027A6B` er alternativet hvis det må opp.
+
+### Video (`/video/<slug>`, dokumenttypen «Video» i Studio)
+
+- **Videoside:** etiketter, tittel, første avsnitt av beskrivelsen som magenta ingress, varighet + dato, spiller i full bredde, resten av beskrivelsen, så felles bunn («Les også» tema-først).
+- **Vimeo-lenke (anbefalt):** lim inn lenken i Studio. Vimeo tilpasser kvaliteten til nettet. Stående video får automatisk smal, høy spiller (maks 80 % av skjermhøyden). Varigheten hentes fra Vimeo. Spilleren har «ikke spor» og skjuler Vimeos tittel/byline/profilbilde (logoen vises på gratiskonto).
+- **Videofil (reserve):** brukes bare uten Vimeo-lenke. Helst mp4 under ca. 100 MB.
+- Første video, «Velkommen inn i Kollektivet!», er et **utkast** fra Christoffer. Filen er en stående video med svarte felt innbakt, og Vimeo-versjonen lå på en personlig gratiskonto — Christoffer sender ny lenke.
+- **Personvern:** Vimeo-spilleren bør nevnes på personvernsiden (ikke gjort).
+
+### Sitat i standardsaker (`PortableTextRenderer.tsx`)
+
+- Mer luft: tekst→sitat **64 px (80 desktop)**, før 48.
+- **Animasjon:** ordene glir opp ett og ett bak en usynlig kant når sitatet scrolles inn (ca. 1 sek). Står stille ved «redusert bevegelse». Fet/kursiv inne i sitater vises nå som vanlig tekst.
+- Teknisk lærdom: ikke la et skript (f.eks. GSAP SplitText) dele opp tekst fra Sanity etter at React har tegnet den. I forhåndsvisningen har teksten usynlige tegn for klikk-for-å-redigere; de ble delt opp, ga hundrevis av «ord» og fikk siden til å henge. Ordene lages nå av React, og tegnene fjernes med `stegaClean`.
+
+### Nye felt i Studio (vises på rede.no/studio først når grenen er publisert)
+
+- **Forsiden:** «Toppsaker» (opptil 3) og «Stor sak midt på siden». Erstatter «Forsidesak» og «Stor sak nr. 2» (de var aldri fylt ut).
+- **Video:** «Vimeo-lenke», «Videofil (reserve)», alt-tekst på miniatyrbildet, forhåndsvisningsknapp.
+- **Artikkel → Kortfarge:** grønn, rosa, mint, mørk teal.
+
+---
+
 ## Redesign etter malen (gren `feat/ny-mal`, ikke publisert)
 
 Påbegynt 13. oktober 2026 etter designpakken «Rede.no website design system» (laget av Elise i Claude Design). Pakken ligger i Drive: `TOBB/REDE/Rede digitalt - ny mal design package/`. Asbjørn har godkjent malen.
