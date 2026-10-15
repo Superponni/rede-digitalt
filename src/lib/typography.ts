@@ -33,3 +33,13 @@ export function shortTeaser(text: string | undefined, maxChars: number): string 
   }
   return out
 }
+
+/** Varighet i sekunder som «4:32» (eller «1:02:05»). Tom/0 gir undefined. */
+export function formatDuration(seconds: number | undefined): string | undefined {
+  if (!seconds || seconds <= 0) return undefined
+  const s = Math.round(seconds)
+  const h = Math.floor(s / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  const ss = String(s % 60).padStart(2, '0')
+  return h > 0 ? `${h}:${String(m).padStart(2, '0')}:${ss}` : `${m}:${ss}`
+}

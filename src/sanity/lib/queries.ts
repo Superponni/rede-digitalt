@@ -5,6 +5,9 @@ import { defineQuery } from 'next-sanity'
 // at intensjonen (kun-publiserbare) bor ett sted.
 const PUBLISHABLE_ARTICLE = `_type == "article" && defined(slug.current)`
 
+// Samme for videoer: må ha slug og enten Vimeo-lenke eller opplastet fil.
+const PUBLISHABLE_VIDEO = `_type == "videoPost" && defined(slug.current) && (defined(vimeoUrl) || defined(video.asset))`
+
 // Felles SEO-fragment. `legacyOgDescription` plukker opp den gamle topp-nivå-
 // `ogDescription` fra dokumenter importert før seo-objektet, så fallback i
 // generateMetadata fungerer uten re-import.
@@ -102,13 +105,13 @@ export const TAG_PAGE_QUERY = defineQuery(
 
 // Forsiden (malen høsten 2026). Selve fordelingen på rader skjer i Forside.tsx;
 // spørringen henter bare råstoffet:
-//   - hero/second: håndplukket på forside-dokumentet (kan stå tomt)
+//   - topIds: de tre toppsakene, håndplukket på forside-dokumentet (kan stå tomt)
 //   - articles: alle saker, nyeste først, med utgave-id
 //   - currentEdition: nyeste utgave som faktisk har saker, med trykkrekkefølgen
 export const FRONTPAGE_QUERY = defineQuery(
   `{
-    "heroId": *[_type == "frontPage"][0].heroArticle._ref,
-    "secondId": *[_type == "frontPage"][0].secondArticle._ref,
+    "topIds": *[_type == "frontPage"][0].topArticles[]._ref,
+    "featureId": *[_type == "frontPage"][0].featureArticle._ref,
     "currentEdition": *[_type == "edition" && count(*[${PUBLISHABLE_ARTICLE} && edition._ref == ^._id]) > 0] | order(year desc, number desc) [0] {
       _id, title, number, year,
       "order": articleOrder[]._ref
@@ -126,10 +129,25 @@ export const FRONTPAGE_QUERY = defineQuery(
     "editorial": *[_type == "editorial"] | order(publishedAt desc) [0] {
       _id, title, slug, teaserText
     },
+    "video": *[${PUBLISHABLE_VIDEO}] | order(publishedAt desc, _createdAt desc) [0] {
+      _id, title, slug, description, thumbnail, duration
+    },
     "podcast": *[_type == "podcastEpisode"] | order(episodeNumber desc, publishedAt desc) [0] {
       _id, title, spotifyUrl, thumbnail, duration, episodeNumber, publishedAt
     },
     "tags": *[_type == "tag" && defined(slug.current)] | order(title asc) { _id, title, slug }
+  }`
+)
+
+// Videosiden (/video/<slug>). Vimeo-lenken vinner; ellers strømmes filen rett
+// fra Sanitys filserver.
+export const VIDEO_BY_SLUG_QUERY = defineQuery(
+  `*[${PUBLISHABLE_VIDEO} && slug.current == $slug][0] {
+    _id, title, slug, description, thumbnail, duration, publishedAt, _createdAt, _updatedAt,
+    vimeoUrl,
+    "videoUrl": video.asset->url,
+    "mimeType": video.asset->mimeType,
+    tags[]->{ _id, title, slug }
   }`
 )
 
@@ -203,6 +221,7 @@ export const SITEMAP_QUERY = defineQuery(
     "editorial": *[_type == "editorial" && seo.noIndex != true] | order(publishedAt desc) [0] {
       _updatedAt
     },
+    "videos": *[${PUBLISHABLE_VIDEO}] { "slug": slug.current, _updatedAt },
     "memberOffersUpdated": *[_type == "memberOffer"] | order(_updatedAt desc) [0]._updatedAt
   }`
 )

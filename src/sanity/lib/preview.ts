@@ -8,6 +8,10 @@ export function previewPathFor(
     const slug = doc?.slug?.current
     return slug ? `/artikler/${slug}` : null
   }
+  if (type === 'videoPost') {
+    const slug = doc?.slug?.current
+    return slug ? `/video/${slug}` : null
+  }
   if (type === 'editorial') {
     return '/leder'
   }

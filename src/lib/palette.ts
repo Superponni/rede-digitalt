@@ -32,6 +32,8 @@ export const HUES: Record<Hue, string> = {
 export const CREAM = '#FEFAE8'
 export const NAVY = HUES.navy
 export const MAGENTA = HUES.magenta
+/** Grønnblå fra videokortet — brukes også som lys kortfarge. */
+export const MINT = '#028C7B'
 
 /** Fargen lagt over hvitt i `pct` prosent (10 = svært lys, 30 = tydelig tonet). */
 export function tint(hex: string, pct: number): string {
@@ -53,7 +55,7 @@ export const RULE_SOFT = 'rgba(0,56,101,0.3)'
    aldri på tvers. */
 
 export interface CardPalette {
-  key: 'purple' | 'lightblue' | 'teal' | 'yellow' | 'navy'
+  key: 'purple' | 'lightblue' | 'teal' | 'yellow' | 'green' | 'pink' | 'mint' | 'navy' | 'deepteal'
   /** Mørkt kort (full farge) — lys tekst, og maks ett per rad. */
   solid: boolean
   bg: string
@@ -129,6 +131,50 @@ export const CARD_PALETTES: CardPalette[] = [
     ctaLabel: HUES.violet,
     ink: NAVY,
   },
+  // Tre lyse kort lagt til i oktober 2026, så forsiden får flere farger å
+  // trekke fra (med bare fire ble mønsteret nesten låst av naboregelen).
+  {
+    key: 'green',
+    solid: false,
+    bg: tint(HUES.green, 30),
+    bgHover: tint(HUES.green, 40),
+    title: NAVY,
+    text: 'rgba(0,56,101,0.85)',
+    tagBg: TAG_ON_TINT,
+    tagText: NAVY,
+    cta: HUES.teal,
+    ctaGlyph: '#FFFFFF',
+    ctaLabel: NAVY,
+    ink: NAVY,
+  },
+  {
+    key: 'pink',
+    solid: false,
+    bg: tint(MAGENTA, 20),
+    bgHover: tint(MAGENTA, 28),
+    title: MAGENTA,
+    text: 'rgba(0,56,101,0.85)',
+    tagBg: TAG_ON_TINT,
+    tagText: NAVY,
+    cta: MAGENTA,
+    ctaGlyph: '#FFFFFF',
+    ctaLabel: MAGENTA,
+    ink: NAVY,
+  },
+  {
+    key: 'mint',
+    solid: false,
+    bg: tint(MINT, 20),
+    bgHover: tint(MINT, 30),
+    title: '#026358',
+    text: 'rgba(0,56,101,0.85)',
+    tagBg: TAG_ON_TINT,
+    tagText: NAVY,
+    cta: MINT,
+    ctaGlyph: '#FFFFFF',
+    ctaLabel: '#026358',
+    ink: NAVY,
+  },
   {
     key: 'navy',
     solid: true,
@@ -142,6 +188,20 @@ export const CARD_PALETTES: CardPalette[] = [
     ctaGlyph: NAVY,
     ctaLabel: '#FFFFFF',
     ink: NAVY,
+  },
+  {
+    key: 'deepteal',
+    solid: true,
+    bg: MINT,
+    bgHover: '#027A6B',
+    title: '#FFFFFF',
+    text: '#FFFFFF',
+    tagBg: 'rgba(255,255,255,0.22)',
+    tagText: '#FFFFFF',
+    cta: '#FFFFFF',
+    ctaGlyph: MINT,
+    ctaLabel: '#FFFFFF',
+    ink: MINT,
   },
 ]
 
@@ -159,19 +219,25 @@ function hash(text: string): number {
  * Trekker en kortpalett til hver sak. Trekningen er «tilfeldig, men fast»: den
  * regnes ut fra sakens id, så en sak får samme farge hver gang siden lastes.
  *
- * To regler rydder opp etter trekningen (kortene står `perRow` i bredden):
+ * To regler gjelder (kortene står `perRow` i bredden):
  *   1. Ingen like naboer — heller ikke rett over hverandre.
  *   2. Maks ett mørkt kort per rad.
- * Kolliderer trekningen, får kortet neste palett i lista.
+ * Blant fargene som er lov, trekkes én ut fra sakens id. (Tidligere ble første
+ * lovlige farge i lista valgt, og da ble enkelte farger mye oftere brukt.)
  *
  * Har saken en håndvalgt kortfarge (feltet «Kortfarge» i Studio), brukes den
  * uansett — da er det nabokortene som viker.
+ *
+ * `allowSolid: false` holder de mørke kortene (marineblå, mørk teal) utenfor trekningen.
+ * `avoidEdge` er farger kortene ikke skal få i første og siste rad — brukes når
+ * rutenettet grenser til en flate i samme farge (lederkortet, videokortet).
  */
 export function assignCardPalettes(
   items: { _id: string; cardColor?: string }[],
   perRow = 3,
+  { allowSolid = true, avoidEdge = [] }: { allowSolid?: boolean; avoidEdge?: CardPalette['key'][] } = {},
 ): CardPalette[] {
-  const n = CARD_PALETTES.length
+  const pool = allowSolid ? CARD_PALETTES : CARD_PALETTES.filter((p) => !p.solid)
   const out: CardPalette[] = []
   items.forEach(({ _id, cardColor }, i) => {
     const chosen = CARD_PALETTES.find((p) => p.key === cardColor)
@@ -182,23 +248,24 @@ export function assignCardPalettes(
     const row = out.slice(i - (i % perRow), i)
     // Naboer på alle skjermbredder: kortet rett før (mobil: over, ellers til
     // venstre), to før (nettbrett: over) og `perRow` før (desktop: over).
-    const near = [out[i - 1], out[i - 2], out[i - perRow]].filter(Boolean).map((c) => c.key)
+    const near: string[] = [out[i - 1], out[i - 2], out[i - perRow]].filter(Boolean).map((c) => c.key)
+    const lastRowStart = items.length - (items.length % perRow || perRow)
+    if (i < perRow || i >= lastRowStart) near.push(...avoidEdge)
     // Håndvalgt farge på neste kort: unngå den også.
     const next = items[i + 1]?.cardColor
-    const start = hash(_id.replace(/^drafts\./, '')) % n
-    const order = CARD_PALETTES.map((_, k) => CARD_PALETTES[(start + k) % n])
-    const pick =
-      // Strengt: ingen like naboer, maks ett mørkt kort per rad.
-      order.find(
-        (c) =>
-          !near.includes(c.key) &&
-          c.key !== next &&
-          !(c.solid && (row.some((r) => r.solid) || next === 'navy')),
-      ) ??
-      // Går ikke det opp: i det minste ikke lik kortet rett før.
-      order.find((c) => c.key !== out[i - 1]?.key) ??
-      order[0]
-    out.push(pick)
+    const nextSolid = CARD_PALETTES.find((p) => p.key === next)?.solid
+    const h = hash(_id.replace(/^drafts\./, ''))
+    // Strengt: ingen like naboer, maks ett mørkt kort per rad.
+    const allowed = pool.filter(
+      (c) =>
+        !near.includes(c.key) &&
+        c.key !== next &&
+        !(c.solid && (row.some((r) => r.solid) || nextSolid)),
+    )
+    // Går ikke det opp: i det minste ikke lik kortet rett før.
+    const fallback = pool.filter((c) => c.key !== out[i - 1]?.key)
+    const choices = allowed.length ? allowed : fallback.length ? fallback : pool
+    out.push(choices[h % choices.length])
   })
   return out
 }

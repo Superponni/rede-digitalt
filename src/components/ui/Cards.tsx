@@ -55,11 +55,21 @@ function Arrow() {
 }
 
 /** «Les saken» + pilsirkel. Kun et visuelt signal — kortet er lenken. */
-function CardCta({ label, circle, glyph }: { label: string; circle: string; glyph: string }) {
+function CardCta({
+  label,
+  circle,
+  glyph,
+  text = 'Les saken',
+}: {
+  label: string
+  circle: string
+  glyph: string
+  text?: string
+}) {
   return (
     <span className="flex items-center gap-3" aria-hidden>
       <span className="label" style={{ color: label }}>
-        Les saken
+        {text}
       </span>
       <span
         className={`flex h-11 w-11 items-center justify-center rounded-full transition-transform duration-200 desk:h-10 desk:w-10 ${EASE} group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5 motion-reduce:transform-none`}
@@ -98,6 +108,7 @@ export function ArticleCard({
   palette,
   tag,
   showTeaser = false,
+  large = false,
   sizes = '(min-width: 1200px) 33vw, (min-width: 720px) 50vw, 100vw',
   className = '',
 }: {
@@ -106,6 +117,9 @@ export function ArticleCard({
   /** Overstyr taggen (temasiden viser det aktive temaet). */
   tag?: string
   showTeaser?: boolean
+  /** Større variant til toppsakene på forsiden: bildet øverst, så større tittel
+   *  og ingress på den fargede flaten under. */
+  large?: boolean
   sizes?: string
   className?: string
 }) {
@@ -120,30 +134,35 @@ export function ArticleCard({
       className={`group flex min-h-[280px] flex-col bg-[var(--card-bg)] transition-colors duration-200 ${EASE} hover:bg-[var(--card-hover)] focus-visible:bg-[var(--card-hover)] active:scale-[0.98] motion-reduce:active:scale-100 ${className}`}
       style={{ '--card-bg': palette.bg, '--card-hover': palette.bgHover } as CSSProperties}
     >
-      <div className="flex flex-col gap-4 p-6">
+      <div className={`flex flex-col gap-4 ${large ? 'order-2 flex-1 p-6 desk:p-7' : 'p-6'}`}>
         {label && (
           <TagPill bg={palette.tagBg} color={palette.tagText}>
             {label}
           </TagPill>
         )}
         <h3
-          className={`-mt-[0.2em] line-clamp-3 pt-[0.2em] font-display text-[26px] leading-[1.15] desk:text-[32px] ${TITLE_HOVER}`}
+          className={`-mt-[0.2em] line-clamp-3 pt-[0.2em] font-display ${large ? 'text-[30px] leading-[1.1] desk:text-[40px]' : 'text-[26px] leading-[1.15] desk:text-[32px]'} ${TITLE_HOVER}`}
           style={{ color: palette.title, ...TITLE_BREAK }}
         >
           {noBreakNumbers(article.title)}
         </h3>
         {teaser && (
           <p
-            className={`text-[17px] leading-normal ${hasMedia ? 'line-clamp-3' : 'line-clamp-4'}`}
+            className={`${large ? 'text-[17px] desk:text-[19px]' : 'text-[17px]'} leading-normal ${hasMedia ? 'line-clamp-3' : 'line-clamp-4'}`}
             style={{ color: palette.text, textWrap: 'balance' }}
           >
             {shortTeaser(teaser, 110)}
           </p>
         )}
+        {large && hasMedia && (
+          <div className="mt-auto flex justify-end pt-2">
+            <CardCta label={palette.ctaLabel} circle={palette.cta} glyph={palette.ctaGlyph} />
+          </div>
+        )}
       </div>
 
       {hasMedia ? (
-        <div className="relative mt-auto aspect-[4/3] overflow-hidden">
+        <div className={`relative overflow-hidden ${large ? 'order-1 aspect-[4/3] desk:aspect-[4/5]' : 'mt-auto aspect-[4/3]'}`}>
           {article.heroVideoUrl ? (
             <AutoplayVideo
               src={article.heroVideoUrl}
@@ -160,15 +179,18 @@ export function ArticleCard({
             />
           )}
           {/* På bildet ligger «Les saken» i en hvit pille — hvit tekst rett på
-              bildet (som i malen) forsvinner på lyse foto og illustrasjoner. */}
-          <span
-            className={`label pointer-events-none absolute bottom-4 right-4 flex h-11 items-center gap-2.5 rounded-full bg-white pl-4 pr-3 transition-transform duration-200 desk:h-10 ${EASE} group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5 motion-reduce:transform-none`}
-            style={{ color: palette.ink }}
-            aria-hidden
-          >
-            Les saken
-            <Arrow />
-          </span>
+              bildet (som i malen) forsvinner på lyse foto og illustrasjoner.
+              Store kort har knappen på fargeflaten i stedet. */}
+          {!large && (
+            <span
+              className={`label pointer-events-none absolute bottom-4 right-4 flex h-11 items-center gap-2.5 rounded-full bg-white pl-4 pr-3 transition-transform duration-200 desk:h-10 ${EASE} group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5 motion-reduce:transform-none`}
+              style={{ color: palette.ink }}
+              aria-hidden
+            >
+              Les saken
+              <Arrow />
+            </span>
+          )}
         </div>
       ) : (
         <div className="mt-auto flex justify-end p-6 pt-0">
@@ -223,6 +245,120 @@ export function HairlineRow({ items }: { items: HairlineItem[] }) {
         </Link>
       ))}
     </div>
+  )
+}
+
+/* ── Lederkort ──────────────────────────────────────────────────────────────
+   Hel marineblå flate uten bilde. Står ved siden av podkastkortet. */
+
+export function EditorialCard({
+  title,
+  teaser,
+  className = '',
+}: {
+  title: string
+  teaser?: string
+  className?: string
+}) {
+  return (
+    <Link
+      href="/leder"
+      className={`group flex min-h-[280px] flex-col gap-4 bg-navy p-6 transition-colors duration-200 ${EASE} hover:bg-[#0A4473] focus-visible:bg-[#0A4473] ${className}`}
+    >
+      <TagPill bg="rgba(255,255,255,0.22)" color="#FFFFFF">
+        Leder
+      </TagPill>
+      <h3
+        className={`-mt-[0.2em] pt-[0.2em] font-display text-[26px] leading-[1.15] desk:text-[32px] ${TITLE_HOVER}`}
+        style={{ color: tint(HUES.lightblue, 20), ...TITLE_BREAK }}
+      >
+        {noBreakNumbers(title)}
+      </h3>
+      {teaser && (
+        <p
+          className="line-clamp-4 font-serif text-[17px] font-medium leading-snug text-white/85 desk:text-[19px]"
+          style={{ textWrap: 'pretty' }}
+        >
+          {shortTeaser(teaser, 180)}
+        </p>
+      )}
+      <div className="mt-auto flex justify-end pt-2">
+        <CardCta label="#FFFFFF" circle="#FFFFFF" glyph={HUES.navy} text="Les lederen" />
+      </div>
+    </Link>
+  )
+}
+
+/* ── Videokort ──────────────────────────────────────────────────────────────
+   Full bredde, hel grønnblå flate (#028C7B) med hvit tekst. Stillbilde 16:9 med avspillingsknapp til
+   venstre, tittel og beskrivelse til høyre. Lenker til videosiden — videoen
+   spilles ikke av på forsiden. */
+
+export function VideoCard({
+  title,
+  href,
+  cover,
+  teaser,
+  meta,
+  className = '',
+}: {
+  title: string
+  href: string
+  cover?: SanityImageRef
+  teaser?: string
+  meta: string[]
+  className?: string
+}) {
+  return (
+    <Link
+      href={href}
+      className={`group grid gap-6 bg-[#028C7B] p-6 transition-colors duration-200 tab:gap-8 desk:grid-cols-[7fr_5fr] desk:items-center ${EASE} hover:bg-[#027A6B] focus-visible:bg-[#027A6B] ${className}`}
+    >
+      <div className="relative -mx-6 -mt-6 aspect-video overflow-hidden bg-[#026358] desk:m-0">
+        {cover?.asset && (
+          <Image
+            src={coverSrc(cover, 16, 9, 1600)}
+            alt={cover.alt || ''}
+            fill
+            className={`object-cover transition-transform duration-300 ${EASE} group-hover:scale-[1.04] motion-reduce:transform-none`}
+            sizes="(min-width: 1200px) 760px, 100vw"
+          />
+        )}
+        <span
+          className={`absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white transition-transform duration-200 tab:h-20 tab:w-20 ${EASE} group-hover:scale-[1.07] motion-reduce:transform-none`}
+          style={{ color: '#028C7B' }}
+          aria-hidden
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" className="ml-1 h-7 w-7 tab:h-8 tab:w-8">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </span>
+      </div>
+      <div className="flex flex-col gap-4 desk:pr-4">
+        <TagPill bg="rgba(255,255,255,0.22)" color="#FFFFFF">
+          Video
+        </TagPill>
+        <h3
+          className={`-mt-[0.2em] pt-[0.2em] font-display text-[32px] leading-[1.05] desk:text-[44px] ${TITLE_HOVER}`}
+          style={{ color: '#FFFFFF', ...TITLE_BREAK }}
+        >
+          {noBreakNumbers(title)}
+        </h3>
+        {teaser && (
+          <p className="line-clamp-4 text-[17px] leading-normal text-white" style={{ textWrap: 'pretty' }}>
+            {shortTeaser(teaser, 180)}
+          </p>
+        )}
+        <span className="mt-2 flex items-center gap-3">
+          <span className="label text-white">Se videoen</span>
+          {meta.length > 0 && (
+            <span className="font-label text-[13px] font-medium tracking-[0.04em] text-white/90">
+              {meta.join('  •  ')}
+            </span>
+          )}
+        </span>
+      </div>
+    </Link>
   )
 }
 

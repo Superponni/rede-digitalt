@@ -5,14 +5,18 @@ import type { SanityImageRef } from '@/sanity/lib/imageHelpers'
 
 export default async function Home() {
   const data = await sanityFetch<{
-    heroId?: string
-    secondId?: string
+    topIds?: string[]
+    featureId?: string
     currentEdition: { _id: string; order?: string[] } | null
     articles: Array<FrontArticle & { expertPortrait?: SanityImageRef }>
     editorial: { _id: string; title: string; teaserText?: string } | null
     podcast: {
       _id: string; title: string; spotifyUrl?: string
       thumbnail?: SanityImageRef; duration?: number; episodeNumber?: number
+    } | null
+    video: {
+      _id: string; title: string; slug: { current: string }
+      description?: string; thumbnail?: SanityImageRef; duration?: number
     } | null
     tags: { _id: string; title: string; slug: { current: string } }[]
   }>({ query: FRONTPAGE_QUERY })
@@ -26,12 +30,13 @@ export default async function Home() {
 
   return (
     <Forside
-      heroId={data.heroId}
-      secondId={data.secondId}
+      topIds={data.topIds ?? []}
+      featureId={data.featureId}
       currentEdition={data.currentEdition}
       articles={articles}
       editorial={data.editorial}
       podcast={data.podcast}
+      video={data.video}
       tags={data.tags || []}
     />
   )
