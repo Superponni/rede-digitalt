@@ -6,9 +6,9 @@ Kildemateriale: TOBBs profilmanual i `docs/brand/`, opprinnelige skisser i `docs
 
 ---
 
-## Forside, video og kortfarger (gren `feat/forside-og-video`, ikke publisert)
+## Forside, video og kortfarger (publisert 21. okt. 2026)
 
-Laget 15. oktober 2026 med Elise. **Venter på godkjenning fra Christoffer** (redaktør for Rede digitalt) før publisering. Forhåndsvisning: https://rede-digitalt-git-feat-forside-og-video-superponni.vercel.app (krever Vercel-innlogging — del med «Share» i Vercel-verktøylinjen). Når grenen er publisert, erstatter dette punktene om forside og kort lenger ned.
+Laget 15. oktober 2026 med Elise, godkjent av Christoffer (redaktør for Rede digitalt) og publisert 21. oktober (PR Superponni/rede-digitalt#7). **Dette gjelder på rede.no og erstatter punktene om forside og kort lenger ned** (de er ikke skrevet om ennå).
 
 ### Hvorfor
 
@@ -47,7 +47,7 @@ Tilbakemelding om at forsiden var «litt kjedelig»: for få bilder i første sk
 - **Animasjon:** ordene glir opp ett og ett bak en usynlig kant når sitatet scrolles inn (ca. 1 sek). Står stille ved «redusert bevegelse». Fet/kursiv inne i sitater vises nå som vanlig tekst.
 - Teknisk lærdom: ikke la et skript (f.eks. GSAP SplitText) dele opp tekst fra Sanity etter at React har tegnet den. I forhåndsvisningen har teksten usynlige tegn for klikk-for-å-redigere; de ble delt opp, ga hundrevis av «ord» og fikk siden til å henge. Ordene lages nå av React, og tegnene fjernes med `stegaClean`.
 
-### Nye felt i Studio (vises på rede.no/studio først når grenen er publisert)
+### Nye felt i Studio
 
 - **Forsiden:** «Toppsaker» (opptil 3) og «Stor sak midt på siden». Erstatter «Forsidesak» og «Stor sak nr. 2» (de var aldri fylt ut).
 - **Video:** «Vimeo-lenke», «Videofil (reserve)», alt-tekst på miniatyrbildet, forhåndsvisningsknapp.
