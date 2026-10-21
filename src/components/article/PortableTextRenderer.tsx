@@ -1,8 +1,11 @@
 'use client'
 
+import { Fragment, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { gsap } from '@/lib/gsap-config'
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
+import { stegaClean } from 'next-sanity'
 import { naturalSrc, imageDims } from '@/sanity/lib/imageHelpers'
 import { HUES, MAGENTA, tint, type Hue } from '@/lib/palette'
 import type { AccentColor } from './theme'
@@ -20,7 +23,8 @@ import { Reveal } from './Reveal'
  * vises i tekstflyten.
  *
  * Luft (malens rytme): avsnitt→avsnitt 16, tekst→mellomtittel 48,
- * mellomtittel→tekst 16, tekst→bilde/sitat/boks 48, bilde→bildetekst 12.
+ * mellomtittel→tekst 16, tekst→bilde/boks 48, tekst→sitat 64 (80 på desktop),
+ * bilde→bildetekst 12.
  */
 
 // Signaturfargen til saken → malens fargenavn (gull heter gul i malen).
@@ -140,6 +144,58 @@ function RailImage({ value }: { value: any }) {
   )
 }
 
+/**
+ * Sitat: ordene stiger opp ett og ett, hvert bak sin egen usynlige kant, når
+ * sitatet scrolles inn. Ordene lages av React (ikke delt opp i ettertid av et
+ * skript) — ellers dupliseres teksten når siden oppdateres. Skjermlesere får
+ * hele sitatet som én tekst. Ved «redusert bevegelse» står sitatet stille.
+ */
+function PullQuote({ text }: { text: string }) {
+  const ref = useRef<HTMLQuoteElement | null>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from(el.querySelectorAll('[data-word]'), {
+        yPercent: 110,
+        duration: 0.9,
+        ease: 'power3.out',
+        stagger: 0.05,
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+      })
+    })
+    return () => mm.revert()
+  }, [text])
+
+  // I forhåndsvisningen henger Sanity usynlige tegn på teksten (klikk-for-å-
+  // redigere). De får bli igjen i skjermleserteksten, men fjernes fra ordene —
+  // ellers deles de opp og Sanitys redigeringsverktøy klarer ikke å lese dem.
+  const words = stegaClean(text).trim().split(/\s+/)
+  return (
+    <blockquote
+      ref={ref}
+      className="my-16 font-quote text-[30px] leading-[1.2] text-navy first:mt-0 desk:my-20 desk:text-[42px] desk:leading-[1.15]"
+    >
+      <span className="sr-only">{text}</span>
+      <span aria-hidden>
+        {words.map((word, i) => (
+          <Fragment key={i}>
+            {/* Litt luft over og under klippekanten, så aksenter og «g/j» ikke kuttes. */}
+            <span className="-my-[0.15em] inline-block overflow-hidden py-[0.15em] align-top">
+              <span data-word className="inline-block">
+                {word}
+              </span>
+            </span>
+            {i < words.length - 1 && ' '}
+          </Fragment>
+        ))}
+      </span>
+    </blockquote>
+  )
+}
+
 const LINK = 'underline underline-offset-[3px] transition-colors hover:text-navy'
 
 const components: PortableTextComponents = {
@@ -169,15 +225,8 @@ const components: PortableTextComponents = {
         {children}
       </Reveal>
     ),
-    blockquote: ({ children }) => (
-      <Reveal
-        as="blockquote"
-        y={20}
-        duration={0.8}
-        className="my-12 font-quote text-[30px] leading-[1.2] text-navy first:mt-0 desk:text-[42px] desk:leading-[1.15]"
-      >
-        {children}
-      </Reveal>
+    blockquote: ({ value }) => (
+      <PullQuote text={(value.children ?? []).map((c: any) => c.text ?? '').join('')} />
     ),
     normal: ({ children }) => (
       <Reveal as="p" y={10} duration={0.55} className="mb-4 text-lg leading-[1.6] text-navy desk:text-xl desk:leading-[1.65]">

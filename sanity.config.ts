@@ -56,6 +56,10 @@ export default defineConfig({
             filter: `_type == "article" && slug.current == $slug`,
           },
           {
+            route: '/video/:slug',
+            filter: `_type == "videoPost" && slug.current == $slug`,
+          },
+          {
             route: '/leder',
             filter: `_type == "editorial"`,
           },

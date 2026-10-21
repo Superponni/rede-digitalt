@@ -4,16 +4,16 @@ import { coverSrc, type SanityImageRef } from '@/sanity/lib/imageHelpers'
 import { ThemeBar } from '@/components/layout/ThemeBar'
 import {
   ArticleCard,
-  HairlineRow,
+  EditorialCard,
   PodcastCard,
+  VideoCard,
   TagPill,
   cardLabel,
   type CardArticle,
-  type HairlineItem,
 } from '@/components/ui/Cards'
 import { AutoplayVideo } from './AutoplayVideo'
-import { noBreakNumbers, shortTeaser } from '@/lib/typography'
-import { CARD_PALETTES, assignCardPalettes, weeklyShuffle, RULE, type CardPalette } from '@/lib/palette'
+import { formatDuration, noBreakNumbers, shortTeaser } from '@/lib/typography'
+import { assignCardPalettes, weeklyShuffle, RULE, type CardPalette } from '@/lib/palette'
 
 export interface FrontArticle extends CardArticle {
   publishedAt?: string
@@ -24,8 +24,8 @@ export interface FrontArticle extends CardArticle {
 }
 
 interface ForsideProps {
-  heroId?: string
-  secondId?: string
+  topIds?: string[]
+  featureId?: string
   currentEdition: { _id: string; order?: string[] } | null
   articles: FrontArticle[]
   editorial: { _id: string; title: string; teaserText?: string } | null
@@ -37,21 +37,23 @@ interface ForsideProps {
     duration?: number
     episodeNumber?: number
   } | null
+  video: {
+    _id: string
+    title: string
+    slug: { current: string }
+    description?: string
+    thumbnail?: SanityImageRef
+    duration?: number
+  } | null
   tags: { _id: string; title: string; slug: { current: string } }[]
 }
 
-/** Stor sak: tekst i venstre fem kolonner, bilde i høyre seks. Hele blokka er én lenke. */
-function BigStory({
-  article,
-  as: Heading = 'h2',
-  priority = false,
-  className = '',
-}: {
-  article: FrontArticle
-  as?: 'h1' | 'h2'
-  priority?: boolean
-  className?: string
-}) {
+/**
+ * Stor sak: tekst i fem kolonner, bilde i seks. Hele blokka er én lenke.
+ * `flip` legger bildet til venstre (desktop), så to store saker på samme side
+ * ikke blir like.
+ */
+function BigStory({ article, flip = false }: { article: FrontArticle; flip?: boolean }) {
   const tag = cardLabel(article)
   const byline = [
     article.authorName && `Tekst: ${article.authorName}`,
@@ -61,16 +63,18 @@ function BigStory({
   return (
     <Link
       href={`/artikler/${article.slug.current}`}
-      className={`group grid items-center gap-x-6 gap-y-8 desk:grid-cols-12 ${className}`}
+      className="group grid items-center gap-x-6 gap-y-8 desk:grid-cols-12"
     >
-      <div className="flex flex-col gap-6 desk:col-span-5 desk:pl-6">
+      <div
+        className={`flex flex-col gap-6 desk:col-span-5 ${flip ? 'desk:col-start-8 desk:row-start-1 desk:pr-6' : 'desk:pl-6'}`}
+      >
         {tag && <TagPill>{tag}</TagPill>}
-        <Heading
+        <h2
           className="font-display text-[40px] leading-[1.08] tracking-[-0.01em] text-navy underline decoration-transparent decoration-2 underline-offset-[8px] transition-[text-decoration-color] duration-200 group-hover:decoration-current group-focus-visible:decoration-current desk:text-[64px] desk:leading-[1.05] desk:tracking-[-0.015em]"
           style={{ hyphens: 'auto', hyphenateLimitChars: '12 4 4' }}
         >
           {noBreakNumbers(article.title)}
-        </Heading>
+        </h2>
         {article.teaser && (
           <p className="line-clamp-4 font-serif text-[21px] font-medium leading-snug text-magenta desk:text-2xl">
             {shortTeaser(article.teaser, 160)}
@@ -83,7 +87,9 @@ function BigStory({
         )}
       </div>
       {(hasImage || article.heroVideoUrl) && (
-        <div className="relative -mx-5 aspect-[4/3] overflow-hidden tab:mx-0 desk:col-span-6 desk:col-start-7">
+        <div
+          className={`relative -mx-5 aspect-[4/3] overflow-hidden tab:mx-0 desk:col-span-6 ${flip ? 'desk:col-start-1 desk:row-start-1' : 'desk:col-start-7'}`}
+        >
           {article.heroVideoUrl ? (
             <AutoplayVideo
               src={article.heroVideoUrl}
@@ -95,7 +101,6 @@ function BigStory({
               src={coverSrc(article.heroImage!, 4, 3, 2000)}
               alt={article.heroImage!.alt || ''}
               fill
-              priority={priority}
               className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
               sizes="(min-width: 1200px) 640px, 100vw"
             />
@@ -133,22 +138,26 @@ function CardGrid({ articles, palettes }: { articles: FrontArticle[]; palettes: 
 }
 
 /**
- * Forsiden, bygget etter malen og Elises plan (oktober 2026):
- *   1. Stor sak øverst — håndplukket (forside-dokumentet). Tomt felt ⇒ nyeste
- *      sak merket «toppraden», ellers nyeste sak.
- *   2. Hårstrek-rad: lederen + de to nyeste sakene.
- *   3. Fargede kort: resten av gjeldende utgave i trykkrekkefølge, med
- *      podkastkortet (nyeste episode) i første rad.
- *   4. Eldre saker — stokkes om én gang i uka.
+ * Forsiden (justert etter tilbakemelding oktober 2026 — «for få bilder øverst»):
+ *   1. Tre toppsaker som store fargede kort. Håndplukket på forside-
+ *      dokumentet; tomme plasser fylles med saker merket «toppraden», så de
+ *      nyeste i trykkrekkefølge.
+ *   2. Lederen (marineblått kort uten bilde) og podkasten side om side.
+ *   3. Videokort (nyeste video) i full bredde.
+ *   4. Fargede kort: først resten av gjeldende utgave i trykkrekkefølge, så
+ *      eldre saker (stokkes om én gang i uka). Etter første rad står én stor
+ *      sak mellom to linjer — håndplukket, ellers neste sak i rekka. Etter to
+ *      rader til kommer stor sak nr. 2 (speilvendt), så de siste kortene.
  * En sak vises bare ett sted.
  */
 export function Forside({
-  heroId,
-  secondId,
+  topIds = [],
+  featureId,
   currentEdition,
   articles,
   editorial,
   podcast,
+  video,
   tags,
 }: ForsideProps) {
   const byId = new Map(articles.map((a) => [a._id, a]))
@@ -158,58 +167,50 @@ export function Forside({
     const i = order.indexOf(a._id)
     return i === -1 ? Number.MAX_SAFE_INTEGER : i
   }
+  // Nyeste først; en hel utgave har samme dato, så ved likhet avgjør trykkrekkefølgen.
+  const newestFirst = [...articles].sort(
+    (a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '') || printPos(a) - printPos(b),
+  )
 
-  // 1. Forsidesaken
-  const hero =
-    (heroId && byId.get(heroId)) ||
-    articles.find((a) => a.frontpagePlacement === 'top') ||
-    articles[0]
-  const second = secondId && secondId !== hero?._id ? byId.get(secondId) : undefined
-  const used = new Set([hero?._id, second?._id].filter(Boolean) as string[])
+  // 1. Toppsakene
+  const top: FrontArticle[] = []
+  const used = new Set<string>()
+  const take = (a: FrontArticle | undefined) => {
+    if (a && !used.has(a._id) && top.length < 3) {
+      top.push(a)
+      used.add(a._id)
+    }
+  }
+  topIds.forEach((id) => take(byId.get(id)))
+  newestFirst.filter((a) => a.frontpagePlacement === 'top').forEach(take)
+  newestFirst.forEach(take)
 
-  // 2. De to nyeste. `articles` er alt sortert nyeste først; en hel utgave
-  // har samme dato, så ved likhet avgjør trykkrekkefølgen.
-  const newest = articles
-    .filter((a) => !used.has(a._id))
-    .sort(
-      (a, b) =>
-        (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '') || printPos(a) - printPos(b),
-    )
-    .slice(0, 2)
-  newest.forEach((a) => used.add(a._id))
+  // Første rad grenser til lederkortet (marineblått) under.
+  const topPalettes = assignCardPalettes(top, 3, { avoidEdge: ['navy'] })
 
-  const hairline: HairlineItem[] = [
-    ...(editorial
-      ? [{ key: editorial._id, href: '/leder', tag: 'Leder', title: editorial.title, teaser: editorial.teaserText }]
-      : []),
-    ...newest.map((a) => ({
-      key: a._id,
-      href: `/artikler/${a.slug.current}`,
-      tag: cardLabel(a),
-      title: a.title,
-      teaser: a.teaser,
-    })),
-  ]
-
-  // 3. Resten av gjeldende utgave, i trykkrekkefølge
-  const editionCards = articles
+  // 4. Resten av gjeldende utgave i trykkrekkefølge, så eldre saker med ny
+  // rekkefølge hver uke — alt i ett rutenett, så fargereglene gjelder på tvers.
+  const editionRest = articles
     .filter((a) => !used.has(a._id) && currentEdition && a.editionId === currentEdition._id)
     .sort((a, b) => printPos(a) - printPos(b))
-  editionCards.forEach((a) => used.add(a._id))
-
-  // Podkastkortet deler første rad med ett sakskort. Det kortet skal ikke
-  // være lilla (podkastkortet er lilla).
-  const beside = podcast ? editionCards[0] : undefined
-  const gridCards = beside ? editionCards.slice(1) : editionCards
-  let besidePalette = beside ? assignCardPalettes([beside])[0] : undefined
-  if (besidePalette?.key === 'purple' && !beside?.cardColor) besidePalette = CARD_PALETTES.find((p) => p.key === 'navy')
-  const gridPalettes = assignCardPalettes(gridCards)
-  // Stor sak nr. 2 legges etter første hele rad med kort.
-  const splitAt = second ? Math.min(3, gridCards.length) : gridCards.length
-
-  // 4. Eldre saker, ny rekkefølge hver uke
-  const older = weeklyShuffle(articles.filter((a) => !used.has(a._id))).slice(0, 9)
-  const olderPalettes = assignCardPalettes(older)
+  const picked = featureId && !used.has(featureId) ? byId.get(featureId) : undefined
+  if (picked) used.add(picked._id)
+  editionRest.filter((a) => a._id !== picked?._id).forEach((a) => used.add(a._id))
+  const older = weeklyShuffle(articles.filter((a) => !used.has(a._id))).slice(0, 14)
+  const queue = [...editionRest.filter((a) => a._id !== picked?._id), ...older]
+  // Ikke håndplukket: den store saken er den første etter første rad.
+  const feature = picked ?? queue[3]
+  const afterFeature = queue.filter((a) => a._id !== feature?._id)
+  // Stor sak nr. 2 kommer etter to rader til — alltid automatisk.
+  const feature2 = afterFeature[9]
+  const cards = afterFeature.filter((a) => a._id !== feature2?._id).slice(0, 12)
+  const firstRow = cards.slice(0, 3)
+  const middleCards = cards.slice(3, 9)
+  const lastCards = cards.slice(9)
+  // Raden under videokortet skal ikke få videokortets farge.
+  const firstRowPalettes = assignCardPalettes(firstRow, 3, { avoidEdge: video ? ['deepteal'] : [] })
+  const middlePalettes = assignCardPalettes(middleCards)
+  const lastPalettes = assignCardPalettes(lastCards)
 
   const podcastMeta = podcast
     ? [
@@ -222,64 +223,86 @@ export function Forside({
     <div className="wrap pb-14 pt-[69px] tab:pb-24 tab:pt-[109px]">
       <ThemeBar tags={tags} />
 
-      {hero && <BigStory article={hero} as="h1" priority className="pt-10 tab:pt-16" />}
-
-      {hairline.length > 0 && (
-        <section className="mt-10 tab:mt-16" aria-label="Siste saker">
-          <HairlineRow items={hairline} />
+      {top.length > 0 && (
+        <section className="pt-10 tab:pt-16" aria-label="Toppsaker">
+          <h1 className="sr-only">Rede – et magasin for TOBB-medlemmer</h1>
+          <div className="grid gap-6 tab:grid-cols-2 desk:grid-cols-3">
+            {top.map((a, i) => (
+              <ArticleCard
+                key={a._id}
+                article={a}
+                palette={topPalettes[i]}
+                large
+                showTeaser
+                // Nettbrett: første sak over hele bredden, de to neste side om side.
+                className={i === 0 && top.length !== 2 ? 'tab:col-span-2 desk:col-span-1' : ''}
+                sizes="(min-width: 1200px) 420px, (min-width: 720px) 50vw, 100vw"
+              />
+            ))}
+          </div>
         </section>
       )}
 
-      {(beside || podcast || gridCards.length > 0) && (
-        <section className="mt-12 flex flex-col gap-6" aria-label="I denne utgaven">
-          {(beside || podcast) && (
-            <div className="grid gap-6 desk:grid-cols-12">
-              {beside && besidePalette && (
-                <ArticleCard
-                  article={beside}
-                  palette={besidePalette}
-                  showTeaser
-                  className="desk:col-span-4"
-                />
-              )}
-              {podcast && (
-                <PodcastCard
-                  title={podcast.title}
-                  href={podcast.spotifyUrl}
-                  cover={podcast.thumbnail}
-                  meta={podcastMeta}
-                  className={beside ? 'desk:col-span-8' : 'desk:col-span-12'}
-                />
-              )}
-            </div>
+      {(editorial || podcast) && (
+        <section className="mt-6 grid gap-6 desk:grid-cols-12" aria-label="Leder og podkast">
+          {editorial && (
+            <EditorialCard
+              title={editorial.title}
+              teaser={editorial.teaserText}
+              className={podcast ? 'desk:col-span-5' : 'desk:col-span-12'}
+            />
           )}
-          {splitAt > 0 && (
-            <CardGrid articles={gridCards.slice(0, splitAt)} palettes={gridPalettes.slice(0, splitAt)} />
+          {podcast && (
+            <PodcastCard
+              title={podcast.title}
+              href={podcast.spotifyUrl}
+              cover={podcast.thumbnail}
+              meta={podcastMeta}
+              className={editorial ? 'desk:col-span-7' : 'desk:col-span-12'}
+            />
           )}
         </section>
       )}
 
-      {second && (
-        <section
-          className="mt-10 border-y py-10 tab:mt-16 tab:py-16"
-          style={{ borderColor: RULE }}
-        >
-          <BigStory article={second} />
+      {video && (
+        <section className="mt-6" aria-label="Video">
+          <VideoCard
+            title={video.title}
+            href={`/video/${video.slug.current}`}
+            cover={video.thumbnail}
+            teaser={video.description?.split(/\n\s*\n/)[0]}
+            meta={[formatDuration(video.duration)].filter(Boolean) as string[]}
+          />
         </section>
       )}
 
-      {gridCards.length > splitAt && (
-        <section className="mt-12">
-          <CardGrid articles={gridCards.slice(splitAt)} palettes={gridPalettes.slice(splitAt)} />
+      {firstRow.length > 0 && (
+        <section className="mt-6" aria-label="Flere saker">
+          <CardGrid articles={firstRow} palettes={firstRowPalettes} />
         </section>
       )}
 
-      {older.length > 0 && (
-        <section className="mt-14 tab:mt-24" aria-labelledby="flere-saker">
-          <h2 id="flere-saker" className="label mb-6 border-t pt-5 tracking-[0.1em] text-navy/70" style={{ borderColor: RULE }}>
-            Flere saker
-          </h2>
-          <CardGrid articles={older} palettes={olderPalettes} />
+      {feature && (
+        <section className="mt-10 border-y py-10 tab:mt-16 tab:py-16" style={{ borderColor: RULE }}>
+          <BigStory article={feature} />
+        </section>
+      )}
+
+      {middleCards.length > 0 && (
+        <section className="mt-10 tab:mt-16" aria-label="Enda flere saker">
+          <CardGrid articles={middleCards} palettes={middlePalettes} />
+        </section>
+      )}
+
+      {feature2 && (
+        <section className="mt-10 border-y py-10 tab:mt-16 tab:py-16" style={{ borderColor: RULE }}>
+          <BigStory article={feature2} flip />
+        </section>
+      )}
+
+      {lastCards.length > 0 && (
+        <section className="mt-10 tab:mt-16" aria-label="Eldre saker">
+          <CardGrid articles={lastCards} palettes={lastPalettes} />
         </section>
       )}
     </div>

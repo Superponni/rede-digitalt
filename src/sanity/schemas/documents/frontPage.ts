@@ -1,28 +1,29 @@
 import { defineType, defineField } from 'sanity'
 
 // Forsiden styres nesten helt av seg selv (se Forside.tsx). Det eneste som
-// velges for hånd er den store saken øverst — og eventuelt en stor sak til
-// lenger ned. Singleton: ett dokument med fast id `frontPage`.
+// velges for hånd er de tre store sakene øverst og den store saken midt på. Singleton: ett dokument med
+// fast id `frontPage`.
 export const frontPage = defineType({
   name: 'frontPage',
   title: 'Forsiden',
   type: 'document',
   fields: [
     defineField({
-      name: 'heroArticle',
-      title: 'Forsidesak (den store saken øverst)',
-      type: 'reference',
-      to: [{ type: 'article' }],
+      name: 'topArticles',
+      title: 'Toppsaker (de tre store sakene øverst)',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'article' }] }],
+      validation: (rule) => rule.max(3).unique(),
       description:
-        'På utgivelsesdagen: magasinets forsidesak. Kommer det en viktig sak senere, velger du den her i stedet. Står feltet tomt, brukes den nyeste saken.',
+        'Velg opptil tre saker, i den rekkefølgen de skal stå (venstre mot høyre). Tomme plasser fylles automatisk: først saker merket «toppraden», så de nyeste i trykkrekkefølge.',
     }),
     defineField({
-      name: 'secondArticle',
-      title: 'Stor sak nr. 2 (valgfri)',
+      name: 'featureArticle',
+      title: 'Stor sak midt på siden (valgfri)',
       type: 'reference',
       to: [{ type: 'article' }],
       description:
-        'Vises stort midt på forsiden, mellom radene med fargede kort. La stå tom for å droppe den.',
+        'Vises stort mellom to linjer, etter første rad med kort: tekst til venstre, bilde til høyre. Står feltet tomt, brukes neste sak i rekka.',
     }),
   ],
   preview: {

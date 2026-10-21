@@ -6,6 +6,7 @@ import { absoluteUrl } from '@/lib/site'
 interface SitemapData {
   articles: { slug: string; _updatedAt: string; publishedAt?: string }[]
   tags: { slug: string; _updatedAt: string }[]
+  videos: { slug: string; _updatedAt: string }[]
   editorial: { _updatedAt: string } | null
   memberOffersUpdated: string | null
 }
@@ -62,5 +63,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.4,
   }))
 
-  return [...staticPages, ...articlePages, ...tagPages]
+  const videoPages: MetadataRoute.Sitemap = (data.videos || []).map((v) => ({
+    url: absoluteUrl(`/video/${v.slug}`),
+    lastModified: new Date(v._updatedAt),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }))
+
+  return [...staticPages, ...articlePages, ...videoPages, ...tagPages]
 }
